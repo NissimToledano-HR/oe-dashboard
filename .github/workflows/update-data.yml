@@ -18,10 +18,10 @@ jobs:
       - name: Download Excel from Box
         run: |
           curl -L \
-            -H "BoxApi: shared_link=https://harmonicinc.box.com/s/xvccxq02t9dy0e4e9d12wypcvac1i5ff" \
-            "https://api.box.com/2.0/files/2163043833191/content" \
+            "https://harmonicinc.box.com/shared/static/xvccxq02t9dy0e4e9d12wypcvac1i5ff.xlsx" \
             -o data.xlsx
-          echo "Downloaded: $(ls -lh data.xlsx)"
+          file data.xlsx
+          ls -lh data.xlsx
 
       - name: Install Python dependencies
         run: pip install openpyxl
@@ -49,7 +49,6 @@ jobs:
                   if not any(v is not None for v in row):
                       continue
                   if headers is None:
-                      # Find header row (row with multiple string values)
                       str_count = sum(1 for v in row if isinstance(v, str) and len(str(v)) > 1)
                       if str_count >= 3:
                           headers = [str(v).strip() if v else f'col_{i}' for i,v in enumerate(row)]
@@ -63,7 +62,7 @@ jobs:
           result['_updated'] = datetime.utcnow().strftime('%Y-%m-%d %H:%M UTC')
           with open('data.json', 'w', encoding='utf-8') as f:
               json.dump(result, f, ensure_ascii=False, indent=2)
-          print(f"Done — {sum(len(v) for v in result.values() if isinstance(v,list))} rows total")
+          print(f"Done")
           PYEOF
 
       - name: Commit and push JSON
