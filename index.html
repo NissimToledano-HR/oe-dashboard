@@ -3,207 +3,143 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>OE Dashboard 2026</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<title>OE Operations Dashboard 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
-:root {
-  --bg:#f0f4f8;--bg2:#e4eaf2;--white:#ffffff;--navy:#0f2044;--navy2:#1a3460;
-  --blue:#1d4ed8;--blue2:#2563eb;--accent:#3b82f6;--accent2:#60a5fa;
-  --steel:#64748b;--muted:#94a3b8;--border:#cbd5e1;--border2:#e2e8f0;
-  --text:#0f172a;--text2:#334155;--text3:#64748b;
-  --green:#16a34a;--green2:#22c55e;--gbg:#dcfce7;
-  --yellow:#d97706;--yellow2:#f59e0b;--ybg:#fef3c7;
-  --red:#dc2626;--red2:#ef4444;--rbg:#fee2e2;
-  --shadow:0 1px 3px rgba(0,0,0,0.08),0 1px 2px rgba(0,0,0,0.05);
-  --shadow2:0 4px 12px rgba(0,0,0,0.08);
+:root{
+  --bg:#f0f4f8;--bg2:#e4eaf2;--white:#fff;
+  --navy:#0a1628;--navy3:#1a3060;
+  --blue:#1d4ed8;--blue2:#2563eb;--blue3:#3b82f6;--blue4:#93c5fd;
+  --steel:#475569;--muted:#94a3b8;--border:#cbd5e1;--border2:#e2e8f0;
+  --text:#0f172a;--text2:#1e293b;--text3:#475569;--text4:#94a3b8;
+  --green:#15803d;--green2:#16a34a;--green3:#22c55e;--gbg:#dcfce7;
+  --yellow:#b45309;--yellow2:#d97706;--yellow3:#f59e0b;--ybg:#fef3c7;
+  --red:#b91c1c;--red2:#dc2626;--red3:#ef4444;--rbg:#fee2e2;
+  --sh1:0 1px 3px rgba(0,0,0,.07),0 1px 2px rgba(0,0,0,.04);
+  --sh2:0 4px 16px rgba(0,0,0,.08);
 }
 *{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:13px;}
-
-/* HEADER */
-header{background:var(--navy);padding:0 28px;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,0.2);}
-.logo{display:flex;align-items:center;gap:10px;}
-.logo-mark{width:32px;height:32px;background:linear-gradient(135deg,var(--blue2),var(--accent2));border-radius:7px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;color:#fff;letter-spacing:.5px;}
-.logo-text{font-size:14px;font-weight:600;color:#fff;}
-.logo-sub{font-size:10px;color:var(--muted);letter-spacing:1.2px;text-transform:uppercase;}
-.header-right{display:flex;align-items:center;gap:12px;}
-.timestamp{font-size:10px;color:var(--muted);font-family:'DM Mono',monospace;}
-
-/* REFRESH BUTTON */
-.refresh-btn{display:flex;align-items:center;gap:6px;background:var(--blue2);color:#fff;border:none;border-radius:7px;padding:7px 14px;font-size:11px;font-weight:600;cursor:pointer;transition:all .2s;font-family:'DM Sans',sans-serif;}
-.refresh-btn:hover{background:var(--blue);}
-.refresh-btn.loading{background:var(--steel);cursor:not-allowed;}
+body{font-family:'IBM Plex Sans',sans-serif;background:var(--bg);color:var(--text);font-size:13px;line-height:1.5;}
+header{background:linear-gradient(135deg,var(--navy) 0%,var(--navy3) 100%);padding:0 32px;height:58px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;box-shadow:0 2px 12px rgba(0,0,0,.25);}
+.logo{display:flex;align-items:center;gap:12px;}
+.logo-icon{width:34px;height:34px;border-radius:8px;background:linear-gradient(135deg,var(--blue3),var(--blue4));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;color:#fff;}
+.logo-text{font-size:15px;font-weight:600;color:#fff;letter-spacing:-.3px;}
+.logo-sub{font-size:9px;color:rgba(255,255,255,.4);letter-spacing:2px;text-transform:uppercase;margin-top:1px;}
+.hdr-right{display:flex;align-items:center;gap:14px;}
+.clock{font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(255,255,255,.4);}
+.refresh-btn{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);color:#fff;border-radius:8px;padding:7px 14px;font-size:11px;font-weight:500;cursor:pointer;transition:all .2s;font-family:'IBM Plex Sans',sans-serif;}
+.refresh-btn:hover{background:rgba(255,255,255,.18);}
+.refresh-btn.loading{opacity:.6;cursor:not-allowed;}
 .refresh-btn svg{width:13px;height:13px;}
 .refresh-btn.loading svg{animation:spin 1s linear infinite;}
 @keyframes spin{to{transform:rotate(360deg)}}
-
-/* STATUS BAR */
-.status-bar{background:var(--white);border-bottom:1px solid var(--border2);padding:6px 28px;display:flex;align-items:center;gap:8px;font-size:10px;color:var(--text3);}
-.status-dot{width:7px;height:7px;border-radius:50%;}
-.status-dot.ok{background:var(--green2);}
-.status-dot.loading{background:var(--yellow2);animation:pulse 1s ease infinite;}
-.status-dot.error{background:var(--red2);}
-.status-dot.idle{background:var(--muted);}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
-
-/* NAV */
-nav{background:var(--white);border-bottom:2px solid var(--border2);padding:0 28px;display:flex;box-shadow:var(--shadow);}
-.tab{padding:13px 22px;font-size:12px;font-weight:500;color:var(--steel);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .2s;}
-.tab:hover{color:var(--text);}
+.status-bar{background:var(--white);border-bottom:1px solid var(--border2);padding:5px 32px;display:flex;align-items:center;gap:8px;font-size:10px;color:var(--text4);}
+.sdot{width:6px;height:6px;border-radius:50%;}
+.sdot.ok{background:var(--green3);}
+.sdot.loading{background:var(--yellow3);animation:pulse .9s ease infinite;}
+.sdot.error{background:var(--red3);}
+.sdot.idle{background:var(--muted);}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+nav{background:var(--white);border-bottom:1px solid var(--border2);padding:0 32px;display:flex;box-shadow:var(--sh1);}
+.tab{padding:14px 20px;font-size:12px;font-weight:500;color:var(--text3);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .18s;}
+.tab:hover{color:var(--text2);}
 .tab.active{color:var(--blue2);border-bottom-color:var(--blue2);font-weight:600;}
-
-/* LAYOUT */
-main{padding:24px 28px;max-width:1440px;margin:0 auto;}
-.section-label{font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:12px;margin-top:28px;display:flex;align-items:center;gap:8px;}
-.section-label:first-of-type{margin-top:0;}
-.section-label::after{content:'';flex:1;height:1px;background:var(--border2);}
-.row2{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
-.row3{display:grid;grid-template-columns:1.6fr 1fr;gap:18px;}
-
-/* CARD */
-.card{background:var(--white);border:1px solid var(--border2);border-radius:10px;padding:20px;box-shadow:var(--shadow);}
-.card-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;}
+main{padding:24px 32px;max-width:1480px;margin:0 auto;}
+.sec-label{font-size:9px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);margin:28px 0 14px;display:flex;align-items:center;gap:10px;}
+.sec-label:first-child{margin-top:0;}
+.sec-label::after{content:'';flex:1;height:1px;background:var(--border2);}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+.g3{display:grid;grid-template-columns:1.7fr 1fr;gap:18px;}
+.card{background:var(--white);border:1px solid var(--border2);border-radius:12px;padding:20px;box-shadow:var(--sh1);}
+.card-hdr{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;}
 .card-title{font-size:12px;font-weight:600;color:var(--text);}
-.card-sub{font-size:11px;color:var(--text3);margin-top:2px;}
-
-/* BADGE */
-.badge{display:inline-block;font-size:9px;font-weight:600;letter-spacing:.8px;padding:2px 8px;border-radius:4px;text-transform:uppercase;}
-.badge.green{background:var(--gbg);color:var(--green);}
-.badge.yellow{background:var(--ybg);color:var(--yellow);}
-.badge.red{background:var(--rbg);color:var(--red);}
-.badge.blue{background:#dbeafe;color:var(--blue);}
+.card-sub{font-size:10px;color:var(--text4);margin-top:2px;}
+.badge{display:inline-flex;align-items:center;font-size:9px;font-weight:600;letter-spacing:.8px;padding:2px 8px;border-radius:4px;text-transform:uppercase;}
+.badge.green{background:var(--gbg);color:var(--green2);}
+.badge.yellow{background:var(--ybg);color:var(--yellow2);}
+.badge.red{background:var(--rbg);color:var(--red2);}
+.badge.blue{background:#dbeafe;color:var(--blue2);}
 .badge.steel{background:var(--border2);color:var(--steel);}
-
-/* KPI STRIP */
-.kpi-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:16px;}
-.kpi-box{background:var(--white);border:1px solid var(--border2);border-radius:10px;padding:16px 18px;position:relative;overflow:hidden;box-shadow:var(--shadow);}
-.kpi-box::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:10px 10px 0 0;}
-.kpi-box.blue::before{background:var(--blue2);}
-.kpi-box.green::before{background:var(--green2);}
-.kpi-box.yellow::before{background:var(--yellow2);}
-.kpi-box.red::before{background:var(--red2);}
-.kpi-lbl{font-size:9px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
-.kpi-val{font-size:28px;font-weight:700;color:var(--text);font-family:'DM Mono',monospace;line-height:1;}
-.kpi-note{font-size:10px;color:var(--text3);margin-top:6px;}
-.kpi-delta{display:inline-flex;align-items:center;font-size:10px;font-weight:600;padding:2px 6px;border-radius:4px;margin-top:4px;}
-.kpi-delta.up{background:var(--gbg);color:var(--green);}
-.kpi-delta.warn{background:var(--ybg);color:var(--yellow);}
-.kpi-delta.down{background:var(--rbg);color:var(--red);}
-
-/* TABLE */
-table{width:100%;border-collapse:collapse;}
-thead th{padding:8px 12px;text-align:left;font-size:9px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);border-bottom:2px solid var(--border2);background:var(--bg);white-space:nowrap;}
-tbody tr{border-bottom:1px solid var(--border2);transition:background .1s;}
-tbody tr:last-child{border-bottom:none;}
-tbody tr:hover{background:#f8faff;}
-tbody td{padding:9px 12px;font-size:11px;color:var(--text2);vertical-align:middle;}
-.mono{font-family:'DM Mono',monospace;font-size:10px;}
-
-/* PILL */
-.pill{display:inline-flex;align-items:center;gap:4px;font-size:9px;font-weight:600;letter-spacing:.5px;padding:2px 8px;border-radius:20px;text-transform:uppercase;white-space:nowrap;}
+.pill{display:inline-flex;align-items:center;gap:4px;font-size:9px;font-weight:600;padding:2px 8px;border-radius:20px;letter-spacing:.3px;white-space:nowrap;}
 .pill::before{content:'';width:5px;height:5px;border-radius:50%;flex-shrink:0;}
-.pill.success,.pill.closed{background:var(--gbg);color:var(--green);}
-.pill.success::before,.pill.closed::before{background:var(--green2);}
-.pill.open,.pill.progress{background:var(--ybg);color:var(--yellow);}
-.pill.open::before,.pill.progress::before{background:var(--yellow2);}
-.pill.fail{background:var(--rbg);color:var(--red);}
-.pill.fail::before{background:var(--red2);}
-
-/* PVA BARS */
-.pva-row{display:grid;grid-template-columns:80px 1fr 56px 56px;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border2);}
-.pva-row:last-child{border-bottom:none;}
-.pva-label{font-size:11px;font-weight:600;color:var(--text2);}
-.bar-group{display:flex;flex-direction:column;gap:3px;}
-.bar-track{background:var(--bg2);border-radius:3px;height:7px;overflow:hidden;}
-.bar-fill{height:100%;border-radius:3px;}
-.bar-num{font-size:10px;font-family:'DM Mono',monospace;color:var(--text3);text-align:right;}
-.bar-pct{font-size:10px;font-family:'DM Mono',monospace;font-weight:600;text-align:right;}
-
-/* METHOD ROWS */
-.method-grid{display:grid;grid-template-columns:1fr 90px 70px 1fr 80px;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border2);}
-.method-grid:last-child{border-bottom:none;}
-.method-grid.hdr div{font-size:9px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);}
-.rate-bar{background:var(--bg2);border-radius:3px;height:6px;overflow:hidden;}
+.pill.success,.pill.closed,.pill.on-track{background:var(--gbg);color:var(--green2);}
+.pill.success::before,.pill.closed::before,.pill.on-track::before{background:var(--green3);}
+.pill.open,.pill.progress,.pill.at-risk{background:var(--ybg);color:var(--yellow2);}
+.pill.open::before,.pill.progress::before,.pill.at-risk::before{background:var(--yellow3);}
+.pill.fail,.pill.blocked{background:var(--rbg);color:var(--red2);}
+.pill.fail::before,.pill.blocked::before{background:var(--red3);}
+.mono{font-family:'IBM Plex Mono',monospace;font-size:10px;}
+.pva{display:grid;grid-template-columns:72px 1fr 52px 52px;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border2);}
+.pva:last-child{border-bottom:none;}
+.pva-lbl{font-size:11px;font-weight:600;color:var(--text2);}
+.bar-wrap{display:flex;flex-direction:column;gap:4px;}
+.bar-track{background:var(--bg2);border-radius:4px;height:6px;overflow:hidden;}
+.bar-fill{height:100%;border-radius:4px;transition:width .6s ease;}
+.bar-num{font-size:10px;font-family:'IBM Plex Mono',monospace;color:var(--text4);text-align:right;line-height:1.4;}
+.bar-pct{font-size:11px;font-family:'IBM Plex Mono',monospace;font-weight:600;text-align:right;}
+.method-row{display:grid;grid-template-columns:1fr 70px 62px 1fr 74px;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border2);}
+.method-row:last-child{border-bottom:none;}
+.method-hdr div{font-size:9px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);}
+.rate-track{background:var(--bg2);border-radius:3px;height:5px;overflow:hidden;}
 .rate-fill{height:100%;border-radius:3px;}
-
-/* MS TABLE */
-.ms-grid{display:grid;grid-template-columns:130px 55px 70px 1fr 95px 80px 80px 55px 90px;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border2);}
-.ms-grid:last-child{border-bottom:none;}
-.ms-tag{font-size:9px;font-weight:600;padding:2px 7px;border-radius:4px;background:#dbeafe;color:var(--blue);text-transform:uppercase;white-space:nowrap;}
-
-/* NPI CARDS */
+.comp-row{display:grid;grid-template-columns:120px 55px 100px 1fr 55px 75px 75px 60px;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border2);}
+.comp-row:last-child{border-bottom:none;}
+.comp-row.hdr div{font-size:9px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);}
+.cost-row{display:grid;grid-template-columns:1fr 80px 80px 80px 74px 80px;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border2);}
+.cost-row:last-child{border-bottom:none;}
+.cost-row.hdr div{font-size:9px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);}
 .npi-grid{display:flex;flex-direction:column;gap:14px;}
-.npi-card{background:var(--white);border:1px solid var(--border2);border-radius:10px;overflow:hidden;box-shadow:var(--shadow);}
-.npi-top{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:16px;padding:14px 18px;border-bottom:1px solid var(--border2);}
-.traffic-light{width:18px;height:18px;border-radius:50%;flex-shrink:0;}
-.tl-green{background:var(--green2);box-shadow:0 0 0 3px rgba(34,197,94,.2);}
-.tl-yellow{background:var(--yellow2);box-shadow:0 0 0 3px rgba(245,158,11,.2);}
-.tl-red{background:var(--red2);box-shadow:0 0 0 3px rgba(239,68,68,.2);}
-.npi-name{font-size:14px;font-weight:700;color:var(--text);}
+.npi-card{background:var(--white);border:1px solid var(--border2);border-radius:12px;overflow:hidden;box-shadow:var(--sh1);transition:box-shadow .2s;}
+.npi-card:hover{box-shadow:var(--sh2);}
+.npi-top{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:16px;padding:14px 20px;border-bottom:1px solid var(--border2);background:linear-gradient(to right,#fafbfd,var(--white));}
+.tl{width:16px;height:16px;border-radius:50%;flex-shrink:0;}
+.tl-green{background:var(--green3);box-shadow:0 0 0 3px rgba(34,197,94,.18);}
+.tl-yellow{background:var(--yellow3);box-shadow:0 0 0 3px rgba(245,158,11,.18);}
+.tl-red{background:var(--red3);box-shadow:0 0 0 3px rgba(239,68,68,.18);}
+.npi-name{font-size:15px;font-weight:700;color:var(--text);letter-spacing:-.3px;}
 .phase-bar{display:flex;gap:2px;}
-.phase-step{padding:4px 10px;font-size:10px;font-weight:500;border-radius:4px;color:var(--muted);background:var(--bg2);border:1px solid var(--border);}
-.phase-step.active{background:var(--blue2);color:#fff;border-color:var(--blue2);font-weight:600;}
-.phase-step.done{background:var(--bg2);color:var(--steel);}
+.ph{padding:4px 10px;font-size:9px;font-weight:500;border-radius:5px;color:var(--muted);background:var(--bg2);border:1px solid var(--border);letter-spacing:.3px;}
+.ph.active{background:var(--blue2);color:#fff;border-color:var(--blue2);font-weight:700;box-shadow:0 0 0 2px rgba(37,99,235,.2);}
+.ph.done{background:var(--border2);color:var(--steel);border-color:var(--border2);}
 .npi-body{display:grid;grid-template-columns:1fr 1px 1fr 1px 1fr;}
 .npi-divider{background:var(--border2);}
-.npi-section{padding:14px 18px;}
-.npi-section-title{font-size:9px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;text-decoration:underline;}
-.npi-field{display:flex;gap:8px;align-items:flex-start;margin-bottom:7px;}
-.npi-key{font-size:10px;color:var(--text3);flex-shrink:0;min-width:90px;padding-top:1px;}
-.npi-val{font-size:10px;font-family:'DM Mono',monospace;color:var(--text2);word-break:break-all;}
-.npi-val.tbd{background:var(--rbg);color:var(--red);padding:1px 6px;border-radius:3px;font-weight:600;}
-.design-btn{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:600;color:var(--red);background:var(--rbg);border:1px solid #fca5a5;border-radius:5px;padding:3px 9px;cursor:pointer;margin-top:10px;}
-.design-btn:hover{background:#fecaca;}
-
-/* COST */
-.cost-row{display:grid;grid-template-columns:1fr 80px 90px 90px 80px;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border2);}
-.cost-row:last-child{border-bottom:none;}
-.cost-row.hdr div{font-size:9px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);}
-
-/* AUTH OVERLAY */
-.auth-overlay{position:fixed;inset:0;background:rgba(15,32,68,.85);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;z-index:1000;}
-.auth-box{background:var(--white);border-radius:16px;padding:40px 48px;text-align:center;max-width:420px;width:90%;box-shadow:0 25px 60px rgba(0,0,0,.3);}
-.auth-logo{width:56px;height:56px;background:linear-gradient(135deg,var(--blue2),var(--accent2));border-radius:14px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:18px;color:#fff;margin:0 auto 20px;}
-.auth-title{font-size:20px;font-weight:700;color:var(--text);margin-bottom:8px;}
-.auth-sub{font-size:13px;color:var(--text3);margin-bottom:28px;line-height:1.5;}
-.auth-btn{display:inline-flex;align-items:center;gap:10px;background:var(--blue2);color:#fff;border:none;border-radius:10px;padding:13px 28px;font-size:14px;font-weight:600;cursor:pointer;transition:all .2s;font-family:'DM Sans',sans-serif;width:100%;justify-content:center;}
-.auth-btn:hover{background:var(--blue);transform:translateY(-1px);}
-
-/* COMING SOON */
-.coming{display:flex;align-items:center;justify-content:center;min-height:180px;border:2px dashed var(--border2);border-radius:10px;flex-direction:column;gap:10px;}
-.coming-title{font-size:12px;font-weight:600;color:var(--muted);letter-spacing:1px;text-transform:uppercase;}
+.npi-sec{padding:14px 20px;}
+.npi-sec-title{font-size:9px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;}
+.npi-field{display:flex;gap:8px;align-items:flex-start;margin-bottom:6px;}
+.npi-key{font-size:10px;color:var(--text4);flex-shrink:0;min-width:86px;padding-top:1px;}
+.npi-v{font-size:10px;font-family:'IBM Plex Mono',monospace;color:var(--text2);word-break:break-all;}
+.npi-v.tbd{background:var(--rbg);color:var(--red2);padding:1px 6px;border-radius:3px;font-weight:600;}
+.di-btn{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:600;color:var(--red2);background:var(--rbg);border:1px solid #fca5a5;border-radius:6px;padding:3px 10px;cursor:pointer;margin-top:10px;transition:all .15s;}
+.di-btn:hover{background:#fecaca;}
+.di-detail{display:none;margin:0 20px 14px;background:#fff5f5;border:1px solid #fca5a5;border-radius:8px;padding:12px;}
+.di-detail-title{font-size:9px;font-weight:600;color:var(--red2);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px;}
+/* Design issue row - PCBA PN in full on one line */
+.di-row{display:grid;grid-template-columns:1fr 1fr 70px 80px;gap:10px;font-size:10px;padding:5px 0;border-bottom:1px solid #fecaca;align-items:center;}
+.di-row:last-child{border-bottom:none;}
+.di-pn{font-family:'IBM Plex Mono',monospace;font-size:10px;white-space:nowrap;color:var(--text2);}
+.coming{display:flex;align-items:center;justify-content:center;min-height:130px;border:2px dashed var(--border2);border-radius:10px;flex-direction:column;gap:8px;}
+.coming-title{font-size:11px;font-weight:600;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;}
 .coming-sub{font-size:11px;color:var(--muted);}
-
-/* DESIGN DETAIL */
-.design-detail{display:none;margin:0 18px 14px;background:var(--rbg);border:1px solid #fca5a5;border-radius:7px;padding:12px;}
-.design-detail-title{font-size:10px;font-weight:600;color:var(--red);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;}
-.design-detail-row{display:grid;grid-template-columns:1fr 100px 100px 80px;gap:8px;font-size:10px;padding:4px 0;border-bottom:1px solid #fecaca;align-items:center;}
-
-.fade-in{opacity:0;animation:fi .35s ease forwards;}
-@keyframes fi{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+.fade{opacity:0;animation:fi .4s ease forwards;}
+@keyframes fi{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 </style>
 </head>
 <body>
-
-
-  <div class="header-right">
+<header>
+  <div class="logo">
+    <div class="logo-icon">OE</div>
+    <div><div class="logo-text">OE Operations Dashboard</div><div class="logo-sub">Engineering Excellence · 2026</div></div>
+  </div>
+  <div class="hdr-right">
     <button class="refresh-btn" id="refreshBtn" onclick="refreshData()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-        <path d="M21 2v6h-6M3 12a9 9 0 0 1 15-6.7L21 8M3 22v-6h6M21 12a9 9 0 0 1-15 6.7L3 16"/>
-      </svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 2v6h-6M3 12a9 9 0 0 1 15-6.7L21 8M3 22v-6h6M21 12a9 9 0 0 1-15 6.7L3 16"/></svg>
       Refresh Data
     </button>
-    <div class="timestamp" id="clock">—</div>
+    <span class="clock" id="clock">—</span>
   </div>
 </header>
-
-<div class="status-bar" id="statusBar">
-  <div class="status-dot idle" id="statusDot"></div>
-  <span id="statusText">ממתין לאימות...</span>
-</div>
-
+<div class="status-bar"><div class="sdot idle" id="sdot"></div><span id="stxt">Loading...</span></div>
 <nav>
   <div class="tab active" onclick="switchTab('oe',this)">OE Excellence &amp; Efficiency</div>
   <div class="tab" onclick="switchTab('npi',this)">NPI Project Master</div>
@@ -212,482 +148,225 @@ tbody td{padding:9px 12px;font-size:11px;color:var(--text2);vertical-align:middl
 
 <!-- TAB 1 -->
 <main id="tab-oe">
-  <div class="section-label">MRB — Material Review Board</div>
-  <div class="kpi-strip" id="mrbKpis">
-    <div class="kpi-box blue fade-in"><div class="kpi-lbl">Total Repaired YTD</div><div class="kpi-val" id="k-total">—</div><div class="kpi-note">Q1 + Q2 + Q3</div></div>
-    <div class="kpi-box green fade-in"><div class="kpi-lbl">Best Quarter</div><div class="kpi-val" id="k-best">—</div><div class="kpi-note" id="k-best-note">—</div></div>
-    <div class="kpi-box yellow fade-in"><div class="kpi-lbl">Lowest Quarter</div><div class="kpi-val" id="k-low">—</div><div class="kpi-note" id="k-low-note">—</div></div>
-    <div class="kpi-box green fade-in"><div class="kpi-lbl">Avg Success Rate</div><div class="kpi-val" id="k-rate">—</div><div class="kpi-note">Across all repairs</div></div>
-  </div>
-  <div class="row2">
+  <div class="sec-label">MRB — Material Review Board</div>
+  <div class="g2">
     <div class="card">
-      <div class="card-header">
-        <div><div class="card-title">① Quarterly Repair Target — Plan vs. Actual</div><div class="card-sub">Units repaired per quarter · 2026</div></div>
-      </div>
-      <div id="pvaRows"><div style="color:var(--muted);font-size:11px;text-align:center;padding:20px">טוען נתונים...</div></div>
+      <div class="card-hdr"><div><div class="card-title">① Quarterly Repair Target — Plan vs. Actual</div><div class="card-sub">Units repaired · 2026</div></div></div>
+      <div id="pvaRows"></div>
     </div>
     <div class="card">
-      <div class="card-header">
-        <div><div class="card-title">② Symptom-Based Repair — Method &amp; Success Rate</div><div class="card-sub">Per product / symptom</div></div>
+      <div class="card-hdr">
+        <div><div class="card-title">② Symptom-Based Repair — Method &amp; Success Rate</div></div>
+        <span class="badge green" id="rateBadge">Avg —%</span>
       </div>
-      <div class="method-grid hdr"><div>Product · Symptom</div><div>Method</div><div>Qty</div><div>Success Rate</div><div>Status</div></div>
-      <div id="methodRows"><div style="color:var(--muted);font-size:11px;text-align:center;padding:20px">טוען נתונים...</div></div>
+      <div class="method-row method-hdr"><div>Product · Symptom</div><div>Method</div><div>Qty</div><div>Success Rate</div><div>Status</div></div>
+      <div id="methodRows"></div>
     </div>
   </div>
 
-  <div class="section-label" style="margin-top:32px">Component Engineering — Milestones</div>
-  <div class="row3">
+  <div class="sec-label" style="margin-top:32px">Component Engineering — Implementation Cycle Time</div>
+  <div class="g3">
     <div class="card">
-      <div class="card-header"><div><div class="card-title">Implementation Cycle Time — Visual vs. Actual</div><div class="card-sub">Delay in days per task</div></div><span class="badge yellow" id="otdBadge">OTD —%</span></div>
-      <canvas id="cycleChart" style="max-height:200px;"></canvas>
+      <div class="card-hdr"><div><div class="card-title">Cycle Time per Product / New Component</div><div class="card-sub">Total delay days across all milestones</div></div><span class="badge yellow" id="otdBadge">OTD —%</span></div>
+      <canvas id="cycleChart" style="max-height:200px"></canvas>
     </div>
     <div class="card">
-      <div class="card-header"><div><div class="card-title">OTD &amp; Root Cause</div></div></div>
-      <canvas id="rootChart" style="max-height:160px;margin-bottom:12px;"></canvas>
+      <div class="card-hdr"><div><div class="card-title">OTD &amp; Root Cause</div></div></div>
+      <canvas id="rootChart" style="max-height:150px;margin-bottom:10px"></canvas>
       <div id="rootSummary"></div>
     </div>
   </div>
-  <div class="card" style="margin-top:18px;">
-    <div class="card-header"><div><div class="card-title">Milestone Detail</div></div></div>
-    <div style="display:grid;grid-template-columns:130px 55px 70px 1fr 95px 80px 80px 55px 90px;gap:8px;padding:7px 0;border-bottom:2px solid var(--border2);">
-      <div style="font-size:9px;font-weight:600;text-transform:uppercase;color:var(--muted)">Product</div>
-      <div style="font-size:9px;font-weight:600;text-transform:uppercase;color:var(--muted)">Type</div>
-      <div style="font-size:9px;font-weight:600;text-transform:uppercase;color:var(--muted)">Comp.</div>
-      <div style="font-size:9px;font-weight:600;text-transform:uppercase;color:var(--muted)">Task</div>
-      <div style="font-size:9px;font-weight:600;text-transform:uppercase;color:var(--muted)">Milestone</div>
-      <div style="font-size:9px;font-weight:600;text-transform:uppercase;color:var(--muted)">Target</div>
-      <div style="font-size:9px;font-weight:600;text-transform:uppercase;color:var(--muted)">Actual</div>
-      <div style="font-size:9px;font-weight:600;text-transform:uppercase;color:var(--muted)">Delay</div>
-      <div style="font-size:9px;font-weight:600;text-transform:uppercase;color:var(--muted)">Root Cause</div>
-    </div>
-    <div id="msRows"></div>
+  <div class="card" style="margin-top:18px">
+    <div class="card-hdr"><div><div class="card-title">Per Product / New Component Summary</div></div></div>
+    <div class="comp-row hdr"><div>Product</div><div>Type</div><div>New Component</div><div>Org. HPN</div><div>Tasks</div><div>First Target</div><div>Last Actual</div><div>Total Delay</div></div>
+    <div id="compRows"></div>
   </div>
 
-  <div class="section-label" style="margin-top:32px">Cost Reduction Activities</div>
-  <div class="row3">
-    <div class="card"><div class="card-header"><div><div class="card-title">Yearly Cost Reduction Summary</div></div></div><canvas id="costChart" style="max-height:200px;"></canvas></div>
-    <div class="card" style="display:flex;flex-direction:column;gap:16px;">
-      <div>
-        <div style="font-size:36px;font-weight:700;font-family:'DM Mono',monospace;color:var(--green);line-height:1" id="costTotal">$—</div>
-        <div style="font-size:10px;color:var(--text3);letter-spacing:1px;text-transform:uppercase;margin-top:4px">Total Annual Savings</div>
-      </div>
-      <div style="border-top:1px solid var(--border2);padding-top:14px;">
-        <div class="cost-row hdr"><div>Activity</div><div>Category</div><div>Unit Save</div><div>Annual Vol.</div><div>Status</div></div>
-        <div id="costRows"></div>
+  <div class="sec-label" style="margin-top:32px">Cost Reduction Activities</div>
+  <div class="card">
+    <div class="card-hdr">
+      <div><div class="card-title">Activity Summary</div></div>
+      <div style="text-align:right">
+        <div style="font-size:36px;font-weight:700;font-family:'IBM Plex Mono',monospace;color:var(--green2);line-height:1" id="costTotal">$—</div>
+        <div style="font-size:9px;color:var(--text4);letter-spacing:1.5px;text-transform:uppercase;margin-top:2px">Total Annual Savings (Closed)</div>
       </div>
     </div>
+    <div class="cost-row hdr"><div>Activity</div><div>Category</div><div>Unit ($)</div><div>Volume</div><div>Total ($)</div><div>Status</div></div>
+    <div id="costRows"></div>
   </div>
 
-  <div class="section-label" style="margin-top:32px">Change Order — DA &amp; ECN</div>
-  <div class="row2">
-    <div class="card"><div class="card-header"><div><div class="card-title">Deviation Approval (DA)</div></div><span class="badge steel">ORACLE · Pending</span></div><div class="coming" style="min-height:140px"><div class="coming-title">Data Pending</div><div class="coming-sub">ORACLE system report</div></div></div>
-    <div class="card"><div class="card-header"><div><div class="card-title">ECN — Engineering Change Order</div></div><span class="badge steel">ORACLE · Pending</span></div><div class="coming" style="min-height:140px"><div class="coming-title">Data Pending</div><div class="coming-sub">ORACLE system report</div></div></div>
+  <div class="sec-label" style="margin-top:32px">Change Order — DA &amp; ECN</div>
+  <div class="g2">
+    <div class="card"><div class="card-hdr"><div><div class="card-title">Deviation Approval (DA)</div></div><span class="badge steel">ORACLE · Pending</span></div><div class="coming" style="min-height:100px"><div class="coming-title">Data Pending</div><div class="coming-sub">ORACLE system report</div></div></div>
+    <div class="card"><div class="card-hdr"><div><div class="card-title">Engineering Change Order (ECN)</div></div><span class="badge steel">ORACLE · Pending</span></div><div class="coming" style="min-height:100px"><div class="coming-title">Data Pending</div><div class="coming-sub">ORACLE system report</div></div></div>
   </div>
 </main>
 
 <!-- TAB 2 -->
 <main id="tab-npi" style="display:none">
-  <div class="section-label">NPI Project Master — OE Status Tracker</div>
-  <div class="npi-grid" id="npiCards"><div style="color:var(--muted);font-size:11px;text-align:center;padding:40px">טוען נתונים...</div></div>
+  <div class="sec-label">NPI Project Master — OE Status Tracker</div>
+  <div class="npi-grid" id="npiCards"></div>
 </main>
 
 <!-- TAB 3 -->
 <main id="tab-quality" style="display:none">
-  <div class="section-label">Quality</div>
-  <div class="coming"><div class="coming-title">Module Coming Soon</div><div class="coming-sub">Pending alignment with Shachaf Cohen — TBD</div></div>
+  <div class="sec-label">Quality</div>
+  <div class="coming"><div class="coming-title">Coming Soon</div><div class="coming-sub">Pending alignment with Shachaf Cohen</div></div>
 </main>
 
 <script>
-// ═══════════════════════════════════════════════
-// CONFIG
-// ═══════════════════════════════════════════════
-// Direct Box shared link — no auth needed
-const BOX_SHARED_LINK = 'https://harmonicinc.box.com/shared/static/xvccxq02t9dy0e4e9d12wypcvac1i5ff.xlsx';
-const PHASE_ORDER = ['Design','Prototype','0 series','MP'];
+const DATA_URL='https://raw.githubusercontent.com/NissimToledano-HR/oe-dashboard/main/data.json';
+const PHASES=['Design','Prototype','0 series','MP'];
+let cycleChart=null,rootChart=null;
 
-let cycleChart=null, rootChart=null, costChart=null;
+function tick(){const n=new Date();document.getElementById('clock').textContent=n.toLocaleDateString('en-GB')+' · '+n.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});}
+tick();setInterval(tick,1000);
 
-// ═══════════════════════════════════════════════
-// CLOCK
-// ═══════════════════════════════════════════════
-function tick(){
-  const n=new Date();
-  document.getElementById('clock').textContent=
-    n.toLocaleDateString('en-GB')+'  '+n.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
-}
-tick(); setInterval(tick,1000);
-
-// ═══════════════════════════════════════════════
-// TAB SWITCHING
-// ═══════════════════════════════════════════════
 function switchTab(id,el){
   ['oe','npi','quality'].forEach(t=>document.getElementById('tab-'+t).style.display='none');
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
   document.getElementById('tab-'+id).style.display='block';
   el.classList.add('active');
 }
+function setStatus(st,txt){document.getElementById('sdot').className='sdot '+st;document.getElementById('stxt').textContent=txt;}
 
-// ═══════════════════════════════════════════════
-// STATUS
-// ═══════════════════════════════════════════════
-function setStatus(state, text){
-  const dot=document.getElementById('statusDot');
-  const txt=document.getElementById('statusText');
-  dot.className='status-dot '+state;
-  txt.textContent=text;
-}
+function renderMRB(d){
+  const mrb=d['MRB']||{};
+  const quarterly=(mrb.quarterly||[]).map(r=>({q:r['Quarter']||'',plan:parseFloat(r['Target'])||0,actual:parseFloat(r['Actual'])||0}));
+  const symptoms=(mrb.symptoms||[]).map(r=>({product:r['Product Name']||'',symptom:r['Symptom']||'',method:r['Repair Method']||'',qty:parseFloat(r['Qty. Repaired'])||0,status:r['Repair status']||'',rate:parseFloat(r['Success rate'])||0}));
+  const avgRate=symptoms.length?symptoms.reduce((s,r)=>s+r.rate,0)/symptoms.length:0;
+  document.getElementById('rateBadge').textContent='Avg Rate: '+(avgRate?(avgRate*100).toFixed(1)+'%':'—');
 
-// ═══════════════════════════════════════════════
-// NO AUTH NEEDED — reads local data.json
-// ═══════════════════════════════════════════════
-// ═══════════════════════════════════════════════
-// LOAD DATA FROM data.json
-// ═══════════════════════════════════════════════
-async function downloadExcel(){
-  setStatus('loading','טוען נתונים...');
-  const res = await fetch('https://raw.githubusercontent.com/NissimToledano-HR/oe-dashboard/main/data.json?t='+Date.now());
-  if(!res.ok) throw new Error('data.json not found — please run update_dashboard.bat first');
-  return await res.json();
-}
-
-// ═══════════════════════════════════════════════
-// PARSE — already JSON, just return it
-// ═══════════════════════════════════════════════
-function parseExcel(data){
-  return data; // already parsed JSON from convert.py
-}
-
-function getSheet(sheets, name){
-  const key=Object.keys(sheets).find(k=>k.trim().toLowerCase()===name.trim().toLowerCase());
-  const rows = key ? (sheets[key] || []) : [];
-  return rows.filter(r => r && typeof r === 'object');
-}
-
-// ═══════════════════════════════════════════════
-// RENDER — MRB
-// ═══════════════════════════════════════════════
-function renderMRB(sheets){
-  const mrb = sheets['MRB'] || {};
-  const quarterly = (mrb.quarterly || []).map(r=>({
-    q: r['Quarter']||'',
-    plan: parseFloat(r['Target'])||0,
-    actual: parseFloat(r['Actual'])||0
-  }));
-  const successRate = parseFloat(mrb.success_rate)||0;
-  const symptoms = (mrb.symptoms || []).map(r=>({
-    product: r['Product Name']||'',
-    quarter: r['Quarter']||'',
-    symptom: r['Symptom']||'',
-    method:  r['Repair Method']||'',
-    qty:     parseFloat(r['Qty. Repaired'])||0,
-    status:  r['Repair status']||'',
-    rate:    parseFloat(r['Success rate'])||0
-  }));
-
-  // KPIs — handle null/REF
-  const validQ=quarterly.filter(r=>r.actual>0);
-  const totalActual=validQ.reduce((s,r)=>s+r.actual,0);
-  const best=validQ.length?validQ.reduce((a,b)=>b.actual>a.actual?b:a,validQ[0]):{};
-  const worst=validQ.length?validQ.reduce((a,b)=>b.actual<a.actual?b:a,validQ[0]):{};
-  document.getElementById('k-total').textContent=totalActual?totalActual.toLocaleString():'—';
-  document.getElementById('k-best').textContent=best.actual||'—';
-  document.getElementById('k-best-note').textContent=best.q||'';
-  document.getElementById('k-low').textContent=worst.actual||'—';
-  document.getElementById('k-low-note').textContent=worst.q||'';
-  // calc avg success rate from symptoms if not in data
-  const avgRate=symptoms.length?symptoms.reduce((s,r)=>s+r.rate,0)/symptoms.length:successRate;
-  document.getElementById('k-rate').textContent=avgRate?(avgRate*100).toFixed(1)+'%':'—';
-
-  // PVA bars
-  const maxVal=Math.max(...quarterly.map(r=>Math.max(r.plan,r.actual)),1);
+  const mx=Math.max(...quarterly.map(r=>Math.max(r.plan,r.actual)),1);
   document.getElementById('pvaRows').innerHTML=quarterly.map(r=>{
-    const pp=r.plan/maxVal*100,ap=r.actual>0?r.actual/maxVal*100:0;
+    const pp=r.plan/mx*100,ap=r.actual>0?r.actual/mx*100:0;
     const ratio=r.actual>0?r.actual/r.plan:null;
-    const ac=ratio===null?'var(--muted)':ratio>=1?'var(--green2)':ratio>=0.7?'var(--yellow2)':'var(--red2)';
-    const pc=ratio===null?'var(--muted)':ratio>=1?'var(--green)':ratio>=0.7?'var(--yellow)':'var(--red)';
-    return `<div class="pva-row">
-      <div class="pva-label">${r.q.replace(/ - 2026/,'')}</div>
-      <div class="bar-group">
-        <div class="bar-track"><div class="bar-fill" style="width:${pp}%;background:var(--muted)"></div></div>
-        <div class="bar-track"><div class="bar-fill" style="width:${ap}%;background:${ac}"></div></div>
-      </div>
-      <div class="bar-num">${r.plan.toLocaleString()}<br><span style="color:${ac}">${r.actual>0?r.actual.toLocaleString():'—'}</span></div>
-      <div class="bar-pct" style="color:${pc}">${ratio!==null?(ratio*100).toFixed(0)+'%':'—'}</div>
-    </div>`;
+    const ac=ratio===null?'var(--muted)':ratio>=1?'var(--green3)':ratio>=0.7?'var(--yellow3)':'var(--red3)';
+    const pc=ratio===null?'var(--muted)':ratio>=1?'var(--green2)':ratio>=0.7?'var(--yellow2)':'var(--red2)';
+    return `<div class="pva"><div class="pva-lbl">${r.q.replace(/ - 2026/,'')}</div><div class="bar-wrap"><div class="bar-track"><div class="bar-fill" style="width:${pp}%;background:var(--border)"></div></div><div class="bar-track"><div class="bar-fill" style="width:${ap}%;background:${ac}"></div></div></div><div class="bar-num">${r.plan.toLocaleString()}<br><span style="color:${ac}">${r.actual>0?r.actual.toLocaleString():'—'}</span></div><div class="bar-pct" style="color:${pc}">${ratio!==null?(ratio*100).toFixed(0)+'%':'—'}</div></div>`;
   }).join('');
 
-  // Method rows
   document.getElementById('methodRows').innerHTML=symptoms.map(r=>{
     const pct=(r.rate*100).toFixed(0);
-    const bc=r.rate>=0.9?'var(--green2)':r.rate>=0.8?'var(--yellow2)':'var(--red2)';
-    const tc=r.rate>=0.9?'var(--green)':r.rate>=0.8?'var(--yellow)':'var(--red)';
+    const bc=r.rate>=.9?'var(--green3)':r.rate>=.8?'var(--yellow3)':'var(--red3)';
+    const tc=r.rate>=.9?'var(--green2)':r.rate>=.8?'var(--yellow2)':'var(--red2)';
     const mb=r.method==='SW'?'blue':r.method==='HW'?'steel':'red';
-    return `<div class="method-grid">
-      <div style="font-size:11px">${r.product}<br><span style="color:var(--text3);font-size:10px">${r.symptom}</span></div>
-      <div><span class="badge ${mb}">${r.method}</span></div>
-      <div class="mono">${r.qty.toLocaleString()}</div>
-      <div><div style="display:flex;align-items:center;gap:6px">
-        <div class="rate-bar" style="flex:1"><div class="rate-fill" style="width:${pct}%;background:${bc}"></div></div>
-        <span class="mono" style="color:${tc};font-weight:600;font-size:10px">${pct}%</span>
-      </div></div>
-      <div><span class="pill ${r.status.toLowerCase()==='success'?'success':'fail'}">${r.status}</span></div>
-    </div>`;
+    return `<div class="method-row"><div style="font-size:11px">${r.product}<br><span style="color:var(--text4);font-size:10px">${r.symptom}</span></div><div><span class="badge ${mb}">${r.method}</span></div><div class="mono">${r.qty.toLocaleString()}</div><div style="display:flex;align-items:center;gap:7px"><div class="rate-track" style="flex:1"><div class="rate-fill" style="width:${pct}%;background:${bc}"></div></div><span class="mono" style="color:${tc};font-weight:600;font-size:10px">${pct}%</span></div><div><span class="pill ${r.status.toLowerCase()==='success'?'success':'fail'}">${r.status}</span></div></div>`;
   }).join('');
 }
 
-// ═══════════════════════════════════════════════
-// RENDER — COMPONENT ENG.
-// ═══════════════════════════════════════════════
-function renderCompEng(sheets){
-  const rows=getSheet(sheets,'Component Eng. ');
-  const data=rows.filter(r=>r['Product Name']&&r['Milestone']);
+function renderCompEng(d){
+  const rows=(d['Component Eng. ']||[]).filter(r=>r['Product Name']&&r['New Component']);
+  // Group by Product + Type + New Component + HPN
+  const groups={};
+  rows.forEach(r=>{
+    const key=`${r['Product Name']}|${r['Type']}|${r['New Component']}|${r['Org. HPN']}`;
+    if(!groups[key]) groups[key]={product:r['Product Name'],type:r['Type'],component:r['New Component'],hpn:r['Org. HPN'],tasks:0,firstTarget:null,lastActual:null,totalDelay:0,rootCauses:[]};
+    const g=groups[key];
+    g.tasks++;
+    const delay=parseInt(r['Delay (Days) ']||0)||0;
+    g.totalDelay+=delay;
+    if(!g.firstTarget && r['Target Date']) g.firstTarget=r['Target Date'];
+    if(r['Actual Date']) g.lastActual=r['Actual Date'];
+    if(delay>0 && r['Root Cause']) g.rootCauses.push(r['Root Cause']);
+  });
+  const grouped=Object.values(groups);
 
-  const otdCount=data.filter(r=>parseInt(r['Delay (Days) ']||r['Delay (Days)']||0)===0).length;
-  const otdPct=data.length?Math.round(otdCount/data.length*100):0;
+  const otdN=grouped.filter(g=>g.totalDelay===0).length;
+  const otdPct=grouped.length?Math.round(otdN/grouped.length*100):0;
   document.getElementById('otdBadge').textContent=`OTD ${otdPct}%`;
   document.getElementById('otdBadge').className='badge '+(otdPct>=80?'green':otdPct>=60?'yellow':'red');
-
-  // Cycle chart
-  const labels=data.map(d=>[d['Product Name'],d['Milestone']]);
-  const delays=data.map(d=>{const v=d['Delay (Days) ']||d['Delay (Days)']||0; return (v==='#REF!'||v===null)?0:parseInt(v)||0;});
-  const bgColors=delays.map(d=>d===0?'rgba(22,163,74,.25)':d<10?'rgba(217,119,6,.35)':'rgba(220,38,38,.35)');
-  const bdColors=delays.map(d=>d===0?'#16a34a':d<10?'#d97706':'#dc2626');
 
   if(cycleChart) cycleChart.destroy();
   cycleChart=new Chart(document.getElementById('cycleChart'),{
     type:'bar',
-    data:{labels,datasets:[{label:'Delay (days)',data:delays,backgroundColor:bgColors,borderColor:bdColors,borderWidth:1.5,borderRadius:4}]},
+    data:{
+      labels:grouped.map(g=>[g.product,g.component]),
+      datasets:[{label:'Total Delay (days)',data:grouped.map(g=>g.totalDelay),
+        backgroundColor:grouped.map(g=>g.totalDelay===0?'rgba(34,197,94,.2)':g.totalDelay<15?'rgba(245,158,11,.3)':'rgba(239,68,68,.3)'),
+        borderColor:grouped.map(g=>g.totalDelay===0?'#22c55e':g.totalDelay<15?'#f59e0b':'#ef4444'),
+        borderWidth:1.5,borderRadius:5}]
+    },
     options:{responsive:true,maintainAspectRatio:true,
-      plugins:{legend:{labels:{color:'#64748b',font:{size:10},boxWidth:10}}},
-      scales:{x:{grid:{display:false},ticks:{color:'#64748b',font:{size:9},maxRotation:0}},
-              y:{grid:{color:'rgba(0,0,0,0.05)'},ticks:{color:'#64748b',font:{size:9}},
-                 title:{display:true,text:'Days Late',color:'#94a3b8',font:{size:9}}}}}
+      plugins:{legend:{labels:{color:'#64748b',font:{size:10,family:'IBM Plex Sans'},boxWidth:10}}},
+      scales:{x:{grid:{display:false},ticks:{color:'#64748b',font:{size:9,family:'IBM Plex Sans'},maxRotation:0}},
+        y:{grid:{color:'rgba(0,0,0,0.04)'},ticks:{color:'#64748b',font:{size:9,family:'IBM Plex Sans'}},title:{display:true,text:'Total Days Late',color:'#94a3b8',font:{size:9}}}}}
   });
 
-  // Root cause chart
-  const rootMap={};
-  data.filter(d=>parseInt(d['Delay (Days) ']||d['Delay (Days)']||0)>0).forEach(d=>{
-    const rc=d['Root Cause']||'Unknown';
-    rootMap[rc]=(rootMap[rc]||0)+1;
-  });
-  const onTime=data.length-Object.values(rootMap).reduce((a,b)=>a+b,0);
-  const rcLabels=['On Time',...Object.keys(rootMap)];
-  const rcData=[onTime,...Object.values(rootMap)];
-  const rcColors=['rgba(22,163,74,.7)','rgba(220,38,38,.7)','rgba(217,119,6,.7)','rgba(59,130,246,.7)','rgba(168,85,247,.7)'];
-
+  const rcMap={};
+  rows.forEach(r=>{const delay=parseInt(r['Delay (Days) ']||0)||0;if(delay>0){const rc=r['Root Cause']||'Unknown';rcMap[rc]=(rcMap[rc]||0)+1;}});
+  const onTime=rows.filter(r=>!(parseInt(r['Delay (Days) ']||0)||0)).length;
   if(rootChart) rootChart.destroy();
   rootChart=new Chart(document.getElementById('rootChart'),{
     type:'doughnut',
-    data:{labels:rcLabels,datasets:[{data:rcData,backgroundColor:rcColors,borderColor:'#fff',borderWidth:2,hoverOffset:4}]},
-    options:{responsive:true,maintainAspectRatio:true,cutout:'62%',
-      plugins:{legend:{position:'bottom',labels:{color:'#334155',font:{size:10},boxWidth:10,padding:8}}}}
+    data:{labels:['On Time',...Object.keys(rcMap)],datasets:[{data:[onTime,...Object.values(rcMap)],backgroundColor:['rgba(34,197,94,.7)','rgba(239,68,68,.7)','rgba(245,158,11,.7)','rgba(59,130,246,.7)'],borderColor:'#fff',borderWidth:2,hoverOffset:4}]},
+    options:{responsive:true,maintainAspectRatio:true,cutout:'60%',plugins:{legend:{position:'bottom',labels:{color:'#334155',font:{size:10,family:'IBM Plex Sans'},boxWidth:10,padding:8}}}}
   });
-
-  // Root summary
-  document.getElementById('rootSummary').innerHTML=Object.entries({...{' On Time':onTime},...rootMap}).map(([k,v])=>{
-    const c=k.trim()==='On Time'?'var(--green)':'var(--red)';
-    return `<div style="display:flex;justify-content:space-between;font-size:11px;padding:3px 0;border-top:1px solid var(--border2)">
-      <span style="color:var(--text3)">${k.trim()}</span>
-      <span style="font-family:'DM Mono',monospace;color:${c};font-weight:600">${v} task${v!==1?'s':''}</span>
-    </div>`;
+  document.getElementById('rootSummary').innerHTML=[['On Time',onTime],...Object.entries(rcMap)].map(([k,v])=>{
+    const c=k==='On Time'?'var(--green2)':'var(--red2)';
+    return `<div style="display:flex;justify-content:space-between;font-size:10px;padding:3px 0;border-top:1px solid var(--border2)"><span style="color:var(--text4)">${k}</span><span style="font-family:'IBM Plex Mono',monospace;color:${c};font-weight:600">${v} task${v!==1?'s':''}</span></div>`;
   }).join('');
 
-  // MS rows
-  const fmtDate=v=>{
-    if(!v) return '—';
-    if(v instanceof Date) return v.toLocaleDateString('en-GB');
-    const d=new Date(v); return isNaN(d)?String(v):d.toLocaleDateString('en-GB');
-  };
-  document.getElementById('msRows').innerHTML=data.map(r=>{
-    const dv=r['Delay (Days) ']||r['Delay (Days)']||0; const delay=(dv==='#REF!'||dv===null)?0:parseInt(dv)||0;
-    const dc=delay===0?'var(--green)':delay<10?'var(--yellow)':'var(--red)';
-    const task=String(r['Task Name']||'').substring(0,38);
-    return `<div class="ms-grid">
-      <div style="font-size:11px;font-weight:500">${r['Product Name']}</div>
-      <div style="font-size:10px;color:var(--text3)">${r['Type']||''}</div>
-      <div style="font-size:10px;color:var(--blue);font-weight:500">${r['New Component']||''}</div>
-      <div style="font-size:10px;color:var(--text2)" title="${r['Task Name']||''}">${task}${task.length>=38?'…':''}</div>
-      <div><span class="ms-tag">${r['Milestone']||''}</span></div>
-      <div class="mono" style="color:var(--text3)">${fmtDate(r['Target Date'])}</div>
-      <div class="mono">${fmtDate(r['Actual Date'])}</div>
-      <div class="mono" style="color:${dc};font-weight:600">${delay===0?'+0':'+'+delay+'d'}</div>
-      <div style="font-size:10px;color:var(--text3)">${r['Root Cause']||'—'}</div>
-    </div>`;
+  document.getElementById('compRows').innerHTML=grouped.map(g=>{
+    const dc=g.totalDelay===0?'var(--green2)':g.totalDelay<15?'var(--yellow2)':'var(--red2)';
+    return `<div class="comp-row"><div style="font-size:11px;font-weight:500">${g.product}</div><div style="font-size:10px;color:var(--text3)">${g.type||''}</div><div style="font-size:10px;color:var(--blue2);font-weight:500">${g.component}</div><div class="mono" style="font-size:9px;color:var(--text4)">${g.hpn||''}</div><div class="mono" style="color:var(--text4);text-align:center">${g.tasks}</div><div class="mono" style="color:var(--text4)">${g.firstTarget||'—'}</div><div class="mono">${g.lastActual||'—'}</div><div class="mono" style="color:${dc};font-weight:700">${g.totalDelay===0?'✓ On time':'+'+g.totalDelay+'d'}</div></div>`;
   }).join('');
 }
 
-// ═══════════════════════════════════════════════
-// RENDER — COST REDUCTION
-// ═══════════════════════════════════════════════
-function renderCost(sheets){
-  const rows=getSheet(sheets,'Improvment and Cost Reduction');
-  const data=rows.filter(r=>r['Activity Description']);
-  // calc total from unit*volume if total missing
-  data.forEach(r=>{
-    if(!r['Total Yearly Saving ($)']){
-      const u=parseFloat(r['Unit Saving ($)'])||0;
-      const v=parseFloat(r['Annual Volume'])||0;
-      r['Total Yearly Saving ($)']=Math.round(u*v);
-    }
-  });
-  const total=data.filter(r=>r['Status']==='Closed').reduce((s,r)=>s+parseFloat(r['Total Yearly Saving ($)']||0),0);
-
+function renderCost(d){
+  const rows=(d['Improvment and Cost Reduction']||[]).filter(r=>r['Activity Description']);
+  const total=rows.filter(r=>r['Status']==='Closed').reduce((s,r)=>s+(parseFloat(r['Total Yearly Saving ($)'])||0),0);
   document.getElementById('costTotal').textContent='$'+total.toLocaleString();
-
-  if(costChart) costChart.destroy();
-  costChart=new Chart(document.getElementById('costChart'),{
-    type:'bar',
-    data:{
-      labels:data.map(r=>String(r['Activity Description']||'').substring(0,22)+'…'),
-      datasets:[{label:'Total Yearly Saving ($)',
-        data:data.map(r=>parseFloat(r['Total Yearly Saving ($)']||0)),
-        backgroundColor:data.map(r=>r['Status']==='Closed'?'rgba(22,163,74,.25)':'rgba(217,119,6,.25)'),
-        borderColor:data.map(r=>r['Status']==='Closed'?'#16a34a':'#d97706'),
-        borderWidth:1.5,borderRadius:4}]},
-    options:{responsive:true,maintainAspectRatio:true,indexAxis:'y',
-      plugins:{legend:{display:false}},
-      scales:{x:{grid:{color:'rgba(0,0,0,0.04)'},ticks:{color:'#64748b',font:{size:9},callback:v=>'$'+v.toLocaleString()}},
-              y:{grid:{display:false},ticks:{color:'#334155',font:{size:10}}}}}
-  });
-
   const catColor={BOM:'blue',Labor:'steel','Process Time':'green','Testing Time':'yellow',Logistics:'steel'};
-  document.getElementById('costRows').innerHTML=data.map(r=>{
-    const sc=r['Status']==='Closed'?'closed':'progress';
-    const cc=catColor[r['Category']]||'steel';
-    const act=String(r['Activity Description']||'').substring(0,28);
-    return `<div class="cost-row">
-      <div style="font-size:11px;color:var(--text2)">${act}${act.length>=28?'…':''}</div>
-      <div><span class="badge ${cc}">${r['Category']||''}</span></div>
-      <div class="mono">$${parseFloat(r['Unit Saving ($)']||0).toFixed(2)}</div>
-      <div class="mono">${parseFloat(r['Annual Volume']||0).toLocaleString()}</div>
-      <div><span class="pill ${sc}">${r['Status']||''}</span></div>
-    </div>`;
+  document.getElementById('costRows').innerHTML=rows.map(r=>{
+    const act=String(r['Activity Description']||'').substring(0,34);
+    const tot=parseFloat(r['Total Yearly Saving ($)'])||0;
+    return `<div class="cost-row"><div style="font-size:11px">${act}${act.length>=34?'…':''}</div><div><span class="badge ${catColor[r['Category']]||'steel'}">${r['Category']||''}</span></div><div class="mono">$${parseFloat(r['Unit Saving ($)']||0).toFixed(2)}</div><div class="mono">${parseFloat(r['Annual Volume']||0).toLocaleString()}</div><div class="mono" style="font-weight:600;color:var(--green2)">$${tot.toLocaleString()}</div><div><span class="pill ${r['Status']==='Closed'?'closed':'progress'}">${r['Status']||''}</span></div></div>`;
   }).join('');
 }
 
-// ═══════════════════════════════════════════════
-// RENDER — NPI
-// ═══════════════════════════════════════════════
-function renderNPI(sheets){
-  const npiRows=getSheet(sheets,'NPI_Master');
-  const designRows=getSheet(sheets,'Design issue for improvment');
-  const data=npiRows.filter(r=>r&&r['Product Name']);
-
-  const tlClass={'On Track':'tl-green','At Risk':'tl-yellow','Blocked':'tl-red'};
-  const badgeClass={'On Track':'green','At Risk':'yellow','Blocked':'red'};
-
-  document.getElementById('npiCards').innerHTML=data.map(p=>{
-    const product=p['Product Name'];
-    const status=p['Status']||'On Track';
-    const phase=p['Current Phase']||'';
-    const tl=tlClass[status]||'tl-yellow';
-    const bc=badgeClass[status]||'yellow';
-    const currentIdx=PHASE_ORDER.indexOf(phase);
-
-    const phaseBar=PHASE_ORDER.map((ph,i)=>{
-      const cls=ph===phase?'active':i<currentIdx?'done':'';
-      return `<div class="phase-step ${cls}">${ph}</div>`;
-    }).join('');
-
-    const configFields=['Marketing PN','Main Board','SFP Board','DAUGHTER Board','LED Board','240 Level']
-      .filter(k=>p[k]!=null&&p[k]!=='')
-      .map(k=>{
-        const v=p[k];
-        const vHtml=v==='TBD'?`<span class="npi-val tbd">TBD</span>`:`<span class="npi-val">${v}</span>`;
-        return `<div class="npi-field"><span class="npi-key">${k}</span>${vHtml}</div>`;
-      }).join('');
-
-    const notes=(p['Important Notes']||'').split('\n').map(l=>`<div style="font-size:11px;color:var(--text2);line-height:1.6">${l}</div>`).join('');
-
-    const issues=designRows.filter(r=>r['Product Name']===product);
-    const designBtn=issues.length?`<div class="design-btn" onclick="toggleDesign('${product}')">⚠ Design Issues (${issues.length})</div>`:'';
-    const designDetail=issues.length?`
-      <div id="design-${product.replace(/\s/g,'_')}" class="design-detail">
-        <div class="design-detail-title">Design Issues for Improvement</div>
-        ${issues.map(d=>`<div class="design-detail-row">
-          <div style="color:var(--text2)">${d['Description']||''}</div>
-          <div class="mono">${d['PCBA PN']||''}</div>
-          <div style="color:var(--text3)">${d['Type issue']||''}</div>
-          <div><span class="pill open">${d['Status']||''}</span></div>
-        </div>`).join('')}
-      </div>`:''  ;
-
-    return `<div class="npi-card">
-      <div class="npi-top">
-        <div class="traffic-light ${tl}"></div>
-        <div><div class="npi-name">${product}</div><div style="margin-top:2px"><span class="badge ${bc}">${status}</span></div></div>
-        <div class="phase-bar">${phaseBar}</div>
-      </div>
-      <div class="npi-body">
-        <div class="npi-section">
-          <div class="npi-section-title">Configuration</div>
-          ${configFields}${designBtn}
-        </div>
-        <div class="npi-divider"></div>
-        <div class="npi-section">
-          <div class="npi-section-title">Important Notes</div>
-          ${notes||'<span style="color:var(--muted);font-size:11px">—</span>'}
-        </div>
-        <div class="npi-divider"></div>
-        <div class="npi-section">
-          <div class="npi-section-title">ECN Key</div>
-          <div style="font-size:11px;color:var(--muted);font-style:italic">TBD</div>
-        </div>
-      </div>
-      ${designDetail}
-    </div>`;
+function renderNPI(d){
+  const npiRows=(d['NPI_Master']||[]).filter(r=>r&&r['Product Name']);
+  const diRows=d['Design issue for improvment']||[];
+  const tlC={'On Track':'tl-green','At Risk':'tl-yellow','Blocked':'tl-red'};
+  document.getElementById('npiCards').innerHTML=npiRows.map(p=>{
+    const prod=p['Product Name'],status=p['Status']||'On Track',phase=p['Current Phase']||'';
+    const curIdx=PHASES.indexOf(phase);
+    const phaseBar=PHASES.map((ph,i)=>`<div class="ph ${ph===phase?'active':i<curIdx?'done':''}">${ph}</div>`).join('');
+    const cfgFields=['Marketing PN','Main Board','SFP Board','DAUGHTER Board','LED Board','240 Level'].filter(k=>p[k]!=null&&p[k]!=='').map(k=>{const v=p[k];return `<div class="npi-field"><span class="npi-key">${k}</span>${v==='TBD'?`<span class="npi-v tbd">TBD</span>`:`<span class="npi-v">${v}</span>`}</div>`;}).join('');
+    const notes=String(p['Important Notes']||'').split('\n').filter(l=>l.trim()).map(l=>`<div style="font-size:11px;color:var(--text2);line-height:1.6">${l}</div>`).join('');
+    const issues=diRows.filter(r=>r['Product Name']===prod);
+    const diBtn=issues.length?`<div class="di-btn" onclick="toggleDI('${prod.replace(/[\s#]/g,'_')}')">⚠ Design Issues (${issues.length})</div>`:'';
+    const diDetail=issues.length?`<div id="di-${prod.replace(/[\s#]/g,'_')}" class="di-detail"><div class="di-detail-title">Design Issues for Improvement</div>${issues.map(di=>`<div class="di-row"><div style="font-size:11px">${di['Description']||''}</div><div class="di-pn">${di['PCBA PN']||''}</div><div style="color:var(--text3);font-size:10px">${di['Type issue']||''}</div><div><span class="pill progress">${di['Status']||''}</span></div></div>`).join('')}</div>`:'' ;
+    const stPill=status==='On Track'?'on-track':status==='At Risk'?'at-risk':'blocked';
+    return `<div class="npi-card"><div class="npi-top"><div class="tl ${tlC[status]||'tl-yellow'}"></div><div><div class="npi-name">${prod}</div><div style="margin-top:4px"><span class="pill ${stPill}">${status}</span></div></div><div class="phase-bar">${phaseBar}</div></div><div class="npi-body"><div class="npi-sec"><div class="npi-sec-title">Configuration</div>${cfgFields}${diBtn}</div><div class="npi-divider"></div><div class="npi-sec"><div class="npi-sec-title">Important Notes</div>${notes||'<span style="color:var(--muted);font-size:11px">—</span>'}</div><div class="npi-divider"></div><div class="npi-sec"><div class="npi-sec-title">ECN Key</div><div style="font-size:11px;color:var(--muted);font-style:italic">TBD</div></div></div>${diDetail}</div>`;
   }).join('');
 }
 
-function toggleDesign(product){
-  const id='design-'+product.replace(/\s/g,'_');
-  const el=document.getElementById(id);
-  if(el) el.style.display=el.style.display==='block'?'none':'block';
-}
+function toggleDI(id){const el=document.getElementById('di-'+id);if(el)el.style.display=el.style.display==='block'?'none':'block';}
 
-// ═══════════════════════════════════════════════
-// RENDER ALL
-// ═══════════════════════════════════════════════
-function renderAll(sheets){
-  renderMRB(sheets);
-  renderCompEng(sheets);
-  renderCost(sheets);
-  renderNPI(sheets);
-  setStatus('ok','נתונים עדכניים · עודכן '+new Date().toLocaleTimeString('he-IL',{hour:'2-digit',minute:'2-digit'}));
+function renderAll(d){
+  renderMRB(d);renderCompEng(d);renderCost(d);renderNPI(d);
+  setStatus('ok','Data loaded · '+(d['_updated']||''));
   document.getElementById('refreshBtn').classList.remove('loading');
   document.getElementById('refreshBtn').disabled=false;
 }
 
-// ═══════════════════════════════════════════════
-// REFRESH DATA
-// ═══════════════════════════════════════════════
 async function refreshData(){
   const btn=document.getElementById('refreshBtn');
-  btn.classList.add('loading'); btn.disabled=true;
-  setStatus('loading','מוריד נתונים מ-Box...');
+  btn.classList.add('loading');btn.disabled=true;
+  setStatus('loading','Fetching latest data...');
   try{
-    const data=await downloadExcel();
-    const sheets=parseExcel(data);
-    renderAll(sheets);
+    const res=await fetch(DATA_URL+'?t='+Date.now());
+    if(!res.ok) throw new Error('Failed to load data ('+res.status+')');
+    renderAll(await res.json());
   }catch(e){
-    setStatus('error','שגיאה: '+e.message);
-    console.error(e);
-    btn.classList.remove('loading'); btn.disabled=false;
+    setStatus('error','Error: '+e.message);
+    btn.classList.remove('loading');btn.disabled=false;
   }
 }
-
-// ═══════════════════════════════════════════════
-// AUTO-REFRESH every 15 min
-// ═══════════════════════════════════════════════
-
-
-// ═══════════════════════════════════════════════
-// INIT — handle OAuth callback or auto-load
-// ═══════════════════════════════════════════════
-// Auto-load on start
-(async function init(){
-  await refreshData();
-})();
+refreshData();
+setInterval(()=>refreshData(),15*60*1000);
 </script>
 </body>
 </html>
