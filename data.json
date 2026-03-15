@@ -3,28 +3,37 @@
     "quarterly": [
       {
         "Quarter": "Q1 - 2026",
-        "Target": 300,
-        "Actual": null
+        "Target": 300.0,
+        "Actual": 445.0
       },
       {
         "Quarter": "Q2 - 2026",
-        "Target": 300,
-        "Actual": "#REF!"
+        "Target": 300.0,
+        "Actual": 120.0
       },
       {
         "Quarter": "Q3 - 2026",
-        "Target": 300,
-        "Actual": "#REF!"
+        "Target": 300.0,
+        "Actual": 252.0
       }
     ],
-    "success_rate": 0,
+    "success_rate": 0.875,
     "symptoms": [
+      {
+        "Product Name": "RPD FDX",
+        "Quarter": "Q1 - 2026",
+        "Symptom": "Fail initialization",
+        "Repair Method": "SW",
+        "Qty. Repaired": 286.0,
+        "Repair status": "Success",
+        "Success rate": 0.75
+      },
       {
         "Product Name": "RPD 2x4",
         "Quarter": "Q1 - 2026",
-        "Symptom": "DS ACP ",
+        "Symptom": "DS ACP",
         "Repair Method": "SW",
-        "Qty. Repaired": 159,
+        "Qty. Repaired": 159.0,
         "Repair status": "Success",
         "Success rate": 0.84
       },
@@ -33,7 +42,7 @@
         "Quarter": "Q2 - 2026",
         "Symptom": "US4 Max Spurious",
         "Repair Method": "HW",
-        "Qty. Repaired": 120,
+        "Qty. Repaired": 120.0,
         "Repair status": "Success",
         "Success rate": 0.94
       },
@@ -42,7 +51,7 @@
         "Quarter": "Q3 - 2026",
         "Symptom": "RL Issue",
         "Repair Method": "HW",
-        "Qty. Repaired": 252,
+        "Qty. Repaired": 252.0,
         "Repair status": "Success",
         "Success rate": 0.97
       }
@@ -73,7 +82,7 @@
       "Status": "Closed",
       "Target Date": "14/08/2025",
       "Actual Date": "14/08/2025",
-      "Delay (Days) ": "#REF!",
+      "Delay (Days) ": 0,
       "Root Cause": null
     },
     {
@@ -81,12 +90,12 @@
       "Type": "eMMC",
       "Org. HPN": "160-1331-001",
       "New Component": "WD",
-      "Task Name": "R&D validation (HW and SW) ",
+      "Task Name": "R&D validation (HW and SW)",
       "Milestone": "R&D Validation",
       "Status": "Closed",
       "Target Date": "01/10/2025",
       "Actual Date": "25/10/2025",
-      "Delay (Days) ": "#REF!",
+      "Delay (Days) ": 24,
       "Root Cause": "SW validation"
     },
     {
@@ -99,7 +108,7 @@
       "Status": "Closed",
       "Target Date": "02/11/2025",
       "Actual Date": "20/11/2025",
-      "Delay (Days) ": "#REF!",
+      "Delay (Days) ": 18,
       "Root Cause": "SW validation"
     },
     {
@@ -112,7 +121,7 @@
       "Status": "Closed",
       "Target Date": "20/11/2025",
       "Actual Date": "20/11/2025",
-      "Delay (Days) ": "#REF!",
+      "Delay (Days) ": 0,
       "Root Cause": null
     },
     {
@@ -125,7 +134,7 @@
       "Status": "Closed",
       "Target Date": "15/12/2025",
       "Actual Date": "22/12/2025",
-      "Delay (Days) ": "#REF!",
+      "Delay (Days) ": 7,
       "Root Cause": "RM readiness"
     },
     {
@@ -138,7 +147,7 @@
       "Status": "Closed",
       "Target Date": "28/12/2025",
       "Actual Date": "28/12/2025",
-      "Delay (Days) ": "#REF!",
+      "Delay (Days) ": 0,
       "Root Cause": null
     }
   ],
@@ -148,7 +157,7 @@
       "Activity Description": "Removing the Thermal Paste",
       "Category": "Process Time",
       "Unit Saving ($)": 1.2,
-      "Annual Volume": 10000,
+      "Annual Volume": 10000.0,
       "Total Yearly Saving ($)": 12000,
       "Status": "Closed"
     },
@@ -156,8 +165,8 @@
       "Product Name": "RPD 2x4",
       "Activity Description": "2nd source for VCXO",
       "Category": "BOM",
-      "Unit Saving ($)": 5,
-      "Annual Volume": 12000,
+      "Unit Saving ($)": 5.0,
+      "Annual Volume": 12000.0,
       "Total Yearly Saving ($)": 60000,
       "Status": "Closed"
     },
@@ -166,7 +175,7 @@
       "Activity Description": "Removing manual soldering rework from Previous spin",
       "Category": "Labor",
       "Unit Saving ($)": 1.4,
-      "Annual Volume": 10000,
+      "Annual Volume": 10000.0,
       "Total Yearly Saving ($)": 14000,
       "Status": "Closed"
     }
@@ -180,5 +189,17 @@
       "Status": "In-Progresss"
     }
   ],
-  "_updated": "2026-03-15 13:57 UTC"
+  "_kpis": {
+    "mrb_total": 817,
+    "mrb_rate": 0.875,
+    "npi_count": 1,
+    "npi_at_risk": 1,
+    "npi_blocked": 0,
+    "npi_on_track": 0,
+    "comp_total": 6,
+    "comp_otd": 3,
+    "comp_max_delay": 24,
+    "cost_total": 86000
+  },
+  "_updated": "2026-03-15 15:09 UTC"
 }
