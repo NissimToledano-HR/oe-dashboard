@@ -15,25 +15,40 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Download Excel from Box
-        run: |
-          curl -L \
-            -H "Authorization: Bearer ${{ secrets.BOX_TOKEN }}" \
-            "https://api.box.com/2.0/files/2163043833191/content" \
-            -o data.xlsx
-          file data.xlsx
-          ls -lh data.xlsx
-
       - name: Install Python dependencies
-        run: pip install openpyxl
+        run: pip install openpyxl requests
 
-      - name: Convert Excel to JSON
+      - name: Download and Convert Excel to JSON
         run: |
           python3 << 'PYEOF'
-          import openpyxl, json
+          import requests, json, sys, openpyxl
           from datetime import datetime, timezone
+          from io import BytesIO
 
-          wb = openpyxl.load_workbook('data.xlsx', data_only=True)
+          TOKEN = "${{ secrets.BOX_TOKEN }}"
+          FILE_ID = "2163043833191"
+
+          # Download file
+          headers = {"Authorization": f"Bearer {TOKEN}"}
+          url = f"https://api.box.com/2.0/files/{FILE_ID}/content"
+          resp = requests.get(url, headers=headers, allow_redirects=True)
+          
+          print(f"Status: {resp.status_code}")
+          print(f"Content-Type: {resp.headers.get('content-type','?')}")
+          print(f"Size: {len(resp.content)} bytes")
+          print(f"First 100 bytes: {resp.content[:100]}")
+
+          if resp.status_code != 200:
+              print(f"ERROR: {resp.text[:500]}")
+              sys.exit(1)
+
+          # Check if it's actually an Excel file (starts with PK)
+          if not resp.content[:2] == b'PK':
+              print(f"ERROR: Not an Excel file. Content: {resp.content[:200]}")
+              sys.exit(1)
+
+          # Parse Excel
+          wb = openpyxl.load_workbook(BytesIO(resp.content), data_only=True)
           result = {}
 
           def cell_val(v):
@@ -59,11 +74,12 @@ jobs:
                       if any(v is not None for v in obj.values()):
                           rows.append(obj)
               result[shname] = rows
+              print(f"  {shname}: {len(rows)} rows")
 
           result['_updated'] = datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M UTC')
           with open('data.json', 'w', encoding='utf-8') as f:
               json.dump(result, f, ensure_ascii=False, indent=2)
-          print(f"Done — {sum(len(v) for v in result.values() if isinstance(v,list))} rows total")
+          print("✅ Done")
           PYEOF
 
       - name: Commit and push JSON
