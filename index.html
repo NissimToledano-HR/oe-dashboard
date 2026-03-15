@@ -367,46 +367,22 @@ function getSheet(sheets, name){
 // RENDER — MRB
 // ═══════════════════════════════════════════════
 function renderMRB(sheets){
-  const rows=getSheet(sheets,'MRB');
-
-  // Quarterly rows — find rows with Quarter/Target/Actual pattern
-  const quarterly=[];
-  let inSymptom=false;
-  const symptoms=[];
-  let successRate=0;
-
-  rows.forEach(row=>{
-    const vals=Object.values(row).map(v=>v==null?'':String(v));
-    const flat=vals.join('|').toLowerCase();
-
-    // Success rate row
-    if(flat.includes('success rate') && !inSymptom){
-      const numVals=Object.values(row).filter(v=>v&&!isNaN(parseFloat(v)));
-      if(numVals.length) successRate=parseFloat(numVals[0]);
-      return;
-    }
-    // Quarterly data row
-    const qVal=Object.values(row).find(v=>v&&String(v).match(/Q[1-4]/i));
-    const numVals=Object.values(row).filter(v=>v&&!isNaN(parseFloat(v))&&parseFloat(v)>50);
-    if(qVal && numVals.length>=2 && !inSymptom){
-      quarterly.push({q:String(qVal),plan:parseFloat(numVals[0]),actual:parseFloat(numVals[1])});
-      return;
-    }
-    // Symptom section header
-    if(flat.includes('symptom') && flat.includes('repair method')){inSymptom=true;return;}
-    // Symptom data
-    if(inSymptom){
-      const keys=Object.keys(row);
-      if(keys.length>=6 && Object.values(row).some(v=>v)){
-        const v=Object.values(row);
-        symptoms.push({
-          product:v[0]||'',quarter:v[1]||'',symptom:v[2]||'',
-          method:v[3]||'',qty:parseFloat(v[4])||0,
-          status:v[5]||'',rate:parseFloat(v[6])||0
-        });
-      }
-    }
-  });
+  const mrb = sheets['MRB'] || {};
+  const quarterly = (mrb.quarterly || []).map(r=>({
+    q: r['Quarter']||'',
+    plan: parseFloat(r['Target'])||0,
+    actual: parseFloat(r['Actual'])||0
+  }));
+  const successRate = parseFloat(mrb.success_rate)||0;
+  const symptoms = (mrb.symptoms || []).map(r=>({
+    product: r['Product Name']||'',
+    quarter: r['Quarter']||'',
+    symptom: r['Symptom']||'',
+    method:  r['Repair Method']||'',
+    qty:     parseFloat(r['Qty. Repaired'])||0,
+    status:  r['Repair status']||'',
+    rate:    parseFloat(r['Success rate'])||0
+  }));
 
   // KPIs
   const totalActual=quarterly.reduce((s,r)=>s+r.actual,0);
@@ -542,7 +518,15 @@ function renderCompEng(sheets){
 // ═══════════════════════════════════════════════
 function renderCost(sheets){
   const rows=getSheet(sheets,'Improvment and Cost Reduction');
-  const data=rows.filter(r=>r['Activity Description']&&r['Total Yearly Saving ($)']);
+  const data=rows.filter(r=>r['Activity Description']);
+  // calc total from unit*volume if total missing
+  data.forEach(r=>{
+    if(!r['Total Yearly Saving ($)']){
+      const u=parseFloat(r['Unit Saving ($)'])||0;
+      const v=parseFloat(r['Annual Volume'])||0;
+      r['Total Yearly Saving ($)']=Math.round(u*v);
+    }
+  });
   const total=data.filter(r=>r['Status']==='Closed').reduce((s,r)=>s+parseFloat(r['Total Yearly Saving ($)']||0),0);
 
   document.getElementById('costTotal').textContent='$'+total.toLocaleString();
@@ -584,7 +568,7 @@ function renderCost(sheets){
 function renderNPI(sheets){
   const npiRows=getSheet(sheets,'NPI_Master');
   const designRows=getSheet(sheets,'Design issue for improvment');
-  const data=npiRows.filter(r=>r['Product Name']);
+  const data=npiRows.filter(r=>r&&r['Product Name']);
 
   const tlClass={'On Track':'tl-green','At Risk':'tl-yellow','Blocked':'tl-red'};
   const badgeClass={'On Track':'green','At Risk':'yellow','Blocked':'red'};
