@@ -4,8 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>OE Dashboard 2026</title>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
 :root {
   --bg:#f0f4f8;--bg2:#e4eaf2;--white:#ffffff;--navy:#0f2044;--navy2:#1a3460;
@@ -19,7 +20,7 @@
   --shadow2:0 4px 12px rgba(0,0,0,0.08);
 }
 *{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:13px;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:13px;}
 
 /* HEADER */
 header{background:var(--navy);padding:0 28px;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,0.2);}
@@ -28,10 +29,10 @@ header{background:var(--navy);padding:0 28px;height:56px;display:flex;align-item
 .logo-text{font-size:14px;font-weight:600;color:#fff;}
 .logo-sub{font-size:10px;color:var(--muted);letter-spacing:1.2px;text-transform:uppercase;}
 .header-right{display:flex;align-items:center;gap:12px;}
-.timestamp{font-size:10px;color:var(--muted);font-family:'JetBrains Mono',monospace;}
+.timestamp{font-size:10px;color:var(--muted);font-family:'DM Mono',monospace;}
 
 /* REFRESH BUTTON */
-.refresh-btn{display:flex;align-items:center;gap:6px;background:var(--blue2);color:#fff;border:none;border-radius:7px;padding:7px 14px;font-size:11px;font-weight:600;cursor:pointer;transition:all .2s;font-family:'Plus Jakarta Sans',sans-serif;}
+.refresh-btn{display:flex;align-items:center;gap:6px;background:var(--blue2);color:#fff;border:none;border-radius:7px;padding:7px 14px;font-size:11px;font-weight:600;cursor:pointer;transition:all .2s;font-family:'DM Sans',sans-serif;}
 .refresh-btn:hover{background:var(--blue);}
 .refresh-btn.loading{background:var(--steel);cursor:not-allowed;}
 .refresh-btn svg{width:13px;height:13px;}
@@ -84,7 +85,7 @@ main{padding:24px 28px;max-width:1440px;margin:0 auto;}
 .kpi-box.yellow::before{background:var(--yellow2);}
 .kpi-box.red::before{background:var(--red2);}
 .kpi-lbl{font-size:9px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
-.kpi-val{font-size:28px;font-weight:700;color:var(--text);font-family:'JetBrains Mono',monospace;line-height:1;}
+.kpi-val{font-size:28px;font-weight:700;color:var(--text);font-family:'DM Mono',monospace;line-height:1;}
 .kpi-note{font-size:10px;color:var(--text3);margin-top:6px;}
 .kpi-delta{display:inline-flex;align-items:center;font-size:10px;font-weight:600;padding:2px 6px;border-radius:4px;margin-top:4px;}
 .kpi-delta.up{background:var(--gbg);color:var(--green);}
@@ -98,7 +99,7 @@ tbody tr{border-bottom:1px solid var(--border2);transition:background .1s;}
 tbody tr:last-child{border-bottom:none;}
 tbody tr:hover{background:#f8faff;}
 tbody td{padding:9px 12px;font-size:11px;color:var(--text2);vertical-align:middle;}
-.mono{font-family:'JetBrains Mono',monospace;font-size:10px;}
+.mono{font-family:'DM Mono',monospace;font-size:10px;}
 
 /* PILL */
 .pill{display:inline-flex;align-items:center;gap:4px;font-size:9px;font-weight:600;letter-spacing:.5px;padding:2px 8px;border-radius:20px;text-transform:uppercase;white-space:nowrap;}
@@ -117,8 +118,8 @@ tbody td{padding:9px 12px;font-size:11px;color:var(--text2);vertical-align:middl
 .bar-group{display:flex;flex-direction:column;gap:3px;}
 .bar-track{background:var(--bg2);border-radius:3px;height:7px;overflow:hidden;}
 .bar-fill{height:100%;border-radius:3px;}
-.bar-num{font-size:10px;font-family:'JetBrains Mono',monospace;color:var(--text3);text-align:right;}
-.bar-pct{font-size:10px;font-family:'JetBrains Mono',monospace;font-weight:600;text-align:right;}
+.bar-num{font-size:10px;font-family:'DM Mono',monospace;color:var(--text3);text-align:right;}
+.bar-pct{font-size:10px;font-family:'DM Mono',monospace;font-weight:600;text-align:right;}
 
 /* METHOD ROWS */
 .method-grid{display:grid;grid-template-columns:1fr 90px 70px 1fr 80px;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border2);}
@@ -151,7 +152,7 @@ tbody td{padding:9px 12px;font-size:11px;color:var(--text2);vertical-align:middl
 .npi-section-title{font-size:9px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;text-decoration:underline;}
 .npi-field{display:flex;gap:8px;align-items:flex-start;margin-bottom:7px;}
 .npi-key{font-size:10px;color:var(--text3);flex-shrink:0;min-width:90px;padding-top:1px;}
-.npi-val{font-size:10px;font-family:'JetBrains Mono',monospace;color:var(--text2);word-break:break-all;}
+.npi-val{font-size:10px;font-family:'DM Mono',monospace;color:var(--text2);word-break:break-all;}
 .npi-val.tbd{background:var(--rbg);color:var(--red);padding:1px 6px;border-radius:3px;font-weight:600;}
 .design-btn{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:600;color:var(--red);background:var(--rbg);border:1px solid #fca5a5;border-radius:5px;padding:3px 9px;cursor:pointer;margin-top:10px;}
 .design-btn:hover{background:#fecaca;}
@@ -167,7 +168,7 @@ tbody td{padding:9px 12px;font-size:11px;color:var(--text2);vertical-align:middl
 .auth-logo{width:56px;height:56px;background:linear-gradient(135deg,var(--blue2),var(--accent2));border-radius:14px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:18px;color:#fff;margin:0 auto 20px;}
 .auth-title{font-size:20px;font-weight:700;color:var(--text);margin-bottom:8px;}
 .auth-sub{font-size:13px;color:var(--text3);margin-bottom:28px;line-height:1.5;}
-.auth-btn{display:inline-flex;align-items:center;gap:10px;background:var(--blue2);color:#fff;border:none;border-radius:10px;padding:13px 28px;font-size:14px;font-weight:600;cursor:pointer;transition:all .2s;font-family:'Plus Jakarta Sans',sans-serif;width:100%;justify-content:center;}
+.auth-btn{display:inline-flex;align-items:center;gap:10px;background:var(--blue2);color:#fff;border:none;border-radius:10px;padding:13px 28px;font-size:14px;font-weight:600;cursor:pointer;transition:all .2s;font-family:'DM Sans',sans-serif;width:100%;justify-content:center;}
 .auth-btn:hover{background:var(--blue);transform:translateY(-1px);}
 
 /* COMING SOON */
@@ -186,7 +187,7 @@ tbody td{padding:9px 12px;font-size:11px;color:var(--text2);vertical-align:middl
 </head>
 <body>
 
-<!-- NO AUTH NEEDED -->
+
   <div class="header-right">
     <button class="refresh-btn" id="refreshBtn" onclick="refreshData()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
@@ -267,7 +268,7 @@ tbody td{padding:9px 12px;font-size:11px;color:var(--text2);vertical-align:middl
     <div class="card"><div class="card-header"><div><div class="card-title">Yearly Cost Reduction Summary</div></div></div><canvas id="costChart" style="max-height:200px;"></canvas></div>
     <div class="card" style="display:flex;flex-direction:column;gap:16px;">
       <div>
-        <div style="font-size:36px;font-weight:700;font-family:'JetBrains Mono',monospace;color:var(--green);line-height:1" id="costTotal">$—</div>
+        <div style="font-size:36px;font-weight:700;font-family:'DM Mono',monospace;color:var(--green);line-height:1" id="costTotal">$—</div>
         <div style="font-size:10px;color:var(--text3);letter-spacing:1px;text-transform:uppercase;margin-top:4px">Total Annual Savings</div>
       </div>
       <div style="border-top:1px solid var(--border2);padding-top:14px;">
@@ -300,382 +301,8 @@ tbody td{padding:9px 12px;font-size:11px;color:var(--text2);vertical-align:middl
 // ═══════════════════════════════════════════════
 // CONFIG
 // ═══════════════════════════════════════════════
-
-const PHASE_ORDER = ['Design','Prototype','0 series','MP'];
-
-let cycleChart=null, rootChart=null, costChart=null;
-
-// ═══════════════════════════════════════════════
-// CLOCK
-// ═══════════════════════════════════════════════
-function tick(){
-  const n=new Date();
-  document.getElementById('clock').textContent=
-    n.toLocaleDateString('en-GB')+'  '+n.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
-}
-tick(); setInterval(tick,1000);
-
-// ═══════════════════════════════════════════════
-// TAB SWITCHING
-// ═══════════════════════════════════════════════
-function switchTab(id,el){
-  ['oe','npi','quality'].forEach(t=>document.getElementById('tab-'+t).style.display='none');
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-  document.getElementById('tab-'+id).style.display='block';
-  el.classList.add('active');
-}
-
-// ═══════════════════════════════════════════════
-// STATUS
-// ═══════════════════════════════════════════════
-function setStatus(state, text){
-  const dot=document.getElementById('statusDot');
-  const txt=document.getElementById('statusText');
-  dot.className='status-dot '+state;
-  txt.textContent=text;
-}
-
-// ═══════════════════════════════════════════════
-// NO AUTH NEEDED — reads local data.json
-// ═══════════════════════════════════════════════
-// ═══════════════════════════════════════════════
-// LOAD DATA FROM data.json
-// ═══════════════════════════════════════════════
-async function downloadExcel(){
-  setStatus('loading','טוען נתונים...');
-  const res = await fetch('https://raw.githubusercontent.com/NissimToledano-HR/oe-dashboard/main/data.json?t='+Date.now());
-  if(!res.ok) throw new Error('data.json not found — please run update_dashboard.bat first');
-  return await res.json();
-}
-
-// ═══════════════════════════════════════════════
-// PARSE — already JSON, just return it
-// ═══════════════════════════════════════════════
-function parseExcel(data){
-  return data; // already parsed JSON from convert.py
-}
-
-function getSheet(sheets, name){
-  const key=Object.keys(sheets).find(k=>k.trim().toLowerCase()===name.trim().toLowerCase());
-  const rows = key ? (sheets[key] || []) : [];
-  return rows.filter(r => r && typeof r === 'object');
-}
-
-// ═══════════════════════════════════════════════
-// RENDER — MRB
-// ═══════════════════════════════════════════════
-function renderMRB(sheets){
-  const mrb=sheets['MRB']||{};
-  const quarterly=(mrb.quarterly||[]).map(r=>({q:r.Quarter||'',plan:+r.Target||0,actual:+r.Actual||0}));
-  const successRate=+mrb.success_rate||0;
-  const symptoms=(mrb.symptoms||[]).map(r=>({
-    product:r['Product Name']||'',symptom:r.Symptom||'',method:r['Repair Method']||'',
-    qty:+r['Qty. Repaired']||0,status:r['Repair status']||'',rate:+r['Success rate']||0
-  }));
-  // KPIs
-  const validQ=quarterly.filter(r=>r.actual>0);
-  const totalActualen">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>OE Dashboard 2026</title>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
-<style>
-:root {
-  --bg:#f0f4f8;--bg2:#e4eaf2;--white:#ffffff;--navy:#0f2044;--navy2:#1a3460;
-  --blue:#1d4ed8;--blue2:#2563eb;--accent:#3b82f6;--accent2:#60a5fa;
-  --steel:#64748b;--muted:#94a3b8;--border:#cbd5e1;--border2:#e2e8f0;
-  --text:#0f172a;--text2:#334155;--text3:#64748b;
-  --green:#16a34a;--green2:#22c55e;--gbg:#dcfce7;
-  --yellow:#d97706;--yellow2:#f59e0b;--ybg:#fef3c7;
-  --red:#dc2626;--red2:#ef4444;--rbg:#fee2e2;
-  --shadow:0 1px 3px rgba(0,0,0,0.08),0 1px 2px rgba(0,0,0,0.05);
-  --shadow2:0 4px 12px rgba(0,0,0,0.08);
-}
-*{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:13px;}
-
-/* HEADER */
-header{background:var(--navy);padding:0 28px;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,0.2);}
-.logo{display:flex;align-items:center;gap:10px;}
-.logo-mark{width:32px;height:32px;background:linear-gradient(135deg,var(--blue2),var(--accent2));border-radius:7px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;color:#fff;letter-spacing:.5px;}
-.logo-text{font-size:14px;font-weight:600;color:#fff;}
-.logo-sub{font-size:10px;color:var(--muted);letter-spacing:1.2px;text-transform:uppercase;}
-.header-right{display:flex;align-items:center;gap:12px;}
-.timestamp{font-size:10px;color:var(--muted);font-family:'JetBrains Mono',monospace;}
-
-/* REFRESH BUTTON */
-.refresh-btn{display:flex;align-items:center;gap:6px;background:var(--blue2);color:#fff;border:none;border-radius:7px;padding:7px 14px;font-size:11px;font-weight:600;cursor:pointer;transition:all .2s;font-family:'Plus Jakarta Sans',sans-serif;}
-.refresh-btn:hover{background:var(--blue);}
-.refresh-btn.loading{background:var(--steel);cursor:not-allowed;}
-.refresh-btn svg{width:13px;height:13px;}
-.refresh-btn.loading svg{animation:spin 1s linear infinite;}
-@keyframes spin{to{transform:rotate(360deg)}}
-
-/* STATUS BAR */
-.status-bar{background:var(--white);border-bottom:1px solid var(--border2);padding:6px 28px;display:flex;align-items:center;gap:8px;font-size:10px;color:var(--text3);}
-.status-dot{width:7px;height:7px;border-radius:50%;}
-.status-dot.ok{background:var(--green2);}
-.status-dot.loading{background:var(--yellow2);animation:pulse 1s ease infinite;}
-.status-dot.error{background:var(--red2);}
-.status-dot.idle{background:var(--muted);}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
-
-/* NAV */
-nav{background:var(--white);border-bottom:2px solid var(--border2);padding:0 28px;display:flex;box-shadow:var(--shadow);}
-.tab{padding:13px 22px;font-size:12px;font-weight:500;color:var(--steel);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .2s;}
-.tab:hover{color:var(--text);}
-.tab.active{color:var(--blue2);border-bottom-color:var(--blue2);font-weight:600;}
-
-/* LAYOUT */
-main{padding:24px 28px;max-width:1440px;margin:0 auto;}
-.section-label{font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:12px;margin-top:28px;display:flex;align-items:center;gap:8px;}
-.section-label:first-of-type{margin-top:0;}
-.section-label::after{content:'';flex:1;height:1px;background:var(--border2);}
-.row2{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
-.row3{display:grid;grid-template-columns:1.6fr 1fr;gap:18px;}
-
-/* CARD */
-.card{background:var(--white);border:1px solid var(--border2);border-radius:10px;padding:20px;box-shadow:var(--shadow);}
-.card-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;}
-.card-title{font-size:12px;font-weight:600;color:var(--text);}
-.card-sub{font-size:11px;color:var(--text3);margin-top:2px;}
-
-/* BADGE */
-.badge{display:inline-block;font-size:9px;font-weight:600;letter-spacing:.8px;padding:2px 8px;border-radius:4px;text-transform:uppercase;}
-.badge.green{background:var(--gbg);color:var(--green);}
-.badge.yellow{background:var(--ybg);color:var(--yellow);}
-.badge.red{background:var(--rbg);color:var(--red);}
-.badge.blue{background:#dbeafe;color:var(--blue);}
-.badge.steel{background:var(--border2);color:var(--steel);}
-
-/* KPI STRIP */
-.kpi-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:16px;}
-.kpi-box{background:var(--white);border:1px solid var(--border2);border-radius:10px;padding:16px 18px;position:relative;overflow:hidden;box-shadow:var(--shadow);}
-.kpi-box::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:10px 10px 0 0;}
-.kpi-box.blue::before{background:var(--blue2);}
-.kpi-box.green::before{background:var(--green2);}
-.kpi-box.yellow::before{background:var(--yellow2);}
-.kpi-box.red::before{background:var(--red2);}
-.kpi-lbl{font-size:9px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
-.kpi-val{font-size:28px;font-weight:700;color:var(--text);font-family:'JetBrains Mono',monospace;line-height:1;}
-.kpi-note{font-size:10px;color:var(--text3);margin-top:6px;}
-.kpi-delta{display:inline-flex;align-items:center;font-size:10px;font-weight:600;padding:2px 6px;border-radius:4px;margin-top:4px;}
-.kpi-delta.up{background:var(--gbg);color:var(--green);}
-.kpi-delta.warn{background:var(--ybg);color:var(--yellow);}
-.kpi-delta.down{background:var(--rbg);color:var(--red);}
-
-/* TABLE */
-table{width:100%;border-collapse:collapse;}
-thead th{padding:8px 12px;text-align:left;font-size:9px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);border-bottom:2px solid var(--border2);background:var(--bg);white-space:nowrap;}
-tbody tr{border-bottom:1px solid var(--border2);transition:background .1s;}
-tbody tr:last-child{border-bottom:none;}
-tbody tr:hover{background:#f8faff;}
-tbody td{padding:9px 12px;font-size:11px;color:var(--text2);vertical-align:middle;}
-.mono{font-family:'JetBrains Mono',monospace;font-size:10px;}
-
-/* PILL */
-.pill{display:inline-flex;align-items:center;gap:4px;font-size:9px;font-weight:600;letter-spacing:.5px;padding:2px 8px;border-radius:20px;text-transform:uppercase;white-space:nowrap;}
-.pill::before{content:'';width:5px;height:5px;border-radius:50%;flex-shrink:0;}
-.pill.success,.pill.closed{background:var(--gbg);color:var(--green);}
-.pill.success::before,.pill.closed::before{background:var(--green2);}
-.pill.open,.pill.progress{background:var(--ybg);color:var(--yellow);}
-.pill.open::before,.pill.progress::before{background:var(--yellow2);}
-.pill.fail{background:var(--rbg);color:var(--red);}
-.pill.fail::before{background:var(--red2);}
-
-/* PVA BARS */
-.pva-row{display:grid;grid-template-columns:80px 1fr 56px 56px;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border2);}
-.pva-row:last-child{border-bottom:none;}
-.pva-label{font-size:11px;font-weight:600;color:var(--text2);}
-.bar-group{display:flex;flex-direction:column;gap:3px;}
-.bar-track{background:var(--bg2);border-radius:3px;height:7px;overflow:hidden;}
-.bar-fill{height:100%;border-radius:3px;}
-.bar-num{font-size:10px;font-family:'JetBrains Mono',monospace;color:var(--text3);text-align:right;}
-.bar-pct{font-size:10px;font-family:'JetBrains Mono',monospace;font-weight:600;text-align:right;}
-
-/* METHOD ROWS */
-.method-grid{display:grid;grid-template-columns:1fr 90px 70px 1fr 80px;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border2);}
-.method-grid:last-child{border-bottom:none;}
-.method-grid.hdr div{font-size:9px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);}
-.rate-bar{background:var(--bg2);border-radius:3px;height:6px;overflow:hidden;}
-.rate-fill{height:100%;border-radius:3px;}
-
-/* MS TABLE */
-.ms-grid{display:grid;grid-template-columns:130px 55px 70px 1fr 95px 80px 80px 55px 90px;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border2);}
-.ms-grid:last-child{border-bottom:none;}
-.ms-tag{font-size:9px;font-weight:600;padding:2px 7px;border-radius:4px;background:#dbeafe;color:var(--blue);text-transform:uppercase;white-space:nowrap;}
-
-/* NPI CARDS */
-.npi-grid{display:flex;flex-direction:column;gap:14px;}
-.npi-card{background:var(--white);border:1px solid var(--border2);border-radius:10px;overflow:hidden;box-shadow:var(--shadow);}
-.npi-top{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:16px;padding:14px 18px;border-bottom:1px solid var(--border2);}
-.traffic-light{width:18px;height:18px;border-radius:50%;flex-shrink:0;}
-.tl-green{background:var(--green2);box-shadow:0 0 0 3px rgba(34,197,94,.2);}
-.tl-yellow{background:var(--yellow2);box-shadow:0 0 0 3px rgba(245,158,11,.2);}
-.tl-red{background:var(--red2);box-shadow:0 0 0 3px rgba(239,68,68,.2);}
-.npi-name{font-size:14px;font-weight:700;color:var(--text);}
-.phase-bar{display:flex;gap:2px;}
-.phase-step{padding:4px 10px;font-size:10px;font-weight:500;border-radius:4px;color:var(--muted);background:var(--bg2);border:1px solid var(--border);}
-.phase-step.active{background:var(--blue2);color:#fff;border-color:var(--blue2);font-weight:600;}
-.phase-step.done{background:var(--bg2);color:var(--steel);}
-.npi-body{display:grid;grid-template-columns:1fr 1px 1fr 1px 1fr;}
-.npi-divider{background:var(--border2);}
-.npi-section{padding:14px 18px;}
-.npi-section-title{font-size:9px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;text-decoration:underline;}
-.npi-field{display:flex;gap:8px;align-items:flex-start;margin-bottom:7px;}
-.npi-key{font-size:10px;color:var(--text3);flex-shrink:0;min-width:90px;padding-top:1px;}
-.npi-val{font-size:10px;font-family:'JetBrains Mono',monospace;color:var(--text2);word-break:break-all;}
-.npi-val.tbd{background:var(--rbg);color:var(--red);padding:1px 6px;border-radius:3px;font-weight:600;}
-.design-btn{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:600;color:var(--red);background:var(--rbg);border:1px solid #fca5a5;border-radius:5px;padding:3px 9px;cursor:pointer;margin-top:10px;}
-.design-btn:hover{background:#fecaca;}
-
-/* COST */
-.cost-row{display:grid;grid-template-columns:1fr 80px 90px 90px 80px;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border2);}
-.cost-row:last-child{border-bottom:none;}
-.cost-row.hdr div{font-size:9px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);}
-
-/* AUTH OVERLAY */
-.auth-overlay{position:fixed;inset:0;background:rgba(15,32,68,.85);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;z-index:1000;}
-.auth-box{background:var(--white);border-radius:16px;padding:40px 48px;text-align:center;max-width:420px;width:90%;box-shadow:0 25px 60px rgba(0,0,0,.3);}
-.auth-logo{width:56px;height:56px;background:linear-gradient(135deg,var(--blue2),var(--accent2));border-radius:14px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:18px;color:#fff;margin:0 auto 20px;}
-.auth-title{font-size:20px;font-weight:700;color:var(--text);margin-bottom:8px;}
-.auth-sub{font-size:13px;color:var(--text3);margin-bottom:28px;line-height:1.5;}
-.auth-btn{display:inline-flex;align-items:center;gap:10px;background:var(--blue2);color:#fff;border:none;border-radius:10px;padding:13px 28px;font-size:14px;font-weight:600;cursor:pointer;transition:all .2s;font-family:'Plus Jakarta Sans',sans-serif;width:100%;justify-content:center;}
-.auth-btn:hover{background:var(--blue);transform:translateY(-1px);}
-
-/* COMING SOON */
-.coming{display:flex;align-items:center;justify-content:center;min-height:180px;border:2px dashed var(--border2);border-radius:10px;flex-direction:column;gap:10px;}
-.coming-title{font-size:12px;font-weight:600;color:var(--muted);letter-spacing:1px;text-transform:uppercase;}
-.coming-sub{font-size:11px;color:var(--muted);}
-
-/* DESIGN DETAIL */
-.design-detail{display:none;margin:0 18px 14px;background:var(--rbg);border:1px solid #fca5a5;border-radius:7px;padding:12px;}
-.design-detail-title{font-size:10px;font-weight:600;color:var(--red);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;}
-.design-detail-row{display:grid;grid-template-columns:1fr 100px 100px 80px;gap:8px;font-size:10px;padding:4px 0;border-bottom:1px solid #fecaca;align-items:center;}
-
-.fade-in{opacity:0;animation:fi .35s ease forwards;}
-@keyframes fi{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
-</style>
-</head>
-<body>
-
-<!-- NO AUTH NEEDED -->
-  <div class="header-right">
-    <button class="refresh-btn" id="refreshBtn" onclick="refreshData()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-        <path d="M21 2v6h-6M3 12a9 9 0 0 1 15-6.7L21 8M3 22v-6h6M21 12a9 9 0 0 1-15 6.7L3 16"/>
-      </svg>
-      Refresh Data
-    </button>
-    <div class="timestamp" id="clock">—</div>
-  </div>
-</header>
-
-<div class="status-bar" id="statusBar">
-  <div class="status-dot idle" id="statusDot"></div>
-  <span id="statusText">ממתין לאימות...</span>
-</div>
-
-<nav>
-  <div class="tab active" onclick="switchTab('oe',this)">OE Excellence &amp; Efficiency</div>
-  <div class="tab" onclick="switchTab('npi',this)">NPI Project Master</div>
-  <div class="tab" onclick="switchTab('quality',this)">Quality</div>
-</nav>
-
-<!-- TAB 1 -->
-<main id="tab-oe">
-  <div class="section-label">MRB — Material Review Board</div>
-  <div class="kpi-strip" id="mrbKpis">
-    <div class="kpi-box blue fade-in"><div class="kpi-lbl">Total Repaired YTD</div><div class="kpi-val" id="k-total">—</div><div class="kpi-note">Q1 + Q2 + Q3</div></div>
-    <div class="kpi-box green fade-in"><div class="kpi-lbl">Best Quarter</div><div class="kpi-val" id="k-best">—</div><div class="kpi-note" id="k-best-note">—</div></div>
-    <div class="kpi-box yellow fade-in"><div class="kpi-lbl">Lowest Quarter</div><div class="kpi-val" id="k-low">—</div><div class="kpi-note" id="k-low-note">—</div></div>
-    <div class="kpi-box green fade-in"><div class="kpi-lbl">Avg Success Rate</div><div class="kpi-val" id="k-rate">—</div><div class="kpi-note">Across all repairs</div></div>
-  </div>
-  <div class="row2">
-    <div class="card">
-      <div class="card-header">
-        <div><div class="card-title">① Quarterly Repair Target — Plan vs. Actual</div><div class="card-sub">Units repaired per quarter · 2026</div></div>
-      </div>
-      <div id="pvaRows"><div style="color:var(--muted);font-size:11px;text-align:center;padding:20px">טוען נתונים...</div></div>
-    </div>
-    <div class="card">
-      <div class="card-header">
-        <div><div class="card-title">② Symptom-Based Repair — Method &amp; Success Rate</div><div class="card-sub">Per product / symptom</div></div>
-      </div>
-      <div class="method-grid hdr"><div>Product · Symptom</div><div>Method</div><div>Qty</div><div>Success Rate</div><div>Status</div></div>
-      <div id="methodRows"><div style="color:var(--muted);font-size:11px;text-align:center;padding:20px">טוען נתונים...</div></div>
-    </div>
-  </div>
-
-  <div class="section-label" style="margin-top:32px">Component Engineering — Milestones</div>
-  <div class="row3">
-    <div class="card">
-      <div class="card-header"><div><div class="card-title">Implementation Cycle Time — Visual vs. Actual</div><div class="card-sub">Delay in days per task</div></div><span class="badge yellow" id="otdBadge">OTD —%</span></div>
-      <canvas id="cycleChart" style="max-height:200px;"></canvas>
-    </div>
-    <div class="card">
-      <div class="card-header"><div><div class="card-title">OTD &amp; Root Cause</div></div></div>
-      <canvas id="rootChart" style="max-height:160px;margin-bottom:12px;"></canvas>
-      <div id="rootSummary"></div>
-    </div>
-  </div>
-  <div class="card" style="margin-top:18px;">
-    <div class="card-header"><div><div class="card-title">Milestone Detail</div></div></div>
-    <div style="display:grid;grid-template-columns:130px 55px 70px 1fr 95px 80px 80px 55px 90px;gap:8px;padding:7px 0;border-bottom:2px solid var(--border2);">
-      <div style="font-size:9px;font-weight:600;text-transform:uppercase;color:var(--muted)">Product</div>
-      <div style="font-size:9px;font-weight:600;text-transform:uppercase;color:var(--muted)">Type</div>
-      <div style="font-size:9px;font-weight:600;text-transform:uppercase;color:var(--muted)">Comp.</div>
-      <div style="font-size:9px;font-weight:600;text-transform:uppercase;color:var(--muted)">Task</div>
-      <div style="font-size:9px;font-weight:600;text-transform:uppercase;color:var(--muted)">Milestone</div>
-      <div style="font-size:9px;font-weight:600;text-transform:uppercase;color:var(--muted)">Target</div>
-      <div style="font-size:9px;font-weight:600;text-transform:uppercase;color:var(--muted)">Actual</div>
-      <div style="font-size:9px;font-weight:600;text-transform:uppercase;color:var(--muted)">Delay</div>
-      <div style="font-size:9px;font-weight:600;text-transform:uppercase;color:var(--muted)">Root Cause</div>
-    </div>
-    <div id="msRows"></div>
-  </div>
-
-  <div class="section-label" style="margin-top:32px">Cost Reduction Activities</div>
-  <div class="row3">
-    <div class="card"><div class="card-header"><div><div class="card-title">Yearly Cost Reduction Summary</div></div></div><canvas id="costChart" style="max-height:200px;"></canvas></div>
-    <div class="card" style="display:flex;flex-direction:column;gap:16px;">
-      <div>
-        <div style="font-size:36px;font-weight:700;font-family:'JetBrains Mono',monospace;color:var(--green);line-height:1" id="costTotal">$—</div>
-        <div style="font-size:10px;color:var(--text3);letter-spacing:1px;text-transform:uppercase;margin-top:4px">Total Annual Savings</div>
-      </div>
-      <div style="border-top:1px solid var(--border2);padding-top:14px;">
-        <div class="cost-row hdr"><div>Activity</div><div>Category</div><div>Unit Save</div><div>Annual Vol.</div><div>Status</div></div>
-        <div id="costRows"></div>
-      </div>
-    </div>
-  </div>
-
-  <div class="section-label" style="margin-top:32px">Change Order — DA &amp; ECN</div>
-  <div class="row2">
-    <div class="card"><div class="card-header"><div><div class="card-title">Deviation Approval (DA)</div></div><span class="badge steel">ORACLE · Pending</span></div><div class="coming" style="min-height:140px"><div class="coming-title">Data Pending</div><div class="coming-sub">ORACLE system report</div></div></div>
-    <div class="card"><div class="card-header"><div><div class="card-title">ECN — Engineering Change Order</div></div><span class="badge steel">ORACLE · Pending</span></div><div class="coming" style="min-height:140px"><div class="coming-title">Data Pending</div><div class="coming-sub">ORACLE system report</div></div></div>
-  </div>
-</main>
-
-<!-- TAB 2 -->
-<main id="tab-npi" style="display:none">
-  <div class="section-label">NPI Project Master — OE Status Tracker</div>
-  <div class="npi-grid" id="npiCards"><div style="color:var(--muted);font-size:11px;text-align:center;padding:40px">טוען נתונים...</div></div>
-</main>
-
-<!-- TAB 3 -->
-<main id="tab-quality" style="display:none">
-  <div class="section-label">Quality</div>
-  <div class="coming"><div class="coming-title">Module Coming Soon</div><div class="coming-sub">Pending alignment with Shachaf Cohen — TBD</div></div>
-</main>
-
-<script>
-// ═══════════════════════════════════════════════
-// CONFIG
-// ═══════════════════════════════════════════════
-
+// Direct Box shared link — no auth needed
+const BOX_SHARED_LINK = 'https://harmonicinc.box.com/shared/static/xvccxq02t9dy0e4e9d12wypcvac1i5ff.xlsx';
 const PHASE_ORDER = ['Design','Prototype','0 series','MP'];
 
 let cycleChart=null, rootChart=null, costChart=null;
@@ -763,9 +390,9 @@ function renderMRB(sheets){
   const best=validQ.length?validQ.reduce((a,b)=>b.actual>a.actual?b:a,validQ[0]):{};
   const worst=validQ.length?validQ.reduce((a,b)=>b.actual<a.actual?b:a,validQ[0]):{};
   document.getElementById('k-total').textContent=totalActual?totalActual.toLocaleString():'—';
-  document.getElementById('k-best').textContent=best.actual?best.actual.toLocaleString():'—';
+  document.getElementById('k-best').textContent=best.actual||'—';
   document.getElementById('k-best-note').textContent=best.q||'';
-  document.getElementById('k-low').textContent=worst.actual?worst.actual.toLocaleString():'—';
+  document.getElementById('k-low').textContent=worst.actual||'—';
   document.getElementById('k-low-note').textContent=worst.q||'';
   // calc avg success rate from symptoms if not in data
   const avgRate=symptoms.length?symptoms.reduce((s,r)=>s+r.rate,0)/symptoms.length:successRate;
@@ -861,7 +488,7 @@ function renderCompEng(sheets){
     const c=k.trim()==='On Time'?'var(--green)':'var(--red)';
     return `<div style="display:flex;justify-content:space-between;font-size:11px;padding:3px 0;border-top:1px solid var(--border2)">
       <span style="color:var(--text3)">${k.trim()}</span>
-      <span style="font-family:'JetBrains Mono',monospace;color:${c};font-weight:600">${v} task${v!==1?'s':''}</span>
+      <span style="font-family:'DM Mono',monospace;color:${c};font-weight:600">${v} task${v!==1?'s':''}</span>
     </div>`;
   }).join('');
 
@@ -1052,24 +679,15 @@ async function refreshData(){
 // ═══════════════════════════════════════════════
 // AUTO-REFRESH every 15 min
 // ═══════════════════════════════════════════════
-setInterval(()=>{ refreshData(); }, 15*60*1000);
+
 
 // ═══════════════════════════════════════════════
 // INIT — handle OAuth callback or auto-load
 // ═══════════════════════════════════════════════
 // Auto-load on start
-refreshData();
-setInterval(refreshData,15*60*1000);
+(async function init(){
+  await refreshData();
+})();
 </script>
 </body>
-</html>// ═══════════════════════════════════════════════
-// LOAD DATA FROM GITHUB
-// ═══════════════════════════════════════════════
-const DATA_URL='https://raw.githubusercontent.com/NissimToledano-HR/oe-dashboard/main/data.json';
-async function downloadExcel(){
-  setStatus('loading','Fetching latest data...');
-  const res=await fetch(DATA_URL+'?t='+Date.now());
-  if(!res.ok) throw new Error('Cannot load data.json (HTTP '+res.status+')');
-  return res.json();
-}
-
+</html>
