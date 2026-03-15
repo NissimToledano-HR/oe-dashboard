@@ -2,8 +2,8 @@ name: Update Dashboard Data
 
 on:
   schedule:
-    - cron: '*/30 * * * *'  # Every 30 minutes
-  workflow_dispatch:         # Manual trigger
+    - cron: '*/30 * * * *'
+  workflow_dispatch:
 
 jobs:
   update:
@@ -18,7 +18,8 @@ jobs:
       - name: Download Excel from Box
         run: |
           curl -L \
-            "https://harmonicinc.box.com/shared/static/xvccxq02t9dy0e4e9d12wypcvac1i5ff.xlsx" \
+            -H "Authorization: Bearer ${{ secrets.BOX_TOKEN }}" \
+            "https://api.box.com/2.0/files/2163043833191/content" \
             -o data.xlsx
           file data.xlsx
           ls -lh data.xlsx
@@ -30,7 +31,7 @@ jobs:
         run: |
           python3 << 'PYEOF'
           import openpyxl, json
-          from datetime import datetime
+          from datetime import datetime, timezone
 
           wb = openpyxl.load_workbook('data.xlsx', data_only=True)
           result = {}
@@ -59,10 +60,10 @@ jobs:
                           rows.append(obj)
               result[shname] = rows
 
-          result['_updated'] = datetime.utcnow().strftime('%Y-%m-%d %H:%M UTC')
+          result['_updated'] = datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M UTC')
           with open('data.json', 'w', encoding='utf-8') as f:
               json.dump(result, f, ensure_ascii=False, indent=2)
-          print(f"Done")
+          print(f"Done — {sum(len(v) for v in result.values() if isinstance(v,list))} rows total")
           PYEOF
 
       - name: Commit and push JSON
