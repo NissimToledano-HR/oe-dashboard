@@ -338,36 +338,29 @@ function setStatus(state, text){
 }
 
 // ═══════════════════════════════════════════════
-// BOX AUTH — NOT NEEDED (using shared link)
+// NO AUTH NEEDED — reads local data.json
 // ═══════════════════════════════════════════════
 // ═══════════════════════════════════════════════
-// BOX FILE DOWNLOAD — direct shared link
+// LOAD DATA FROM data.json
 // ═══════════════════════════════════════════════
 async function downloadExcel(){
-  setStatus('loading','מוריד קובץ מ-Box...');
-  // Use Box direct download URL from shared link
-  const directUrl = 'https://harmonicinc.box.com/shared/static/xvccxq02t9dy0e4e9d12wypcvac1i5ff.xlsx';
-  const res = await fetch(directUrl);
-  if(!res.ok) throw new Error('Download failed: '+res.status);
-  return await res.arrayBuffer();
+  setStatus('loading','טוען נתונים...');
+  const res = await fetch('https://raw.githubusercontent.com/NissimToledano-HR/oe-dashboard/main/data.json?t='+Date.now());
+  if(!res.ok) throw new Error('data.json not found — please run update_dashboard.bat first');
+  return await res.json();
 }
 
 // ═══════════════════════════════════════════════
-// PARSE EXCEL
+// PARSE — already JSON, just return it
 // ═══════════════════════════════════════════════
-function parseExcel(buffer){
-  const wb=XLSX.read(buffer,{type:'array',cellDates:true});
-  const sheets={};
-  wb.SheetNames.forEach(name=>{
-    sheets[name]=XLSX.utils.sheet_to_json(wb.Sheets[name],{defval:null,raw:false});
-  });
-  return sheets;
+function parseExcel(data){
+  return data; // already parsed JSON from convert.py
 }
 
 function getSheet(sheets, name){
-  // fuzzy match sheet name
   const key=Object.keys(sheets).find(k=>k.trim().toLowerCase()===name.trim().toLowerCase());
-  return key ? sheets[key] : [];
+  const rows = key ? (sheets[key] || []) : [];
+  return rows.filter(r => r && typeof r === 'object');
 }
 
 // ═══════════════════════════════════════════════
@@ -686,8 +679,8 @@ async function refreshData(){
   btn.classList.add('loading'); btn.disabled=true;
   setStatus('loading','מוריד נתונים מ-Box...');
   try{
-    const buffer=await downloadExcel();
-    const sheets=parseExcel(buffer);
+    const data=await downloadExcel();
+    const sheets=parseExcel(data);
     renderAll(sheets);
   }catch(e){
     setStatus('error','שגיאה: '+e.message);
