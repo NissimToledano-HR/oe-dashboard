@@ -1,0 +1,75 @@
+name: Update Dashboard Data
+
+on:
+  schedule:
+    - cron: '*/30 * * * *'  # Every 30 minutes
+  workflow_dispatch:         # Manual trigger
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download Excel from Box
+        run: |
+          curl -L \
+            -H "BoxApi: shared_link=https://harmonicinc.box.com/s/xvccxq02t9dy0e4e9d12wypcvac1i5ff" \
+            "https://api.box.com/2.0/files/2163043833191/content" \
+            -o data.xlsx
+          echo "Downloaded: $(ls -lh data.xlsx)"
+
+      - name: Install Python dependencies
+        run: pip install openpyxl
+
+      - name: Convert Excel to JSON
+        run: |
+          python3 << 'PYEOF'
+          import openpyxl, json
+          from datetime import datetime
+
+          wb = openpyxl.load_workbook('data.xlsx', data_only=True)
+          result = {}
+
+          def cell_val(v):
+              if v is None: return None
+              if isinstance(v, datetime): return v.strftime('%d/%m/%Y')
+              return v
+
+          for shname in wb.sheetnames:
+              ws = wb[shname]
+              rows = []
+              headers = None
+              for r in ws.iter_rows(values_only=True):
+                  row = [cell_val(v) for v in r]
+                  if not any(v is not None for v in row):
+                      continue
+                  if headers is None:
+                      # Find header row (row with multiple string values)
+                      str_count = sum(1 for v in row if isinstance(v, str) and len(str(v)) > 1)
+                      if str_count >= 3:
+                          headers = [str(v).strip() if v else f'col_{i}' for i,v in enumerate(row)]
+                      continue
+                  if headers:
+                      obj = {headers[i]: row[i] for i in range(min(len(headers), len(row)))}
+                      if any(v is not None for v in obj.values()):
+                          rows.append(obj)
+              result[shname] = rows
+
+          result['_updated'] = datetime.utcnow().strftime('%Y-%m-%d %H:%M UTC')
+          with open('data.json', 'w', encoding='utf-8') as f:
+              json.dump(result, f, ensure_ascii=False, indent=2)
+          print(f"Done — {sum(len(v) for v in result.values() if isinstance(v,list))} rows total")
+          PYEOF
+
+      - name: Commit and push JSON
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data.json
+          git diff --staged --quiet || git commit -m "Update data $(date -u '+%Y-%m-%d %H:%M UTC')"
+          git push
