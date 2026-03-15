@@ -384,32 +384,35 @@ function renderMRB(sheets){
     rate:    parseFloat(r['Success rate'])||0
   }));
 
-  // KPIs
-  const totalActual=quarterly.reduce((s,r)=>s+r.actual,0);
-  const best=quarterly.reduce((a,b)=>b.actual>a.actual?b:a,quarterly[0]||{});
-  const worst=quarterly.reduce((a,b)=>b.actual<a.actual?b:a,quarterly[0]||{});
-  document.getElementById('k-total').textContent=totalActual.toLocaleString();
+  // KPIs — handle null/REF
+  const validQ=quarterly.filter(r=>r.actual>0);
+  const totalActual=validQ.reduce((s,r)=>s+r.actual,0);
+  const best=validQ.length?validQ.reduce((a,b)=>b.actual>a.actual?b:a,validQ[0]):{};
+  const worst=validQ.length?validQ.reduce((a,b)=>b.actual<a.actual?b:a,validQ[0]):{};
+  document.getElementById('k-total').textContent=totalActual?totalActual.toLocaleString():'—';
   document.getElementById('k-best').textContent=best.actual||'—';
   document.getElementById('k-best-note').textContent=best.q||'';
   document.getElementById('k-low').textContent=worst.actual||'—';
   document.getElementById('k-low-note').textContent=worst.q||'';
-  document.getElementById('k-rate').textContent=successRate?(successRate*100).toFixed(1)+'%':'—';
+  // calc avg success rate from symptoms if not in data
+  const avgRate=symptoms.length?symptoms.reduce((s,r)=>s+r.rate,0)/symptoms.length:successRate;
+  document.getElementById('k-rate').textContent=avgRate?(avgRate*100).toFixed(1)+'%':'—';
 
   // PVA bars
   const maxVal=Math.max(...quarterly.map(r=>Math.max(r.plan,r.actual)),1);
   document.getElementById('pvaRows').innerHTML=quarterly.map(r=>{
-    const pp=r.plan/maxVal*100,ap=r.actual/maxVal*100;
-    const ratio=r.actual/r.plan;
-    const ac=ratio>=1?'var(--green2)':ratio>=0.7?'var(--yellow2)':'var(--red2)';
-    const pc=ratio>=1?'var(--green)':ratio>=0.7?'var(--yellow)':'var(--red)';
+    const pp=r.plan/maxVal*100,ap=r.actual>0?r.actual/maxVal*100:0;
+    const ratio=r.actual>0?r.actual/r.plan:null;
+    const ac=ratio===null?'var(--muted)':ratio>=1?'var(--green2)':ratio>=0.7?'var(--yellow2)':'var(--red2)';
+    const pc=ratio===null?'var(--muted)':ratio>=1?'var(--green)':ratio>=0.7?'var(--yellow)':'var(--red)';
     return `<div class="pva-row">
       <div class="pva-label">${r.q.replace(/ - 2026/,'')}</div>
       <div class="bar-group">
         <div class="bar-track"><div class="bar-fill" style="width:${pp}%;background:var(--muted)"></div></div>
         <div class="bar-track"><div class="bar-fill" style="width:${ap}%;background:${ac}"></div></div>
       </div>
-      <div class="bar-num">${r.plan.toLocaleString()}<br><span style="color:${ac}">${r.actual.toLocaleString()}</span></div>
-      <div class="bar-pct" style="color:${pc}">${(ratio*100).toFixed(0)}%</div>
+      <div class="bar-num">${r.plan.toLocaleString()}<br><span style="color:${ac}">${r.actual>0?r.actual.toLocaleString():'—'}</span></div>
+      <div class="bar-pct" style="color:${pc}">${ratio!==null?(ratio*100).toFixed(0)+'%':'—'}</div>
     </div>`;
   }).join('');
 
@@ -446,7 +449,7 @@ function renderCompEng(sheets){
 
   // Cycle chart
   const labels=data.map(d=>[d['Product Name'],d['Milestone']]);
-  const delays=data.map(d=>parseInt(d['Delay (Days) ']||d['Delay (Days)']||0));
+  const delays=data.map(d=>{const v=d['Delay (Days) ']||d['Delay (Days)']||0; return (v==='#REF!'||v===null)?0:parseInt(v)||0;});
   const bgColors=delays.map(d=>d===0?'rgba(22,163,74,.25)':d<10?'rgba(217,119,6,.35)':'rgba(220,38,38,.35)');
   const bdColors=delays.map(d=>d===0?'#16a34a':d<10?'#d97706':'#dc2626');
 
@@ -496,7 +499,7 @@ function renderCompEng(sheets){
     const d=new Date(v); return isNaN(d)?String(v):d.toLocaleDateString('en-GB');
   };
   document.getElementById('msRows').innerHTML=data.map(r=>{
-    const delay=parseInt(r['Delay (Days) ']||r['Delay (Days)']||0);
+    const dv=r['Delay (Days) ']||r['Delay (Days)']||0; const delay=(dv==='#REF!'||dv===null)?0:parseInt(dv)||0;
     const dc=delay===0?'var(--green)':delay<10?'var(--yellow)':'var(--red)';
     const task=String(r['Task Name']||'').substring(0,38);
     return `<div class="ms-grid">
