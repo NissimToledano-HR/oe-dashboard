@@ -60,14 +60,26 @@
   "NPI_Master": [
     {
       "Product Name": "RPD UNF 2G",
-      "Current Phase": "MP",
-      "Marketing PN": "TBD",
+      "Current Phase": "Prototype",
+      "Marketing PN": "COS-PBL2-UNF-G-2-HR01-01",
       "Main Board": "221-0023592-01-01",
       "SFP Board": "221-0023998-01-01",
       "DAUGHTER Board": null,
       "LED Board": null,
       "240 Level": "240-0023592-01-01",
       "Important Notes": "* eMMC from WD\n* FPGA Agilx 043\n*Thermal pads have not been defined yet.",
+      "Status": "On Track"
+    },
+    {
+      "Product Name": "PEARL XL",
+      "Current Phase": "Design",
+      "Marketing PN": "TBD",
+      "Main Board": "221-0023992-01-01",
+      "SFP Board": "221-0023993-01-01",
+      "DAUGHTER Board": null,
+      "LED Board": null,
+      "240 Level": "TBD",
+      "Important Notes": null,
       "Status": "At Risk"
     }
   ],
@@ -192,14 +204,14 @@
   "_kpis": {
     "mrb_total": 817,
     "mrb_rate": 0.875,
-    "npi_count": 1,
+    "npi_count": 2,
     "npi_at_risk": 1,
     "npi_blocked": 0,
-    "npi_on_track": 0,
+    "npi_on_track": 1,
     "comp_total": 6,
     "comp_otd": 3,
     "comp_max_delay": 24,
     "cost_total": 86000
   },
-  "_updated": "2026-03-15 16:02 UTC"
+  "_updated": "2026-03-16 07:54 UTC"
 }
