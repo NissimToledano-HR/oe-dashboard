@@ -330,17 +330,40 @@ function renderNPI(d){
   const npiRows=(d['NPI_Master']||[]).filter(r=>r&&r['Product Name']);
   const diRows=d['Design issue for improvment']||[];
   const tlC={'On Track':'tl-green','At Risk':'tl-yellow','Blocked':'tl-red'};
-  document.getElementById('npiCards').innerHTML=npiRows.map(p=>{
-    const prod=p['Product Name'],status=p['Status']||'On Track',phase=p['Current Phase']||'';
+
+  // Group rows by product name preserving order
+  const grouped={},order=[];
+  npiRows.forEach(p=>{const n=p['Product Name'];if(!grouped[n]){grouped[n]=[];order.push(n);}grouped[n].push(p);});
+
+  function cfgFields(p){return ['Marketing PN','Main Board','SFP Board','DAUGHTER Board','LED Board','240 Level'].filter(k=>p[k]!=null&&p[k]!=='').map(k=>{const v=p[k];return `<div class="npi-field"><span class="npi-key">${k}</span>${v==='TBD'?`<span class="npi-v tbd">TBD</span>`:`<span class="npi-v">${v}</span>`}</div>`;}).join('');}
+  function noteLines(p){return String(p['Important Notes']||'').split('\n').filter(l=>l.trim()).map(l=>`<div style="font-size:11px;color:var(--text2);line-height:1.6">${l}</div>`).join('');}
+
+  document.getElementById('npiCards').innerHTML=order.map(prod=>{
+    const variants=grouped[prod];
+    const p=variants[0];
+    const status=p['Status']||'On Track',phase=p['Current Phase']||'';
     const curIdx=PHASES.indexOf(phase);
     const phaseBar=PHASES.map((ph,i)=>`<div class="ph ${ph===phase?'active':i<curIdx?'done':''}">${ph}</div>`).join('');
-    const cfgFields=['Marketing PN','Main Board','SFP Board','DAUGHTER Board','LED Board','240 Level'].filter(k=>p[k]!=null&&p[k]!=='').map(k=>{const v=p[k];return `<div class="npi-field"><span class="npi-key">${k}</span>${v==='TBD'?`<span class="npi-v tbd">TBD</span>`:`<span class="npi-v">${v}</span>`}</div>`;}).join('');
-    const notes=String(p['Important Notes']||'').split('\n').filter(l=>l.trim()).map(l=>`<div style="font-size:11px;color:var(--text2);line-height:1.6">${l}</div>`).join('');
-    const issues=diRows.filter(r=>r['Product Name']===prod);
-    const diBtn=issues.length?`<div class="di-btn" onclick="toggleDI('${prod.replace(/[\s#]/g,'_')}')">⚠ Design Issues (${issues.length})</div>`:'';
-    const diDetail=issues.length?`<div id="di-${prod.replace(/[\s#]/g,'_')}" class="di-detail"><div class="di-detail-title">Design Issues for Improvement</div>${issues.map(di=>`<div class="di-row"><div style="font-size:11px">${di['Description']||''}</div><div class="di-pn">${di['PCBA PN']||''}</div><div style="color:var(--text3);font-size:10px">${di['Type issue']||''}</div><div><span class="pill progress">${di['Status']||''}</span></div></div>`).join('')}</div>`:'' ;
     const stPill=status==='On Track'?'on-track':status==='At Risk'?'at-risk':'blocked';
-    return `<div class="npi-card"><div class="npi-top"><div class="tl ${tlC[status]||'tl-yellow'}"></div><div><div class="npi-name">${prod}</div><div style="margin-top:4px"><span class="pill ${stPill}">${status}</span></div></div><div class="phase-bar">${phaseBar}</div></div><div class="npi-body"><div class="npi-sec"><div class="npi-sec-title">Configuration</div>${cfgFields}${diBtn}</div><div class="npi-divider"></div><div class="npi-sec"><div class="npi-sec-title">Important Notes</div>${notes||'<span style="color:var(--muted);font-size:11px">—</span>'}</div><div class="npi-divider"></div><div class="npi-sec"><div class="npi-sec-title">ECN Key</div><div style="font-size:11px;color:var(--muted);font-style:italic">TBD</div></div></div>${diDetail}</div>`;
+    const issues=diRows.filter(r=>r['Product Name']===prod);
+    const diBtn=issues.length?`<div class="di-btn" onclick="toggleDI('${prod.replace(/[\s#]/g,'_')}')">&#9888; Design Issues (${issues.length})</div>`:'';
+    const diDetail=issues.length?`<div id="di-${prod.replace(/[\s#]/g,'_')}" class="di-detail"><div class="di-detail-title">Design Issues for Improvement</div>${issues.map(di=>`<div class="di-row"><div style="font-size:11px">${di['Description']||''}</div><div class="di-pn">${di['PCBA PN']||''}</div><div style="color:var(--text3);font-size:10px">${di['Type issue']||''}</div><div><span class="pill progress">${di['Status']||''}</span></div></div>`).join('')}</div>`:'';
+    const top=`<div class="npi-top"><div class="tl ${tlC[status]||'tl-yellow'}"></div><div><div class="npi-name">${prod}</div><div style="margin-top:4px"><span class="pill ${stPill}">${status}</span>${variants.length>1?`<span style="font-size:10px;color:var(--text4);margin-left:8px">${variants.length} revisions</span>`:''}</div></div><div class="phase-bar">${phaseBar}</div></div>`;
+
+    if(variants.length===1){
+      const body=`<div class="npi-body"><div class="npi-sec"><div class="npi-sec-title">Configuration</div>${cfgFields(p)}${diBtn}</div><div class="npi-divider"></div><div class="npi-sec"><div class="npi-sec-title">Important Notes</div>${noteLines(p)||'<span style="color:var(--muted);font-size:11px">—</span>'}</div><div class="npi-divider"></div><div class="npi-sec"><div class="npi-sec-title">ECN Key</div><div style="font-size:11px;color:var(--muted);font-style:italic">TBD</div></div></div>`;
+      return `<div class="npi-card">${top}${body}${diDetail}</div>`;
+    }
+
+    // Multiple revisions — one section per variant
+    const revSections=variants.map((v,i)=>{
+      const cfg=cfgFields(v);
+      const notes=noteLines(v);
+      return `<div style="border-top:1px solid var(--border2);"><div style="display:grid;grid-template-columns:1fr 1px 1fr 1px 1fr;"><div class="npi-sec"><div class="npi-sec-title" style="color:var(--blue2);">Revision ${i+1} &mdash; Configuration</div>${cfg}</div><div class="npi-divider"></div><div class="npi-sec"><div class="npi-sec-title">Important Notes</div>${notes||'<span style="color:var(--muted);font-size:11px">—</span>'}</div><div class="npi-divider"></div><div class="npi-sec"><div class="npi-sec-title">ECN Key</div><div style="font-size:11px;color:var(--muted);font-style:italic">TBD</div></div></div></div>`;
+    }).join('');
+
+    const diBtnRow=diBtn?`<div style="padding:8px 20px 14px;">${diBtn}</div>`:'';
+    return `<div class="npi-card">${top}${revSections}${diBtnRow}${diDetail}</div>`;
   }).join('');
 }
 
