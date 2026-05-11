@@ -587,10 +587,13 @@ function applyQFilters(){
   const prodF=(document.getElementById('q-filter-product')||{}).value||'all';
   const statF=(document.getElementById('q-filter-status')||{}).value||'all';
 
-  // Section visibility
+  // Section show/hide
+  const showSec={};
   ['calibration','production','rma'].forEach(s=>{
     const el=document.getElementById('q-sec-'+s);
-    if(el) el.style.display=(sec==='all'||sec===s)?'block':'none';
+    const show=(sec==='all'||sec===s);
+    if(el) el.style.display=show?'block':'none';
+    showSec[s]=show;
   });
 
   if(!_qData) return;
@@ -598,80 +601,89 @@ function applyQFilters(){
   const prod=_qData['Quality_Production']||{};
   const rma=_qData['Quality_RMA']||{};
 
-  // ── Calibration (filtered by site + status) ─────────────
-  let cItems=(calib.items||[]);
-  if(siteF!=='all') cItems=cItems.filter(i=>(i.Location||'')=== siteF);
-  if(statF!=='all') cItems=cItems.filter(i=>(i.Result||'')=== statF);
+  try{
+    // ── Calibration ─────────────────────────────────────
+    if(showSec.calibration){
+      let cItems=(calib.items||[]);
+      if(siteF!=='all') cItems=cItems.filter(i=>(i.Location||'')=== siteF);
+      if(statF!=='all') cItems=cItems.filter(i=>(i.Result||'')=== statF);
 
-  // Recompute by-site
-  const sSt={};
-  cItems.forEach(i=>{const l=i.Location||'Unknown';if(!sSt[l])sSt[l]={total:0,pass:0,fail:0,overdue:0};sSt[l].total++;if(i.Result==='Pass')sSt[l].pass++;if(i.Result==='Fail')sSt[l].fail++;if(i.Overdue)sSt[l].overdue++;});
-  const bySiteF=Object.entries(sSt).map(function(e){return Object.assign({site:e[0]},e[1]);});
-  document.getElementById('q-calib-site').innerHTML=bySiteF.map(s=>{
-    const pct=s.total?Math.round(s.pass/s.total*100):0;
-    const bc=pct>=95?'var(--green3)':pct>=80?'var(--yellow3)':'var(--red3)';
-    const tc=pct>=95?'var(--green2)':pct>=80?'var(--yellow2)':'var(--red2)';
-    return '<div style="display:grid;grid-template-columns:60px 1fr 40px 60px 60px 60px;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border2);">'+
-      '<div style="font-size:11px;font-weight:600;">'+s.site+'</div>'+
-      '<div><div style="background:var(--bg2);border-radius:4px;height:6px;overflow:hidden;"><div style="height:100%;border-radius:4px;background:'+bc+';width:'+pct+'%"></div></div></div>'+
-      '<div style="font-size:11px;font-family:\'IBM Plex Mono\',monospace;font-weight:700;color:'+tc+';">'+pct+'%</div>'+
-      '<div style="font-size:10px;color:var(--text4);">Total: '+s.total+'</div>'+
-      '<div style="font-size:10px;color:var(--green2);">Pass: '+s.pass+'</div>'+
-      '<div style="font-size:10px;color:var(--red2);">Fail: '+s.fail+'</div></div>';
-  }).join('');
+      const sSt={};
+      cItems.forEach(i=>{const l=i.Location||'Unknown';if(!sSt[l])sSt[l]={total:0,pass:0,fail:0,overdue:0};sSt[l].total++;if(i.Result==='Pass')sSt[l].pass++;if(i.Result==='Fail')sSt[l].fail++;if(i.Overdue)sSt[l].overdue++;});
+      const bySiteF=Object.entries(sSt).map(function(e){return Object.assign({site:e[0]},e[1]);});
+      const siteEl=document.getElementById('q-calib-site');
+      if(siteEl) siteEl.innerHTML=bySiteF.map(s=>{
+        const pct=s.total?Math.round(s.pass/s.total*100):0;
+        const bc=pct>=95?'var(--green3)':pct>=80?'var(--yellow3)':'var(--red3)';
+        const tc=pct>=95?'var(--green2)':pct>=80?'var(--yellow2)':'var(--red2)';
+        return '<div style="display:grid;grid-template-columns:60px 1fr 40px 60px 60px 60px;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border2);">'+
+          '<div style="font-size:11px;font-weight:600;">'+s.site+'</div>'+
+          '<div><div style="background:var(--bg2);border-radius:4px;height:6px;overflow:hidden;"><div style="height:100%;border-radius:4px;background:'+bc+';width:'+pct+'%"></div></div></div>'+
+          '<div style="font-size:11px;font-family:\'IBM Plex Mono\',monospace;font-weight:700;color:'+tc+';">'+pct+'%</div>'+
+          '<div style="font-size:10px;color:var(--text4);">Total: '+s.total+'</div>'+
+          '<div style="font-size:10px;color:var(--green2);">Pass: '+s.pass+'</div>'+
+          '<div style="font-size:10px;color:var(--red2);">Fail: '+s.fail+'</div></div>';
+      }).join('');
 
-  // Type chart from filtered items
-  const tSt={};cItems.forEach(i=>{const t=i.Description||'Unknown';tSt[t]=(tSt[t]||0)+1;});
-  const byTypeF=Object.entries(tSt).sort((a,b)=>b[1]-a[1]).slice(0,10);
-  mkChart('q-calib-type-chart',{type:'bar',data:{labels:byTypeF.map(t=>t[0].substring(0,18)),datasets:[{label:'Count',data:byTypeF.map(t=>t[1]),backgroundColor:'rgba(37,99,235,.7)'}]},options:{responsive:true,maintainAspectRatio:true,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{ticks:{font:{size:9}}},y:{ticks:{font:{size:9}}}}}});
+      const tSt={};cItems.forEach(i=>{const t=i.Description||'Unknown';tSt[t]=(tSt[t]||0)+1;});
+      const byTypeF=Object.entries(tSt).sort((a,b)=>b[1]-a[1]).slice(0,10);
+      mkChart('q-calib-type-chart',{type:'bar',data:{labels:byTypeF.map(t=>t[0].substring(0,18)),datasets:[{label:'Count',data:byTypeF.map(t=>t[1]),backgroundColor:CHART_COLORS}]},options:{responsive:true,maintainAspectRatio:true,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{ticks:{font:{size:9}}},y:{ticks:{font:{size:9}}}}}});
 
-  // Exceptions table from filtered items
-  const excepts=cItems.filter(i=>i.Status&&i.Status!=='NA').slice(0,20);
-  const ovrd=cItems.filter(i=>i.Overdue).slice(0,20);
-  const showItems=[...excepts,...ovrd.filter(o=>!excepts.find(e=>e.Serial===o.Serial))].slice(0,25);
-  const excSub=document.getElementById('q-calib-exception-sub');
-  if(excSub) excSub.textContent=showItems.length+' items shown';
-  document.getElementById('q-calib-exceptions').innerHTML=showItems.map(i=>{
-    const sc=i.Overdue?'var(--red2)':'var(--yellow2)';
-    const sb=i.Overdue?'var(--rbg)':'var(--ybg)';
-    const tag=i.Overdue?'Overdue':i['Status']!=='NA'?i['Status']:'Due Soon';
-    return '<div style="display:grid;grid-template-columns:120px 100px 80px 80px 70px 80px;gap:8px;padding:7px 0;border-bottom:1px solid var(--border2);">'+
-      '<div style="font-size:10px;font-family:\'IBM Plex Mono\',monospace;">'+(i.Model||'—')+'</div>'+
-      '<div style="font-size:10px;color:var(--text3);">'+(i.Description||'').substring(0,16)+'</div>'+
-      '<div style="font-size:10px;">'+(i.Location||'—')+'</div>'+
-      '<div style="font-size:10px;font-family:\'IBM Plex Mono\',monospace;">'+(i['Next Cal Date']||'—')+'</div>'+
-      '<div><span style="font-size:9px;font-weight:600;padding:2px 6px;border-radius:4px;background:'+(i.Result==='Pass'?'var(--gbg)':i.Result==='Fail'?'var(--rbg)':'var(--bg2)')+';color:'+(i.Result==='Pass'?'var(--green2)':i.Result==='Fail'?'var(--red2)':'var(--steel)')+';">'+(i.Result||'—')+'</span></div>'+
-      '<div><span style="font-size:9px;font-weight:600;padding:2px 6px;border-radius:4px;background:'+sb+';color:'+sc+';">'+tag+'</span></div></div>';
-  }).join('');
+      const excepts=cItems.filter(i=>i.Status&&i.Status!=='NA').slice(0,20);
+      const ovrd=cItems.filter(i=>i.Overdue).slice(0,20);
+      const showItems=[...excepts,...ovrd.filter(o=>!excepts.find(e=>e.Serial===o.Serial))].slice(0,25);
+      const excSub=document.getElementById('q-calib-exception-sub');
+      if(excSub) excSub.textContent=showItems.length+' items shown';
+      const excEl=document.getElementById('q-calib-exceptions');
+      if(excEl) excEl.innerHTML=showItems.map(i=>{
+        const sc=i.Overdue?'var(--red2)':'var(--yellow2)';
+        const sb=i.Overdue?'var(--rbg)':'var(--ybg)';
+        const tag=i.Overdue?'Overdue':i['Status']!=='NA'?i['Status']:'Due Soon';
+        return '<div style="display:grid;grid-template-columns:120px 100px 80px 80px 70px 80px;gap:8px;padding:7px 0;border-bottom:1px solid var(--border2);">'+
+          '<div style="font-size:10px;font-family:\'IBM Plex Mono\',monospace;">'+(i.Model||'—')+'</div>'+
+          '<div style="font-size:10px;color:var(--text3);">'+(i.Description||'').substring(0,16)+'</div>'+
+          '<div style="font-size:10px;">'+(i.Location||'—')+'</div>'+
+          '<div style="font-size:10px;font-family:\'IBM Plex Mono\',monospace;">'+(i['Next Cal Date']||'—')+'</div>'+
+          '<div><span style="font-size:9px;font-weight:600;padding:2px 6px;border-radius:4px;background:'+(i.Result==='Pass'?'var(--gbg)':i.Result==='Fail'?'var(--rbg)':'var(--bg2)')+';color:'+(i.Result==='Pass'?'var(--green2)':i.Result==='Fail'?'var(--red2)':'var(--steel)')+';">'+(i.Result||'—')+'</span></div>'+
+          '<div><span style="font-size:9px;font-weight:600;padding:2px 6px;border-radius:4px;background:'+sb+';color:'+sc+';">'+tag+'</span></div></div>';
+      }).join('');
+    }
 
-  // ── Production Quality (filtered by product) ────────────
-  const yieldTrend=(prod.yield_trend||[]).filter(r=>prodF==='all'||r.Product===prodF);
-  const yProducts=[...new Set(yieldTrend.map(r=>r.Product))];
-  const yPeriods=[...new Set(yieldTrend.map(r=>r.Period))];
-  const yDatasets=yProducts.map((p,i)=>({label:p,data:yPeriods.map(per=>{const row=yieldTrend.find(r=>r.Product===p&&r.Period===per);return row&&row['QA1 Yield']!=null?+(row['QA1 Yield']*100).toFixed(1):null;}),borderColor:CHART_COLORS[i%CHART_COLORS.length],backgroundColor:CHART_COLORS[i%CHART_COLORS.length].replace('.7','.15'),fill:true,tension:.35,spanGaps:true,pointRadius:3}));
-  mkChart('q-yield-chart',{type:'line',data:{labels:yPeriods,datasets:yDatasets},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{position:'top',labels:{font:{size:9}}}},scales:{y:{beginAtZero:false,min:50,max:100,ticks:{font:{size:9},callback:v=>v+'%'}},x:{ticks:{font:{size:9}}}}}});
+    // ── Production Quality ───────────────────────────────
+    if(showSec.production){
+      const yieldTrend=(prod.yield_trend||[]).filter(r=>prodF==='all'||r.Product===prodF);
+      const yProducts=[...new Set(yieldTrend.map(r=>r.Product))];
+      const yPeriods=[...new Set(yieldTrend.map(r=>r.Period))];
+      const yDatasets=yProducts.map((p,i)=>({label:p,data:yPeriods.map(per=>{const row=yieldTrend.find(r=>r.Product===p&&r.Period===per);return row&&row['QA1 Yield']!=null?+(row['QA1 Yield']*100).toFixed(1):null;}),borderColor:CHART_COLORS[i%CHART_COLORS.length],backgroundColor:CHART_COLORS[i%CHART_COLORS.length].replace('.7','.15'),fill:true,tension:.35,spanGaps:true,pointRadius:3}));
+      mkChart('q-yield-chart',{type:'line',data:{labels:yPeriods,datasets:yDatasets},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{position:'top',labels:{font:{size:9}}}},scales:{y:{beginAtZero:false,min:50,max:100,ticks:{font:{size:9},callback:v=>v+'%'}},x:{ticks:{font:{size:9}}}}}});
 
-  const dByProdF=(prod.defect_by_product||[]).filter(r=>prodF==='all'||r.product===prodF);
-  const maxDP=Math.max(...dByProdF.map(r=>r.count),1);
-  document.getElementById('q-defect-by-product').innerHTML=dByProdF.map((r,i)=>
-    '<div style="display:grid;grid-template-columns:1fr 120px 40px;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--border2);">'+
-    '<div style="font-size:11px;font-weight:500;">'+r.product+'</div>'+
-    '<div><div style="background:var(--bg2);border-radius:4px;height:5px;overflow:hidden;"><div style="height:100%;border-radius:4px;background:'+CHART_COLORS[i%CHART_COLORS.length]+';width:'+(r.count/maxDP*100)+'%"></div></div></div>'+
-    '<div style="font-size:11px;font-family:\'IBM Plex Mono\',monospace;font-weight:600;text-align:right;">'+r.count+'</div></div>'
-  ).join('');
+      const dByProdF=(prod.defect_by_product||[]).filter(r=>prodF==='all'||r.product===prodF);
+      const maxDP=Math.max(...dByProdF.map(r=>r.count),1);
+      const dpEl=document.getElementById('q-defect-by-product');
+      if(dpEl) dpEl.innerHTML=dByProdF.map((r,i)=>
+        '<div style="display:grid;grid-template-columns:1fr 120px 40px;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--border2);">'+
+        '<div style="font-size:11px;font-weight:500;">'+r.product+'</div>'+
+        '<div><div style="background:var(--bg2);border-radius:4px;height:5px;overflow:hidden;"><div style="height:100%;border-radius:4px;background:'+CHART_COLORS[i%CHART_COLORS.length]+';width:'+(r.count/maxDP*100)+'%"></div></div></div>'+
+        '<div style="font-size:11px;font-family:\'IBM Plex Mono\',monospace;font-weight:600;text-align:right;">'+r.count+'</div></div>'
+      ).join('');
+    }
 
-  // ── RMA (filtered by product + site) ────────────────────
-  const rPareto=(rma.pareto||[]).filter(r=>prodF==='all'||r.family===prodF);
-  mkChart('q-rma-pareto-chart',{type:'bar',data:{labels:rPareto.map(r=>r.family),datasets:[{label:'Total RMA',data:rPareto.map(r=>r.count),backgroundColor:'rgba(37,99,235,.7)'}]},options:{responsive:true,maintainAspectRatio:true,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{ticks:{font:{size:9}}},y:{ticks:{font:{size:9}}}}}});
+    // ── RMA ──────────────────────────────────────────────
+    if(showSec.rma){
+      const rPareto=(rma.pareto||[]).filter(r=>prodF==='all'||r.family===prodF);
+      mkChart('q-rma-pareto-chart',{type:'bar',data:{labels:rPareto.map(r=>r.family),datasets:[{label:'Total RMA',data:rPareto.map(r=>r.count),backgroundColor:CHART_COLORS}]},options:{responsive:true,maintainAspectRatio:true,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{ticks:{font:{size:9}}},y:{ticks:{font:{size:9}}}}}});
 
-  const rSitesF=(rma.by_site||[]).filter(s=>siteF==='all'||s.site===siteF);
-  const maxRS=Math.max(...rSitesF.map(s=>s.count),1);
-  document.getElementById('q-rma-sites').innerHTML=rSitesF.map((s,i)=>
-    '<div style="display:grid;grid-template-columns:160px 1fr 50px;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--border2);">'+
-    '<div style="font-size:11px;font-weight:500;">'+s.site+'</div>'+
-    '<div><div style="background:var(--bg2);border-radius:4px;height:6px;overflow:hidden;"><div style="height:100%;border-radius:4px;background:var(--blue3);width:'+(s.count/maxRS*100)+'%"></div></div></div>'+
-    '<div style="font-size:11px;font-family:\'IBM Plex Mono\',monospace;font-weight:700;text-align:right;">'+s.count+'</div></div>'
-  ).join('');
+      const rSitesF=(rma.by_site||[]).filter(s=>siteF==='all'||s.site===siteF);
+      const maxRS=Math.max(...rSitesF.map(s=>s.count),1);
+      const rsEl=document.getElementById('q-rma-sites');
+      if(rsEl) rsEl.innerHTML=rSitesF.map(s=>
+        '<div style="display:grid;grid-template-columns:160px 1fr 50px;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--border2);">'+
+        '<div style="font-size:11px;font-weight:500;">'+s.site+'</div>'+
+        '<div><div style="background:var(--bg2);border-radius:4px;height:6px;overflow:hidden;"><div style="height:100%;border-radius:4px;background:var(--blue3);width:'+(s.count/maxRS*100)+'%"></div></div></div>'+
+        '<div style="font-size:11px;font-family:\'IBM Plex Mono\',monospace;font-weight:700;text-align:right;">'+s.count+'</div></div>'
+      ).join('');
+    }
+  }catch(e){ console.error('applyQFilters error:',e); }
 }
 function resetQFilters(){
   ['q-filter-section','q-filter-site','q-filter-product','q-filter-status'].forEach(id=>{
