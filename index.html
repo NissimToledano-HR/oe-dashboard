@@ -270,6 +270,7 @@ function switchTab(id,el){
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
   document.getElementById('tab-'+id).style.display='block';
   el.classList.add('active');
+  if(id==='quality'&&_qData) renderQuality(_qData);
 }
 function setStatus(st,txt){document.getElementById('sdot').className='sdot '+st;document.getElementById('stxt').textContent=txt;}
 
@@ -422,7 +423,6 @@ function mkChart(id,cfg){destroyQChart(id);const el=document.getElementById(id);
 const CHART_COLORS=['rgba(37,99,235,.7)','rgba(239,68,68,.7)','rgba(245,158,11,.7)','rgba(34,197,94,.7)','rgba(139,92,246,.7)','rgba(236,72,153,.7)','rgba(20,184,166,.7)','rgba(251,146,60,.7)','rgba(99,102,241,.7)','rgba(16,185,129,.7)'];
 
 function renderQuality(d){
-  _qData=d;
   const calib=d['Quality_Calibration']||{};
   const prod=d['Quality_Production']||{};
   const rma=d['Quality_RMA']||{};
@@ -573,7 +573,8 @@ function resetQFilters(){
 }
 
 function renderAll(d){
-  renderMRB(d);renderCompEng(d);renderCost(d);renderNPI(d);renderQuality(d);
+  renderMRB(d);renderCompEng(d);renderCost(d);renderNPI(d);
+  _qData=d; // store for lazy render when quality tab is opened
   setStatus('ok','Data loaded · '+(d['_updated']||''));
   document.getElementById('refreshBtn').classList.remove('loading');
   document.getElementById('refreshBtn').disabled=false;
