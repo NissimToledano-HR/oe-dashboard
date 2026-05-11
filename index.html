@@ -211,8 +211,50 @@ main{padding:24px 32px;max-width:1480px;margin:0 auto;}
 
 <!-- TAB 3 -->
 <main id="tab-quality" style="display:none">
-  <div class="sec-label">Quality</div>
-  <div class="coming"><div class="coming-title">Coming Soon</div><div class="coming-sub">Pending alignment with Shachaf Cohen</div></div>
+  <div style="background:var(--white);border:1px solid var(--border2);border-radius:10px;padding:12px 18px;margin-bottom:20px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+    <span style="font-size:10px;font-weight:600;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;">Filters</span>
+    <select id="q-filter-section" onchange="applyQFilters()" style="font-size:11px;padding:5px 10px;border:1px solid var(--border);border-radius:6px;color:var(--text2);background:var(--white);cursor:pointer;"><option value="all">All Sections</option><option value="calibration">Calibration</option><option value="production">Production Quality</option><option value="rma">RMA</option></select>
+    <select id="q-filter-site" onchange="applyQFilters()" style="font-size:11px;padding:5px 10px;border:1px solid var(--border);border-radius:6px;color:var(--text2);background:var(--white);cursor:pointer;"><option value="all">All Sites</option></select>
+    <select id="q-filter-product" onchange="applyQFilters()" style="font-size:11px;padding:5px 10px;border:1px solid var(--border);border-radius:6px;color:var(--text2);background:var(--white);cursor:pointer;"><option value="all">All Products</option></select>
+    <select id="q-filter-status" onchange="applyQFilters()" style="font-size:11px;padding:5px 10px;border:1px solid var(--border);border-radius:6px;color:var(--text2);background:var(--white);cursor:pointer;"><option value="all">All Statuses</option><option value="Pass">Pass</option><option value="Fail">Fail</option><option value="Overdue">Overdue</option><option value="NFF">NFF</option><option value="Repair">Repair</option></select>
+    <button onclick="resetQFilters()" style="font-size:10px;padding:5px 12px;border:1px solid var(--border);border-radius:6px;cursor:pointer;background:var(--bg2);color:var(--text3);">Reset</button>
+  </div>
+  <div id="q-kpi-strip" style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:24px;"></div>
+  <div id="q-sec-calibration">
+    <div class="sec-label">Calibration &#8212; Equipment Status</div>
+    <div class="g2" style="margin-bottom:18px;">
+      <div class="card"><div class="card-hdr"><div><div class="card-title">Status by Site</div></div></div><div id="q-calib-site"></div></div>
+      <div class="card"><div class="card-hdr"><div><div class="card-title">Top Equipment Types</div></div></div><canvas id="q-calib-type-chart" style="max-height:200px"></canvas></div>
+    </div>
+    <div class="card" style="margin-bottom:18px;">
+      <div class="card-hdr"><div><div class="card-title">Open Exceptions &amp; Overdue Items</div><div class="card-sub" id="q-calib-exception-sub"></div></div></div>
+      <div style="display:grid;grid-template-columns:120px 100px 80px 80px 70px 80px;gap:8px;padding:8px 0;border-bottom:1px solid var(--border2);"><div style="font-size:9px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted);">Model</div><div style="font-size:9px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted);">Description</div><div style="font-size:9px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted);">Location</div><div style="font-size:9px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted);">Next Cal.</div><div style="font-size:9px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted);">Result</div><div style="font-size:9px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted);">Status</div></div>
+      <div id="q-calib-exceptions"></div>
+    </div>
+  </div>
+  <div id="q-sec-production">
+    <div class="sec-label">Production Quality &#8212; Yield &amp; Defects</div>
+    <div class="g2" style="margin-bottom:18px;">
+      <div class="card"><div class="card-hdr"><div><div class="card-title">QA1 Yield Trend by Product</div><div class="card-sub">Mar&#8211;Sep 2025</div></div></div><canvas id="q-yield-chart" style="max-height:220px"></canvas></div>
+      <div class="card"><div class="card-hdr"><div><div class="card-title">Defect Pareto &#8212; Top Categories</div></div><span class="badge blue" id="q-defect-total-badge">&#8212; defects</span></div><canvas id="q-defect-pareto-chart" style="max-height:220px"></canvas></div>
+    </div>
+    <div class="g2" style="margin-bottom:18px;">
+      <div class="card"><div class="card-hdr"><div><div class="card-title">Monthly Defect Trend</div></div></div><canvas id="q-defect-trend-chart" style="max-height:180px"></canvas></div>
+      <div class="card"><div class="card-hdr"><div><div class="card-title">Defects by Product Family</div></div></div><div id="q-defect-by-product"></div></div>
+    </div>
+  </div>
+  <div id="q-sec-rma">
+    <div class="sec-label">RMA &#8212; Return &amp; Repair Analysis</div>
+    <div class="g2" style="margin-bottom:18px;">
+      <div class="card"><div class="card-hdr"><div><div class="card-title">NFF vs. Repair by Quarter</div></div></div><canvas id="q-rma-trend-chart" style="max-height:200px"></canvas></div>
+      <div class="card"><div class="card-hdr"><div><div class="card-title">Failure Category Distribution</div></div></div><canvas id="q-rma-fail-chart" style="max-height:200px"></canvas></div>
+    </div>
+    <div class="g2" style="margin-bottom:18px;">
+      <div class="card"><div class="card-hdr"><div><div class="card-title">RMA Pareto &#8212; by Product Family</div></div></div><canvas id="q-rma-pareto-chart" style="max-height:200px"></canvas></div>
+      <div class="card"><div class="card-hdr"><div><div class="card-title">Recurring Failures (Repair Only)</div></div></div><div id="q-rma-recurring"></div></div>
+    </div>
+    <div class="card" style="margin-bottom:18px;"><div class="card-hdr"><div><div class="card-title">Repair Site Distribution</div></div></div><div id="q-rma-sites"></div></div>
+  </div>
 </main>
 
 <script>
@@ -369,8 +411,169 @@ function renderNPI(d){
 
 function toggleDI(id){const el=document.getElementById('di-'+id);if(el)el.style.display=el.style.display==='block'?'none':'block';}
 
+// ── QUALITY ─────────────────────────────────────────────
+let qCharts={};
+let _qData=null;
+
+function destroyQChart(id){if(qCharts[id]){qCharts[id].destroy();delete qCharts[id];}}
+
+function mkChart(id,cfg){destroyQChart(id);const el=document.getElementById(id);if(!el)return;qCharts[id]=new Chart(el,cfg);}
+
+const CHART_COLORS=['rgba(37,99,235,.7)','rgba(239,68,68,.7)','rgba(245,158,11,.7)','rgba(34,197,94,.7)','rgba(139,92,246,.7)','rgba(236,72,153,.7)','rgba(20,184,166,.7)','rgba(251,146,60,.7)','rgba(99,102,241,.7)','rgba(16,185,129,.7)'];
+
+function renderQuality(d){
+  _qData=d;
+  const calib=d['Quality_Calibration']||{};
+  const prod=d['Quality_Production']||{};
+  const rma=d['Quality_RMA']||{};
+  const ckpis=calib.kpis||{};
+  const pkpis=prod.kpis||{};
+  const rkpis=rma.kpis||{};
+
+  // populate site filter
+  const siteSet=new Set();
+  (calib.by_site||[]).forEach(s=>siteSet.add(s.site));
+  (rma.by_site||[]).forEach(s=>siteSet.add(s.site));
+  const siteEl=document.getElementById('q-filter-site');
+  siteEl.innerHTML='<option value="all">All Sites</option>'+[...siteSet].map(s=>`<option value="${s}">${s}</option>`).join('');
+
+  // populate product filter
+  const prodSet=new Set();
+  (prod.yield_trend||[]).forEach(r=>prodSet.add(r.Product));
+  (prod.defect_by_product||[]).forEach(r=>prodSet.add(r.product));
+  (rma.pareto||[]).forEach(r=>prodSet.add(r.family));
+  const prodEl=document.getElementById('q-filter-product');
+  prodEl.innerHTML='<option value="all">All Products</option>'+[...prodSet].map(p=>`<option value="${p}">${p}</option>`).join('');
+
+  // KPI strip
+  const kpiData=[
+    {label:'Calibration',items:[
+      {v:ckpis.total||0,lbl:'Total Items',c:'blue'},
+      {v:ckpis.overdue||0,lbl:'Overdue',c:'red'},
+      {v:ckpis.due_soon||0,lbl:'Due in 30d',c:'yellow'},
+      {v:((ckpis.completion_rate||0)*100).toFixed(1)+'%',lbl:'Pass Rate',c:'green'},
+      {v:ckpis.exceptions||0,lbl:'Exceptions',c:'yellow'},
+    ]},
+    {label:'Production Quality',items:[
+      {v:pkpis.total_defects||0,lbl:'Total Defects',c:'red'},
+      {v:pkpis.products_affected||0,lbl:'Products Affected',c:'blue'},
+      {v:pkpis.top_defect_count||0,lbl:'Top Defect Count',c:'yellow'},
+    ]},
+    {label:'RMA',items:[
+      {v:rkpis.total||0,lbl:'Total RMA',c:'blue'},
+      {v:rkpis.nff||0,lbl:'NFF',c:'steel'},
+      {v:rkpis.repair||0,lbl:'Repair',c:'red'},
+      {v:((rkpis.nff_rate||0)*100).toFixed(1)+'%',lbl:'NFF Rate',c:'yellow'},
+    ]},
+  ];
+  const badgeC={blue:'#dbeafe;color:var(--blue2)',red:'var(--rbg);color:var(--red2)',yellow:'var(--ybg);color:var(--yellow2)',green:'var(--gbg);color:var(--green2)',steel:'var(--border2);color:var(--steel)'};
+  document.getElementById('q-kpi-strip').innerHTML=kpiData.map(grp=>`
+    <div class="card"><div style="font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:12px;">${grp.label}</div>
+    <div style="display:flex;flex-wrap:wrap;gap:10px;">${grp.items.map(item=>`<div style="flex:1;min-width:80px;"><div style="font-size:22px;font-weight:700;font-family:'IBM Plex Mono',monospace;color:var(--text);line-height:1;">${item.v}</div><div style="font-size:9px;color:var(--text4);margin-top:2px;">${item.lbl}</div></div>`).join('')}</div></div>`).join('');
+
+  // ── Calibration ──────────────────────────────
+  const bySite=calib.by_site||[];
+  document.getElementById('q-calib-site').innerHTML=bySite.map(s=>{
+    const pct=s.total?Math.round(s.pass/s.total*100):0;
+    const bc=pct>=95?'var(--green3)':pct>=80?'var(--yellow3)':'var(--red3)';
+    const tc=pct>=95?'var(--green2)':pct>=80?'var(--yellow2)':'var(--red2)';
+    return `<div style="display:grid;grid-template-columns:60px 1fr 40px 60px 60px 60px;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border2);">
+      <div style="font-size:11px;font-weight:600;">${s.site}</div>
+      <div><div style="background:var(--bg2);border-radius:4px;height:6px;overflow:hidden;"><div style="height:100%;border-radius:4px;background:${bc};width:${pct}%;"></div></div></div>
+      <div style="font-size:11px;font-family:'IBM Plex Mono',monospace;font-weight:700;color:${tc};">${pct}%</div>
+      <div style="font-size:10px;color:var(--text4);">Total: ${s.total}</div>
+      <div style="font-size:10px;color:var(--green2);">Pass: ${s.pass}</div>
+      <div style="font-size:10px;color:var(--red2);">Fail: ${s.fail}</div>
+    </div>`;
+  }).join('');
+
+  const byType=calib.by_type||[];
+  const maxT=Math.max(...byType.map(t=>t.count),1);
+  mkChart('q-calib-type-chart',{type:'bar',data:{labels:byType.map(t=>t.type.substring(0,18)),datasets:[{label:'Count',data:byType.map(t=>t.count),backgroundColor:CHART_COLORS,borderRadius:4,borderWidth:0}]},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{color:'#64748b',font:{size:9},maxRotation:30}},y:{grid:{color:'rgba(0,0,0,.04)'},ticks:{color:'#64748b',font:{size:9}}}}}});
+
+  const exceptions=(calib.exceptions||[]).slice(0,20);
+  const overdue=((calib.items||[]).filter(i=>i.Overdue)).slice(0,20);
+  const showItems=[...exceptions,...overdue.filter(o=>!exceptions.find(e=>e.Serial===o.Serial))].slice(0,25);
+  document.getElementById('q-calib-exception-sub').textContent=`${showItems.length} items shown`;
+  document.getElementById('q-calib-exceptions').innerHTML=showItems.map(i=>{
+    const sc=i.Overdue?'var(--red2)':'var(--yellow2)';
+    const sb=i.Overdue?'var(--rbg)':'var(--ybg)';
+    const tag=i.Overdue?'Overdue':i['Status']!=='NA'?i['Status']:'Due Soon';
+    return `<div style="display:grid;grid-template-columns:120px 100px 80px 80px 70px 80px;gap:8px;padding:7px 0;border-bottom:1px solid var(--border2);align-items:center;">
+      <div style="font-size:10px;font-family:'IBM Plex Mono',monospace;">${i.Model||'—'}</div>
+      <div style="font-size:10px;color:var(--text3);">${(i.Description||'').substring(0,16)}</div>
+      <div style="font-size:10px;">${i.Location||'—'}</div>
+      <div style="font-size:10px;font-family:'IBM Plex Mono',monospace;">${i['Next Cal Date']||'—'}</div>
+      <div><span style="font-size:9px;font-weight:600;padding:2px 6px;border-radius:4px;background:${i.Result==='Pass'?'var(--gbg)':'var(--rbg)'};color:${i.Result==='Pass'?'var(--green2)':'var(--red2)'};">${i.Result||'—'}</span></div>
+      <div><span style="font-size:9px;font-weight:600;padding:2px 6px;border-radius:4px;background:${sb};color:${sc};">${tag}</span></div>
+    </div>`;
+  }).join('');
+
+  // ── Production Quality ───────────────────────
+  const yieldTrend=prod.yield_trend||[];
+  const yProducts=[...new Set(yieldTrend.map(r=>r.Product))];
+  const yPeriods=[...new Set(yieldTrend.map(r=>r.Period))];
+  const yDatasets=yProducts.map((p,i)=>({label:p,data:yPeriods.map(per=>{const row=yieldTrend.find(r=>r.Product===p&&r.Period===per);return row&&row['QA1 Yield']?+(row['QA1 Yield']*100).toFixed(2):null;}),borderColor:CHART_COLORS[i%CHART_COLORS.length].replace('.7','1'),backgroundColor:'transparent',tension:.35,pointRadius:3,borderWidth:2,spanGaps:true}));
+  mkChart('q-yield-chart',{type:'line',data:{labels:yPeriods,datasets:yDatasets},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{labels:{color:'#334155',font:{size:9},boxWidth:10,padding:6}}},scales:{x:{grid:{display:false},ticks:{color:'#64748b',font:{size:9}}},y:{min:97,max:101,grid:{color:'rgba(0,0,0,.04)'},ticks:{color:'#64748b',font:{size:9},callback:v=>v+'%'},title:{display:true,text:'Yield %',color:'#94a3b8',font:{size:9}}}}}});
+
+  const dPareto=prod.defect_pareto||[];
+  document.getElementById('q-defect-total-badge').textContent=(prod.kpis||{}).total_defects+' defects';
+  mkChart('q-defect-pareto-chart',{type:'bar',data:{labels:dPareto.map(r=>r.desc.split(' - ')[0]),datasets:[{label:'Count',data:dPareto.map(r=>r.count),backgroundColor:CHART_COLORS,borderRadius:4,borderWidth:0}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false}},scales:{x:{grid:{color:'rgba(0,0,0,.04)'},ticks:{color:'#64748b',font:{size:9}}},y:{grid:{display:false},ticks:{color:'#64748b',font:{size:9}}}}}});
+
+  const mDefects=prod.monthly_defects||[];
+  mkChart('q-defect-trend-chart',{type:'bar',data:{labels:mDefects.map(r=>r.period),datasets:[{label:'Defects',data:mDefects.map(r=>r.count),backgroundColor:'rgba(239,68,68,.4)',borderColor:'rgba(239,68,68,.8)',borderWidth:1.5,borderRadius:4}]},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{color:'#64748b',font:{size:9}}},y:{grid:{color:'rgba(0,0,0,.04)'},ticks:{color:'#64748b',font:{size:9}}}}}});
+
+  const dByProd=prod.defect_by_product||[];
+  const maxDP=Math.max(...dByProd.map(r=>r.count),1);
+  document.getElementById('q-defect-by-product').innerHTML=dByProd.map((r,i)=>`<div style="display:grid;grid-template-columns:1fr 120px 40px;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border2);">
+    <div style="font-size:11px;font-weight:500;">${r.product}</div>
+    <div><div style="background:var(--bg2);border-radius:4px;height:5px;overflow:hidden;"><div style="height:100%;border-radius:4px;background:${CHART_COLORS[i%CHART_COLORS.length]};width:${Math.round(r.count/maxDP*100)}%;"></div></div></div>
+    <div style="font-size:11px;font-family:'IBM Plex Mono',monospace;font-weight:600;text-align:right;">${r.count}</div>
+  </div>`).join('');
+
+  // ── RMA ──────────────────────────────────────
+  const qTrend=rma.quarter_trend||[];
+  mkChart('q-rma-trend-chart',{type:'bar',data:{labels:qTrend.map(r=>r.quarter),datasets:[{label:'NFF',data:qTrend.map(r=>r.NFF||0),backgroundColor:'rgba(148,163,184,.6)',borderRadius:3},{label:'Repair',data:qTrend.map(r=>r.Repair||0),backgroundColor:'rgba(239,68,68,.5)',borderRadius:3}]},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{labels:{color:'#334155',font:{size:10},boxWidth:10}}},scales:{x:{stacked:true,grid:{display:false},ticks:{color:'#64748b',font:{size:10}}},y:{stacked:true,grid:{color:'rgba(0,0,0,.04)'},ticks:{color:'#64748b',font:{size:10}}}}}});
+
+  const failCats=rma.fail_categories||[];
+  mkChart('q-rma-fail-chart',{type:'doughnut',data:{labels:failCats.map(r=>r.category),datasets:[{data:failCats.map(r=>r.count),backgroundColor:CHART_COLORS,borderColor:'#fff',borderWidth:2,hoverOffset:4}]},options:{responsive:true,maintainAspectRatio:true,cutout:'55%',plugins:{legend:{position:'bottom',labels:{color:'#334155',font:{size:10},boxWidth:10,padding:8}}}}});
+
+  const rPareto=rma.pareto||[];
+  mkChart('q-rma-pareto-chart',{type:'bar',data:{labels:rPareto.map(r=>r.family),datasets:[{label:'Total RMA',data:rPareto.map(r=>r.count),backgroundColor:CHART_COLORS,borderRadius:4,borderWidth:0}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false}},scales:{x:{grid:{color:'rgba(0,0,0,.04)'},ticks:{color:'#64748b',font:{size:9}}},y:{grid:{display:false},ticks:{color:'#64748b',font:{size:9}}}}}});
+
+  const recurring=rma.recurring||[];
+  const maxR=Math.max(...recurring.map(r=>r.count),1);
+  document.getElementById('q-rma-recurring').innerHTML=recurring.map((r,i)=>`<div style="display:grid;grid-template-columns:1fr 120px 40px;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border2);">
+    <div style="font-size:11px;">${r.category}</div>
+    <div><div style="background:var(--bg2);border-radius:4px;height:5px;overflow:hidden;"><div style="height:100%;border-radius:4px;background:${CHART_COLORS[i%CHART_COLORS.length]};width:${Math.round(r.count/maxR*100)}%;"></div></div></div>
+    <div style="font-size:11px;font-family:'IBM Plex Mono',monospace;font-weight:600;text-align:right;">${r.count}</div>
+  </div>`).join('');
+
+  const rSites=rma.by_site||[];
+  const maxRS=Math.max(...rSites.map(s=>s.count),1);
+  document.getElementById('q-rma-sites').innerHTML=rSites.map((s,i)=>`<div style="display:grid;grid-template-columns:160px 1fr 50px;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid var(--border2);">
+    <div style="font-size:11px;font-weight:500;">${s.site}</div>
+    <div><div style="background:var(--bg2);border-radius:4px;height:6px;overflow:hidden;"><div style="height:100%;border-radius:4px;background:${CHART_COLORS[i%CHART_COLORS.length]};width:${Math.round(s.count/maxRS*100)}%;"></div></div></div>
+    <div style="font-size:11px;font-family:'IBM Plex Mono',monospace;font-weight:700;text-align:right;">${s.count}</div>
+  </div>`).join('');
+}
+
+function applyQFilters(){
+  const sec=document.getElementById('q-filter-section').value;
+  ['calibration','production','rma'].forEach(s=>{
+    const el=document.getElementById('q-sec-'+s);
+    if(el) el.style.display=(sec==='all'||sec===s)?'block':'none';
+  });
+}
+function resetQFilters(){
+  ['q-filter-section','q-filter-site','q-filter-product','q-filter-status'].forEach(id=>{
+    const el=document.getElementById(id); if(el) el.value='all';
+  });
+  applyQFilters();
+}
+
 function renderAll(d){
-  renderMRB(d);renderCompEng(d);renderCost(d);renderNPI(d);
+  renderMRB(d);renderCompEng(d);renderCost(d);renderNPI(d);renderQuality(d);
   setStatus('ok','Data loaded · '+(d['_updated']||''));
   document.getElementById('refreshBtn').classList.remove('loading');
   document.getElementById('refreshBtn').disabled=false;
