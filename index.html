@@ -641,17 +641,19 @@ function renderEcnHeatmap(heatmap){
   document.getElementById('ecn-heatmap').innerHTML=h;
 }
 
-function renderECN(d){
-  const ecn=d['ECN_MCO_DA']||{};
-  const kpis=ecn.kpis||{};
-  const byProd=ecn.by_product||[];
-  const byCat=ecn.by_category||[];
-  const topObjs=ecn.top_objects||{};
-  const heatmap=ecn.heatmap||[];
-  const cycleData=ecn.cycle_data||{};
+function _topObjFromRecs(recs,n){
+  n=n||10;const cnt={};
+  recs.forEach(r=>(r.objects||[]).forEach(o=>{cnt[o]=(cnt[o]||0)+1;}));
+  return Object.entries(cnt).sort((a,b)=>b[1]-a[1]).slice(0,n).map(function(e){return{obj:e[0],count:e[1]};});
+}
 
-  const prodEl=document.getElementById('ecn-filter-product');
-  if(prodEl) prodEl.innerHTML='<option value="all">All Products</option>'+byProd.map(r=>'<option value="'+r.product+'">'+r.product+'</option>').join('');
+function _renderEcnCharts(data){
+  const kpis=data.kpis||{};
+  const byProd=data.byProd||[];
+  const byCat=data.byCat||[];
+  const topObjs=data.topObjs||{};
+  const heatmap=data.heatmap||[];
+  const cycleData=data.cycleData||{};
 
   const badgeC={blue:'#dbeafe;color:var(--blue2)',yellow:'var(--ybg);color:var(--yellow2)',steel:'var(--bg2);color:var(--steel)',green:'var(--gbg);color:var(--green2)'};
   const kpiItems=[
@@ -716,9 +718,83 @@ function renderECN(d){
     scales:{x:{ticks:{font:{size:7},maxRotation:90}},y:{beginAtZero:true,ticks:{font:{size:9}},title:{display:true,text:'Days',font:{size:9}}}}}});
 }
 
-function applyEcnFilters(){}
+function renderECN(d){
+  const raw=d['ECN_MCO_DA']||{};
+  window._ecnRawData=raw;
+
+  // Populate product filter (full list, always from raw)
+  const allProds=[...new Set([...(raw.records?.ECN||[]),...(raw.records?.DA||[]),...(raw.records?.MCO||[])].map(r=>r.product))].sort();
+  const prodEl=document.getElementById('ecn-filter-product');
+  if(prodEl) prodEl.innerHTML='<option value="all">All Products</option>'+allProds.map(p=>'<option value="'+p+'">'+p+'</option>').join('');
+
+  // Render with full data
+  _renderEcnCharts({
+    kpis:raw.kpis||{},
+    byProd:raw.by_product||[],
+    byCat:raw.by_category||[],
+    topObjs:raw.top_objects||{},
+    heatmap:raw.heatmap||[],
+    cycleData:raw.cycle_data||{}
+  });
+}
+
+function applyEcnFilters(){
+  const raw=window._ecnRawData;
+  if(!raw||!raw.records) return;
+  const typeF=document.getElementById('ecn-filter-type').value;
+  const prodF=document.getElementById('ecn-filter-product').value;
+
+  let ecn=(raw.records.ECN||[]).slice();
+  let da =(raw.records.DA ||[]).slice();
+  let mco=(raw.records.MCO||[]).slice();
+
+  if(typeF!=='all'){ecn=typeF==='ECN'?ecn:[];da=typeF==='DA'?da:[];mco=typeF==='MCO'?mco:[];}
+  if(prodF!=='all'){ecn=ecn.filter(r=>r.product===prodF);da=da.filter(r=>r.product===prodF);mco=mco.filter(r=>r.product===prodF);}
+
+  const all=[...ecn,...da,...mco];
+  const prods=[...new Set(all.map(r=>r.product))].sort();
+  const cats=[...new Set(all.map(r=>r.category))].sort();
+
+  const byProd=prods.map(pf=>({
+    product:pf,
+    ECN:ecn.filter(r=>r.product===pf).length,
+    DA: da.filter(r=>r.product===pf).length,
+    MCO:mco.filter(r=>r.product===pf).length,
+    total:all.filter(r=>r.product===pf).length
+  })).sort((a,b)=>b.total-a.total);
+
+  const byCat=cats.map(cat=>({
+    category:cat,
+    ECN:ecn.filter(r=>r.category===cat).length,
+    DA: da.filter(r=>r.category===cat).length,
+    MCO:mco.filter(r=>r.category===cat).length,
+    total:all.filter(r=>r.category===cat).length
+  })).sort((a,b)=>b.total-a.total);
+
+  const hmMap={};
+  all.forEach(r=>{const k=r.product+'||'+r.category;hmMap[k]=(hmMap[k]||0)+1;});
+  const heatmap=Object.entries(hmMap).map(function(e){const p=e[0].split('||');return{product:p[0],category:p[1],count:e[1]};});
+
+  const topObjs={ECN:_topObjFromRecs(ecn),DA:_topObjFromRecs(da),MCO:_topObjFromRecs(mco),ALL:_topObjFromRecs(all)};
+
+  const cycleData={
+    ECN:ecn.filter(r=>r.cycle_days!=null).map(r=>({doc:r.doc,days:r.cycle_days,product:r.product,category:r.category})),
+    DA: da.filter(r=>r.cycle_days!=null).map(r=>({doc:r.doc,days:r.cycle_days,product:r.product,category:r.category})),
+    MCO:mco.filter(r=>r.cycle_days!=null).map(r=>({doc:r.doc,days:r.cycle_days,product:r.product,category:r.category}))
+  };
+
+  const allCyc=all.filter(r=>r.cycle_days!=null).map(r=>r.cycle_days);
+  const avgCyc=allCyc.length?Math.round(allCyc.reduce((s,v)=>s+v,0)/allCyc.length):0;
+
+  _renderEcnCharts({
+    kpis:{ecn:ecn.length,da:da.length,mco:mco.length,total:all.length,avg_cycle:avgCyc},
+    byProd,byCat,topObjs,heatmap,cycleData
+  });
+}
+
 function resetEcnFilters(){
   ['ecn-filter-type','ecn-filter-product'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='all';});
+  applyEcnFilters();
 }
 
 function renderAll(d){
