@@ -71,6 +71,18 @@
       "Status": "On Track"
     },
     {
+      "Product Name": "RPD UNF 2G",
+      "Current Phase": "Prototype",
+      "Marketing PN": "TBD",
+      "Main Board": "221-0023592-02-01",
+      "SFP Board": "221-0023998-21-01",
+      "DAUGHTER Board": null,
+      "LED Board": null,
+      "240 Level": "240-0023592-02-01",
+      "Important Notes": "* eMMC from WD\n* FPGA Agilx 043\n*After new spin + Mech. Re-design",
+      "Status": "On Track"
+    },
+    {
       "Product Name": "PEARL XL",
       "Current Phase": "Design",
       "Marketing PN": "TBD",
@@ -81,6 +93,18 @@
       "240 Level": "TBD",
       "Important Notes": null,
       "Status": "At Risk"
+    },
+    {
+      "Product Name": "JETTY-2S",
+      "Current Phase": "Design",
+      "Marketing PN": "TBD",
+      "Main Board": "221-0023760-02-01",
+      "SFP Board": null,
+      "DAUGHTER Board": null,
+      "LED Board": "221-0023762-01-01",
+      "240 Level": "TBD",
+      "Important Notes": null,
+      "Status": "Status -NPI"
     }
   ],
   "Component Eng. ": [
@@ -204,14 +228,14 @@
   "_kpis": {
     "mrb_total": 817,
     "mrb_rate": 0.875,
-    "npi_count": 2,
+    "npi_count": 4,
     "npi_at_risk": 1,
     "npi_blocked": 0,
-    "npi_on_track": 1,
+    "npi_on_track": 2,
     "comp_total": 6,
     "comp_otd": 3,
     "comp_max_delay": 24,
     "cost_total": 86000
   },
-  "_updated": "2026-03-16 07:54 UTC"
+  "_updated": "2026-05-11 11:48 UTC"
 }
