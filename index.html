@@ -145,6 +145,7 @@ main{padding:24px 32px;max-width:1480px;margin:0 auto;}
   <div class="tab active" onclick="switchTab('oe',this)">OE Excellence &amp; Efficiency</div>
   <div class="tab" onclick="switchTab('npi',this)">NPI Project Master</div>
   <div class="tab" onclick="switchTab('quality',this)">Quality</div>
+  <div class="tab" onclick="switchTab('ecn',this)">Change Orders</div>
 </nav>
 
 <!-- TAB 1 -->
@@ -257,6 +258,27 @@ main{padding:24px 32px;max-width:1480px;margin:0 auto;}
   </div>
 </main>
 
+<!-- TAB 4 -->
+<main id="tab-ecn" style="display:none">
+  <div style="background:var(--white);border:1px solid var(--border2);border-radius:10px;padding:12px 18px;margin-bottom:20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+    <span style="font-size:10px;font-weight:600;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;">Filters</span>
+    <select id="ecn-filter-type" onchange="applyEcnFilters()" style="font-size:11px;padding:5px 10px;border:1px solid var(--border);border-radius:6px;background:var(--white);"><option value="all">All Types</option><option value="ECN">ECN</option><option value="DA">DA</option><option value="MCO">MCO</option></select>
+    <select id="ecn-filter-product" onchange="applyEcnFilters()" style="font-size:11px;padding:5px 10px;border:1px solid var(--border);border-radius:6px;background:var(--white);"><option value="all">All Products</option></select>
+    <button onclick="resetEcnFilters()" style="font-size:10px;padding:5px 12px;border:1px solid var(--border);border-radius:6px;cursor:pointer;background:var(--white);">Reset</button>
+  </div>
+  <div id="ecn-kpi-strip" style="display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:24px;"></div>
+  <div class="g2" style="margin-bottom:18px;">
+    <div class="card"><div class="card-hdr"><div><div class="card-title">Change Orders by Product Family</div><div class="card-sub">Stacked ECN / DA / MCO</div></div></div><canvas id="ecn-by-product-chart" height="250"></canvas></div>
+    <div class="card"><div class="card-hdr"><div><div class="card-title">Category of Change Distribution</div><div class="card-sub">All document types combined</div></div></div><canvas id="ecn-cat-donut-chart" height="250"></canvas></div>
+  </div>
+  <div class="g2" style="margin-bottom:18px;">
+    <div class="card"><div class="card-hdr"><div><div class="card-title">Category Breakdown by Doc Type</div><div class="card-sub">ECN vs DA vs MCO per category</div></div></div><canvas id="ecn-cat-grouped-chart" height="220"></canvas></div>
+    <div class="card"><div class="card-hdr"><div><div class="card-title">Top Affected Parts &amp; Cards</div><div class="card-sub" id="ecn-obj-sub">All Doc Types</div></div><select id="ecn-obj-type" onchange="renderEcnObjects()" style="font-size:10px;padding:3px 8px;border:1px solid var(--border);border-radius:5px;background:var(--white);"><option value="ALL">All</option><option value="ECN">ECN</option><option value="DA">DA</option><option value="MCO">MCO</option></select></div><div id="ecn-top-objects" style="margin-top:6px;"></div></div>
+  </div>
+  <div class="card" style="margin-bottom:18px;"><div class="card-hdr"><div><div class="card-title">Product &#215; Category Heatmap</div><div class="card-sub">Unique change orders per product &amp; category</div></div></div><div id="ecn-heatmap" style="overflow-x:auto;margin-top:10px;"></div></div>
+  <div class="card" style="margin-bottom:18px;"><div class="card-hdr"><div><div class="card-title">Cycle Time &#8212; Creation to Approval</div><div class="card-sub">Days per approved change order &mdash; colored by type</div></div></div><canvas id="ecn-cycle-chart" height="140"></canvas></div>
+</main>
+
 <script>
 const DATA_URL='https://raw.githubusercontent.com/NissimToledano-HR/oe-dashboard/main/data.json';
 const PHASES=['Design','Prototype','0 series','MP'];
@@ -266,11 +288,12 @@ function tick(){const n=new Date();document.getElementById('clock').textContent=
 tick();setInterval(tick,1000);
 
 function switchTab(id,el){
-  ['oe','npi','quality'].forEach(t=>document.getElementById('tab-'+t).style.display='none');
+  ['oe','npi','quality','ecn'].forEach(t=>document.getElementById('tab-'+t).style.display='none');
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
   document.getElementById('tab-'+id).style.display='block';
   el.classList.add('active');
   if(id==='quality'&&_qData) renderQuality(_qData);
+  if(id==='ecn'&&_ecnData) renderECN(_ecnData);
 }
 function setStatus(st,txt){document.getElementById('sdot').className='sdot '+st;document.getElementById('stxt').textContent=txt;}
 
@@ -413,7 +436,7 @@ function renderNPI(d){
 function toggleDI(id){const el=document.getElementById('di-'+id);if(el)el.style.display=el.style.display==='block'?'none':'block';}
 
 // ── QUALITY ─────────────────────────────────────────────
-let qCharts={};
+let qCharts={};let ecnCharts={};let _ecnData=null;
 let _qData=null;
 
 function destroyQChart(id){if(qCharts[id]){qCharts[id].destroy();delete qCharts[id];}}
@@ -572,9 +595,136 @@ function resetQFilters(){
   applyQFilters();
 }
 
+
+function destroyEcnChart(id){if(ecnCharts[id]){ecnCharts[id].destroy();delete ecnCharts[id];}}
+function mkEcnChart(id,cfg){destroyEcnChart(id);const el=document.getElementById(id);if(!el)return;ecnCharts[id]=new Chart(el,cfg);}
+const ECN_COL='rgba(37,99,235,.8)',DA_COL='rgba(245,158,11,.8)',MCO_COL='rgba(139,92,246,.8)';
+
+function renderEcnObjects(){
+  const type=document.getElementById('ecn-obj-type')?.value||'ALL';
+  const objs=(window._ecnTopObjs||{})[type]||[];
+  const sub=document.getElementById('ecn-obj-sub');
+  if(sub) sub.textContent=type==='ALL'?'All Doc Types':type+' only';
+  const max=Math.max(...objs.map(o=>o.count),1);
+  document.getElementById('ecn-top-objects').innerHTML=objs.length?objs.map(o=>
+    '<div style="display:grid;grid-template-columns:1fr 110px 40px;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--border2);">'+
+    '<div style="font-size:10px;font-family:\'IBM Plex Mono\',monospace;">'+o.obj+'</div>'+
+    '<div><div style="background:var(--bg2);border-radius:4px;height:5px;overflow:hidden;"><div style="height:100%;border-radius:4px;background:var(--blue3);width:'+(o.count/max*100)+'%"></div></div></div>'+
+    '<div style="font-size:11px;font-family:\'IBM Plex Mono\',monospace;font-weight:700;text-align:right;color:var(--blue2);">'+o.count+'</div></div>'
+  ).join(''):'<div style="color:var(--muted);font-size:11px;padding:12px 0;">No data</div>';
+}
+
+function renderEcnHeatmap(heatmap){
+  const products=[...new Set(heatmap.map(r=>r.product))].sort();
+  const cats=[...new Set(heatmap.map(r=>r.category))].sort();
+  const hmMap={};heatmap.forEach(r=>{hmMap[r.product+'||'+r.category]=r.count;});
+  const maxHm=Math.max(...heatmap.map(r=>r.count),1);
+  let h='<table style="border-collapse:collapse;font-size:10px;min-width:100%;">';
+  h+='<thead><tr><th style="padding:6px 12px;text-align:left;font-size:9px;font-weight:600;color:var(--muted);border-bottom:2px solid var(--border);white-space:nowrap;">Product</th>';
+  cats.forEach(c=>{h+='<th style="padding:6px 16px;font-size:9px;font-weight:600;color:var(--muted);border-bottom:2px solid var(--border);text-align:center;white-space:nowrap;">'+c+'</th>';});
+  h+='<th style="padding:6px 10px;font-size:9px;font-weight:600;color:var(--muted);border-bottom:2px solid var(--border);text-align:center;">Total</th></tr></thead><tbody>';
+  products.forEach(p=>{
+    const rowT=cats.reduce((s,c)=>s+(hmMap[p+'||'+c]||0),0);
+    h+='<tr><td style="padding:8px 12px;font-size:10px;font-weight:500;border-bottom:1px solid var(--border2);white-space:nowrap;">'+p+'</td>';
+    cats.forEach(c=>{
+      const v=hmMap[p+'||'+c]||0;
+      const intensity=v?Math.max(0.12,v/maxHm):0;
+      const bg=v?'rgba(37,99,235,'+intensity.toFixed(2)+')':'transparent';
+      const tc=intensity>0.5?'#fff':'var(--text)';
+      h+='<td style="padding:8px 16px;text-align:center;border-bottom:1px solid var(--border2);background:'+bg+';color:'+tc+';font-family:\'IBM Plex Mono\',monospace;font-size:11px;font-weight:'+(v?700:400)+';\'>"'+(v||'')+'</td>';
+    });
+    h+='<td style="padding:8px 10px;text-align:center;border-bottom:1px solid var(--border2);font-family:\'IBM Plex Mono\',monospace;font-size:10px;font-weight:700;color:var(--blue2);">'+rowT+'</td></tr>';
+  });
+  h+='<tr style="background:var(--bg2);"><td style="padding:7px 12px;font-size:10px;font-weight:700;">Total</td>';
+  let gt=0;cats.forEach(c=>{const t=products.reduce((s,p)=>s+(hmMap[p+'||'+c]||0),0);gt+=t;h+='<td style="padding:7px 16px;text-align:center;font-family:\'IBM Plex Mono\',monospace;font-size:10px;font-weight:700;color:var(--blue2);">'+t+'</td>';});
+  h+='<td style="padding:7px 10px;text-align:center;font-family:\'IBM Plex Mono\',monospace;font-size:10px;font-weight:700;color:var(--blue2);">'+gt+'</td></tr></tbody></table>';
+  document.getElementById('ecn-heatmap').innerHTML=h;
+}
+
+function renderECN(d){
+  const ecn=d['ECN_MCO_DA']||{};
+  const kpis=ecn.kpis||{};
+  const byProd=ecn.by_product||[];
+  const byCat=ecn.by_category||[];
+  const topObjs=ecn.top_objects||{};
+  const heatmap=ecn.heatmap||[];
+  const cycleData=ecn.cycle_data||{};
+
+  const prodEl=document.getElementById('ecn-filter-product');
+  if(prodEl) prodEl.innerHTML='<option value="all">All Products</option>'+byProd.map(r=>'<option value="'+r.product+'">'+r.product+'</option>').join('');
+
+  const badgeC={blue:'#dbeafe;color:var(--blue2)',yellow:'var(--ybg);color:var(--yellow2)',steel:'var(--bg2);color:var(--steel)',green:'var(--gbg);color:var(--green2)'};
+  const kpiItems=[
+    {v:kpis.total||0,lbl:'Total Changes',c:'blue'},
+    {v:kpis.ecn||0,lbl:'ECNs',c:'blue'},
+    {v:kpis.da||0,lbl:'DAs',c:'yellow'},
+    {v:kpis.mco||0,lbl:'MCOs',c:'steel'},
+    {v:(kpis.avg_cycle||0)+'d',lbl:'Avg Cycle Time',c:'green'},
+  ];
+  document.getElementById('ecn-kpi-strip').innerHTML=kpiItems.map(item=>
+    '<div class="card"><div style="font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">'+item.lbl+'</div>'+
+    '<div style="font-size:30px;font-weight:700;font-family:\'IBM Plex Mono\',monospace;background:'+badgeC[item.c]+';padding:10px 16px;border-radius:8px;display:inline-block;">'+item.v+'</div></div>'
+  ).join('');
+
+  mkEcnChart('ecn-by-product-chart',{type:'bar',data:{
+    labels:byProd.map(r=>r.product.length>24?r.product.substring(0,22)+'\u2026':r.product),
+    datasets:[
+      {label:'ECN',data:byProd.map(r=>r.ECN),backgroundColor:ECN_COL},
+      {label:'DA', data:byProd.map(r=>r.DA), backgroundColor:DA_COL},
+      {label:'MCO',data:byProd.map(r=>r.MCO),backgroundColor:MCO_COL},
+    ]
+  },options:{responsive:true,maintainAspectRatio:true,indexAxis:'y',
+    plugins:{legend:{position:'top',labels:{font:{size:10}}},tooltip:{mode:'index',intersect:false}},
+    scales:{x:{stacked:true,ticks:{font:{size:9}}},y:{stacked:true,ticks:{font:{size:9}}}}}});
+
+  mkEcnChart('ecn-cat-donut-chart',{type:'doughnut',data:{
+    labels:byCat.map(r=>r.category),
+    datasets:[{data:byCat.map(r=>r.total),backgroundColor:CHART_COLORS,borderWidth:2}]
+  },options:{responsive:true,maintainAspectRatio:true,
+    plugins:{legend:{position:'right',labels:{font:{size:11},padding:16}}}}});
+
+  mkEcnChart('ecn-cat-grouped-chart',{type:'bar',data:{
+    labels:byCat.map(r=>r.category),
+    datasets:[
+      {label:'ECN',data:byCat.map(r=>r.ECN),backgroundColor:ECN_COL},
+      {label:'DA', data:byCat.map(r=>r.DA), backgroundColor:DA_COL},
+      {label:'MCO',data:byCat.map(r=>r.MCO),backgroundColor:MCO_COL},
+    ]
+  },options:{responsive:true,maintainAspectRatio:true,
+    plugins:{legend:{position:'top',labels:{font:{size:10}}}},
+    scales:{x:{ticks:{font:{size:10}}},y:{beginAtZero:true,ticks:{font:{size:9}}}}}});
+
+  window._ecnTopObjs=topObjs;
+  renderEcnObjects();
+  renderEcnHeatmap(heatmap);
+
+  const allCycles=[
+    ...(cycleData.ECN||[]).map(r=>Object.assign({},r,{dtype:'ECN'})),
+    ...(cycleData.DA||[]).map(r=>Object.assign({},r,{dtype:'DA'})),
+    ...(cycleData.MCO||[]).map(r=>Object.assign({},r,{dtype:'MCO'})),
+  ].filter(r=>r.days!=null).sort((a,b)=>b.days-a.days);
+  const typeColors={ECN:ECN_COL,DA:DA_COL,MCO:MCO_COL};
+  const legendItems=[{text:'ECN',fillStyle:ECN_COL},{text:'DA',fillStyle:DA_COL},{text:'MCO',fillStyle:MCO_COL}];
+  mkEcnChart('ecn-cycle-chart',{type:'bar',data:{
+    labels:allCycles.map(r=>r.doc),
+    datasets:[{label:'Days',data:allCycles.map(r=>r.days),backgroundColor:allCycles.map(r=>typeColors[r.dtype])}]
+  },options:{responsive:true,maintainAspectRatio:true,
+    plugins:{
+      legend:{display:true,labels:{generateLabels:()=>legendItems.map(l=>({text:l.text,fillStyle:l.fillStyle,strokeStyle:'transparent',hidden:false}))}},
+      tooltip:{callbacks:{label:c=>allCycles[c.dataIndex].dtype+' \xb7 '+c.raw+'d \xb7 '+allCycles[c.dataIndex].product}}
+    },
+    scales:{x:{ticks:{font:{size:7},maxRotation:90}},y:{beginAtZero:true,ticks:{font:{size:9}},title:{display:true,text:'Days',font:{size:9}}}}}});
+}
+
+function applyEcnFilters(){}
+function resetEcnFilters(){
+  ['ecn-filter-type','ecn-filter-product'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='all';});
+}
+
 function renderAll(d){
   renderMRB(d);renderCompEng(d);renderCost(d);renderNPI(d);
   _qData=d; // store for lazy render when quality tab is opened
+  _ecnData=d;
   setStatus('ok','Data loaded · '+(d['_updated']||''));
   document.getElementById('refreshBtn').classList.remove('loading');
   document.getElementById('refreshBtn').disabled=false;
