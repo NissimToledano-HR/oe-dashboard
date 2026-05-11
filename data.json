@@ -7259,5 +7259,1594 @@
       }
     ]
   },
-  "_updated": "2026-05-11 18:02 UTC"
+  "ECN_MCO_DA": {
+    "kpis": {
+      "ecn": 32,
+      "da": 22,
+      "mco": 4,
+      "total": 58,
+      "avg_cycle": 4
+    },
+    "by_product": [
+      {
+        "product": "PEBBLE UNIFIED",
+        "ECN": 11,
+        "DA": 3,
+        "MCO": 1,
+        "total": 15
+      },
+      {
+        "product": "PEBBLE GEN2",
+        "ECN": 2,
+        "DA": 8,
+        "MCO": 0,
+        "total": 10
+      },
+      {
+        "product": "HOUSING UNIFIED",
+        "ECN": 4,
+        "DA": 4,
+        "MCO": 0,
+        "total": 8
+      },
+      {
+        "product": "HOUSING OYSTER",
+        "ECN": 2,
+        "DA": 2,
+        "MCO": 3,
+        "total": 7
+      },
+      {
+        "product": "PON JETTY",
+        "ECN": 6,
+        "DA": 0,
+        "MCO": 0,
+        "total": 6
+      },
+      {
+        "product": "RFT",
+        "ECN": 2,
+        "DA": 4,
+        "MCO": 0,
+        "total": 6
+      },
+      {
+        "product": "NSGEXO",
+        "ECN": 2,
+        "DA": 0,
+        "MCO": 0,
+        "total": 2
+      },
+      {
+        "product": "PON PEARL",
+        "ECN": 1,
+        "DA": 1,
+        "MCO": 0,
+        "total": 2
+      },
+      {
+        "product": "HOUSING GEN2",
+        "ECN": 1,
+        "DA": 0,
+        "MCO": 0,
+        "total": 1
+      },
+      {
+        "product": "HOUSING GEN2, HOUSING UNIFIED",
+        "ECN": 1,
+        "DA": 0,
+        "MCO": 0,
+        "total": 1
+      }
+    ],
+    "by_category": [
+      {
+        "category": "Hardware",
+        "ECN": 23,
+        "DA": 12,
+        "MCO": 4,
+        "total": 39
+      },
+      {
+        "category": "HW & SW",
+        "ECN": 7,
+        "DA": 10,
+        "MCO": 0,
+        "total": 17
+      },
+      {
+        "category": "Quality/Document",
+        "ECN": 1,
+        "DA": 0,
+        "MCO": 0,
+        "total": 1
+      },
+      {
+        "category": "Software",
+        "ECN": 1,
+        "DA": 0,
+        "MCO": 0,
+        "total": 1
+      }
+    ],
+    "heatmap": [
+      {
+        "product": "PON JETTY",
+        "category": "Hardware",
+        "count": 6
+      },
+      {
+        "product": "PEBBLE UNIFIED",
+        "category": "HW & SW",
+        "count": 10
+      },
+      {
+        "product": "NSGEXO",
+        "category": "Hardware",
+        "count": 2
+      },
+      {
+        "product": "RFT",
+        "category": "Software",
+        "count": 1
+      },
+      {
+        "product": "HOUSING UNIFIED",
+        "category": "Hardware",
+        "count": 8
+      },
+      {
+        "product": "PEBBLE UNIFIED",
+        "category": "Hardware",
+        "count": 5
+      },
+      {
+        "product": "HOUSING OYSTER",
+        "category": "Hardware",
+        "count": 7
+      },
+      {
+        "product": "HOUSING GEN2, HOUSING UNIFIED",
+        "category": "Hardware",
+        "count": 1
+      },
+      {
+        "product": "PEBBLE GEN2",
+        "category": "Hardware",
+        "count": 4
+      },
+      {
+        "product": "HOUSING GEN2",
+        "category": "Quality/Document",
+        "count": 1
+      },
+      {
+        "product": "PON PEARL",
+        "category": "Hardware",
+        "count": 1
+      },
+      {
+        "product": "RFT",
+        "category": "Hardware",
+        "count": 5
+      },
+      {
+        "product": "PEBBLE GEN2",
+        "category": "HW & SW",
+        "count": 6
+      },
+      {
+        "product": "PON PEARL",
+        "category": "HW & SW",
+        "count": 1
+      }
+    ],
+    "top_objects": {
+      "ECN": [
+        {
+          "obj": "SC221-0023998-02",
+          "count": 3
+        },
+        {
+          "obj": "014-2040-001",
+          "count": 3
+        },
+        {
+          "obj": "AD221-0023800-02",
+          "count": 2
+        },
+        {
+          "obj": "220-0023800-02",
+          "count": 2
+        },
+        {
+          "obj": "221-0023998-02-01",
+          "count": 2
+        },
+        {
+          "obj": "221-0023505-05-01",
+          "count": 2
+        },
+        {
+          "obj": "COS-RPL2-HW",
+          "count": 2
+        },
+        {
+          "obj": "MI028-0700-001",
+          "count": 2
+        },
+        {
+          "obj": "COS-PBL2-UNF-1-HR04-01",
+          "count": 2
+        },
+        {
+          "obj": "221-0023800-02-01",
+          "count": 1
+        }
+      ],
+      "DA": [
+        {
+          "obj": "COS-RPL2-RFTP-UNF-U-03-01",
+          "count": 6
+        },
+        {
+          "obj": "COS-PBL2-UNF-1-HR03-01",
+          "count": 5
+        },
+        {
+          "obj": "221-0023514-03-01",
+          "count": 3
+        },
+        {
+          "obj": "COS-RPL2-RFTP-UNF-U-02-01",
+          "count": 2
+        },
+        {
+          "obj": "COS-PBL2-FDX-HR02-02",
+          "count": 2
+        },
+        {
+          "obj": "157-0206-001",
+          "count": 1
+        },
+        {
+          "obj": "157-0227-001",
+          "count": 1
+        },
+        {
+          "obj": "152-0361-001",
+          "count": 1
+        },
+        {
+          "obj": "COS-PBL2-2X4-P-HR02-03",
+          "count": 1
+        },
+        {
+          "obj": "160-1331-001",
+          "count": 1
+        }
+      ],
+      "MCO": [
+        {
+          "obj": "250-0054490",
+          "count": 1
+        },
+        {
+          "obj": "COS-OYSP-PON-AM-U-N",
+          "count": 1
+        },
+        {
+          "obj": "COS-OYSP-PON-AM-U-N-01",
+          "count": 1
+        },
+        {
+          "obj": "220-0023998-02",
+          "count": 1
+        },
+        {
+          "obj": "COS-OYSN-PON-RW-U-N-01",
+          "count": 1
+        }
+      ],
+      "ALL": [
+        {
+          "obj": "COS-RPL2-RFTP-UNF-U-03-01",
+          "count": 7
+        },
+        {
+          "obj": "COS-PBL2-UNF-1-HR03-01",
+          "count": 6
+        },
+        {
+          "obj": "SC221-0023998-02",
+          "count": 3
+        },
+        {
+          "obj": "COS-RPL2-RFTP-UNF-U-02-01",
+          "count": 3
+        },
+        {
+          "obj": "014-2040-001",
+          "count": 3
+        },
+        {
+          "obj": "221-0023514-03-01",
+          "count": 3
+        },
+        {
+          "obj": "AD221-0023800-02",
+          "count": 2
+        },
+        {
+          "obj": "220-0023800-02",
+          "count": 2
+        },
+        {
+          "obj": "220-0023998-02",
+          "count": 2
+        },
+        {
+          "obj": "221-0023998-02-01",
+          "count": 2
+        }
+      ]
+    },
+    "cycle_data": {
+      "ECN": [
+        {
+          "doc": "ECN40774",
+          "days": 4,
+          "product": "PON JETTY",
+          "category": "Hardware"
+        },
+        {
+          "doc": "ECN40775",
+          "days": 10,
+          "product": "PON JETTY",
+          "category": "Hardware"
+        },
+        {
+          "doc": "ECN40776",
+          "days": 2,
+          "product": "PEBBLE UNIFIED",
+          "category": "HW & SW"
+        },
+        {
+          "doc": "ECN40778",
+          "days": 17,
+          "product": "PEBBLE UNIFIED",
+          "category": "HW & SW"
+        },
+        {
+          "doc": "ECN40781",
+          "days": 3,
+          "product": "PON JETTY",
+          "category": "Hardware"
+        },
+        {
+          "doc": "ECN40783",
+          "days": 5,
+          "product": "PON JETTY",
+          "category": "Hardware"
+        },
+        {
+          "doc": "ECN40785",
+          "days": 3,
+          "product": "NSGEXO",
+          "category": "Hardware"
+        },
+        {
+          "doc": "ECN40787",
+          "days": 2,
+          "product": "RFT",
+          "category": "Software"
+        },
+        {
+          "doc": "ECN40788",
+          "days": 2,
+          "product": "HOUSING UNIFIED",
+          "category": "Hardware"
+        },
+        {
+          "doc": "ECN40789",
+          "days": 7,
+          "product": "HOUSING UNIFIED",
+          "category": "Hardware"
+        },
+        {
+          "doc": "ECN40791",
+          "days": 3,
+          "product": "PEBBLE UNIFIED",
+          "category": "Hardware"
+        },
+        {
+          "doc": "ECN40793",
+          "days": 15,
+          "product": "HOUSING OYSTER",
+          "category": "Hardware"
+        },
+        {
+          "doc": "ECN40795",
+          "days": 6,
+          "product": "HOUSING UNIFIED",
+          "category": "Hardware"
+        },
+        {
+          "doc": "ECN40796",
+          "days": 2,
+          "product": "HOUSING UNIFIED",
+          "category": "Hardware"
+        },
+        {
+          "doc": "ECN40803",
+          "days": 8,
+          "product": "HOUSING GEN2, HOUSING UNIFIED",
+          "category": "Hardware"
+        },
+        {
+          "doc": "ECN40805",
+          "days": 3,
+          "product": "PEBBLE UNIFIED",
+          "category": "Hardware"
+        },
+        {
+          "doc": "ECN40806",
+          "days": 13,
+          "product": "PEBBLE UNIFIED",
+          "category": "HW & SW"
+        },
+        {
+          "doc": "ECN40811",
+          "days": 1,
+          "product": "PEBBLE GEN2",
+          "category": "Hardware"
+        },
+        {
+          "doc": "ECN40812",
+          "days": 11,
+          "product": "NSGEXO",
+          "category": "Hardware"
+        },
+        {
+          "doc": "ECN40814",
+          "days": 1,
+          "product": "PON JETTY",
+          "category": "Hardware"
+        },
+        {
+          "doc": "ECN40823",
+          "days": 7,
+          "product": "HOUSING GEN2",
+          "category": "Quality/Document"
+        },
+        {
+          "doc": "ECN40827",
+          "days": 2,
+          "product": "PON PEARL",
+          "category": "Hardware"
+        },
+        {
+          "doc": "ECN40828",
+          "days": 3,
+          "product": "PON JETTY",
+          "category": "Hardware"
+        },
+        {
+          "doc": "ECN40830",
+          "days": 1,
+          "product": "PEBBLE UNIFIED",
+          "category": "HW & SW"
+        },
+        {
+          "doc": "ECN40834",
+          "days": 2,
+          "product": "RFT",
+          "category": "Hardware"
+        },
+        {
+          "doc": "ECN40835",
+          "days": 2,
+          "product": "PEBBLE UNIFIED",
+          "category": "Hardware"
+        },
+        {
+          "doc": "ECN40836",
+          "days": 1,
+          "product": "PEBBLE UNIFIED",
+          "category": "HW & SW"
+        },
+        {
+          "doc": "ECN40837",
+          "days": 4,
+          "product": "PEBBLE UNIFIED",
+          "category": "HW & SW"
+        },
+        {
+          "doc": "ECN40839",
+          "days": 1,
+          "product": "HOUSING OYSTER",
+          "category": "Hardware"
+        },
+        {
+          "doc": "ECN40842",
+          "days": 3,
+          "product": "PEBBLE UNIFIED",
+          "category": "HW & SW"
+        },
+        {
+          "doc": "ECN40843",
+          "days": 3,
+          "product": "PEBBLE GEN2",
+          "category": "Hardware"
+        },
+        {
+          "doc": "ECN40844",
+          "days": 0,
+          "product": "PEBBLE UNIFIED",
+          "category": "Hardware"
+        }
+      ],
+      "DA": [
+        {
+          "doc": "D40172C",
+          "days": 2,
+          "product": "PEBBLE GEN2",
+          "category": "HW & SW"
+        },
+        {
+          "doc": "D40173B",
+          "days": 3,
+          "product": "PEBBLE GEN2",
+          "category": "HW & SW"
+        },
+        {
+          "doc": "D40184A",
+          "days": 2,
+          "product": "PEBBLE UNIFIED",
+          "category": "HW & SW"
+        },
+        {
+          "doc": "D40193A",
+          "days": 2,
+          "product": "PEBBLE GEN2",
+          "category": "HW & SW"
+        },
+        {
+          "doc": "D40195A",
+          "days": 2,
+          "product": "PEBBLE UNIFIED",
+          "category": "HW & SW"
+        },
+        {
+          "doc": "D40206A",
+          "days": 3,
+          "product": "PEBBLE GEN2",
+          "category": "HW & SW"
+        },
+        {
+          "doc": "D40207A",
+          "days": 4,
+          "product": "PON PEARL",
+          "category": "HW & SW"
+        },
+        {
+          "doc": "D40215A",
+          "days": 0,
+          "product": "RFT",
+          "category": "Hardware"
+        },
+        {
+          "doc": "D9002PA",
+          "days": 6,
+          "product": "HOUSING UNIFIED",
+          "category": "Hardware"
+        },
+        {
+          "doc": "D9046P",
+          "days": 5,
+          "product": "HOUSING OYSTER",
+          "category": "Hardware"
+        },
+        {
+          "doc": "D9047P",
+          "days": 8,
+          "product": "HOUSING UNIFIED",
+          "category": "Hardware"
+        },
+        {
+          "doc": "D9048P",
+          "days": 4,
+          "product": "PEBBLE GEN2",
+          "category": "Hardware"
+        },
+        {
+          "doc": "D9049P",
+          "days": 4,
+          "product": "HOUSING UNIFIED",
+          "category": "Hardware"
+        },
+        {
+          "doc": "D9050P",
+          "days": 4,
+          "product": "HOUSING UNIFIED",
+          "category": "Hardware"
+        },
+        {
+          "doc": "DA40209",
+          "days": 1,
+          "product": "RFT",
+          "category": "Hardware"
+        },
+        {
+          "doc": "DA40210",
+          "days": 4,
+          "product": "PEBBLE GEN2",
+          "category": "HW & SW"
+        },
+        {
+          "doc": "DA40212",
+          "days": 6,
+          "product": "PEBBLE GEN2",
+          "category": "Hardware"
+        },
+        {
+          "doc": "DA40213",
+          "days": 2,
+          "product": "HOUSING OYSTER",
+          "category": "Hardware"
+        },
+        {
+          "doc": "DA40215",
+          "days": 0,
+          "product": "RFT",
+          "category": "Hardware"
+        },
+        {
+          "doc": "DA40217",
+          "days": 0,
+          "product": "RFT",
+          "category": "Hardware"
+        },
+        {
+          "doc": "DA40220",
+          "days": 4,
+          "product": "PEBBLE UNIFIED",
+          "category": "HW & SW"
+        },
+        {
+          "doc": "DA40221",
+          "days": 3,
+          "product": "PEBBLE GEN2",
+          "category": "HW & SW"
+        }
+      ],
+      "MCO": [
+        {
+          "doc": "MCO40451",
+          "days": 4,
+          "product": "HOUSING OYSTER",
+          "category": "Hardware"
+        },
+        {
+          "doc": "MCO40472",
+          "days": 1,
+          "product": "HOUSING OYSTER",
+          "category": "Hardware"
+        },
+        {
+          "doc": "MCO40481",
+          "days": 3,
+          "product": "PEBBLE UNIFIED",
+          "category": "Hardware"
+        },
+        {
+          "doc": "MCO40485",
+          "days": 0,
+          "product": "HOUSING OYSTER",
+          "category": "Hardware"
+        }
+      ]
+    },
+    "records": {
+      "ECN": [
+        {
+          "doc": "ECN40774",
+          "type": "ECN",
+          "product": "PON JETTY",
+          "category": "Hardware",
+          "status": "Completed",
+          "created": "05-04-2026",
+          "approved": "09-04-2026",
+          "cycle_days": 4,
+          "description": "221-0023800-02-01 PCBA MAIN BOARD JETTY-3  RELEASE BOM REV 01   APPROVED BY: ALE",
+          "objects": [
+            "221-0023800-02-01",
+            "155-2001-001",
+            "071-1378-001",
+            "165-0846-001",
+            "164-2100-001",
+            "155-2000-001",
+            "SC221-0023800-02",
+            "AD221-0023800-02",
+            "220-0023800-02"
+          ]
+        },
+        {
+          "doc": "ECN40775",
+          "type": "ECN",
+          "product": "PON JETTY",
+          "category": "Hardware",
+          "status": "Completed",
+          "created": "05-04-2026",
+          "approved": "15-04-2026",
+          "cycle_days": 10,
+          "description": "041-1841-001, QSFP-DD 1X1 TH CAGE 71.23 X 21.38MM HEIGHT=11.57MM, LEG 2.86MM  RE",
+          "objects": [
+            "041-1841-001"
+          ]
+        },
+        {
+          "doc": "ECN40776",
+          "type": "ECN",
+          "product": "PEBBLE UNIFIED",
+          "category": "HW & SW",
+          "status": "Completed",
+          "created": "05-04-2026",
+          "approved": "07-04-2026",
+          "cycle_days": 2,
+          "description": "PBL2 UNIFIED SFP 2G BOARD 220-0023998-02 ,FAB PCB SFP BOARD UNIFIED 2X2   ---- R",
+          "objects": [
+            "FD220-0023998-02",
+            "GB220-0023998-02",
+            "AD221-0023998-02",
+            "220-0023998-02"
+          ]
+        },
+        {
+          "doc": "ECN40778",
+          "type": "ECN",
+          "product": "PEBBLE UNIFIED",
+          "category": "HW & SW",
+          "status": "Completed",
+          "created": "06-04-2026",
+          "approved": "23-04-2026",
+          "cycle_days": 17,
+          "description": "221-0023998-02-01, ASSY SFP BOARD UNIFIED PEBBLE-2G (AGILEX 043)   --- RELEASE B",
+          "objects": [
+            "221-0023998-02-01",
+            "SC221-0023998-02"
+          ]
+        },
+        {
+          "doc": "ECN40781",
+          "type": "ECN",
+          "product": "PON JETTY",
+          "category": "Hardware",
+          "status": "Completed",
+          "created": "09-04-2026",
+          "approved": "12-04-2026",
+          "cycle_days": 3,
+          "description": "220-0023800-02 FAB PCB MAIN BOARD JETTY-3   RELEASE PCB FILES, ADDING WUS AS APP",
+          "objects": [
+            "220-0023800-02",
+            "GB220-0023800-02",
+            "FD220-0023800-02",
+            "AD221-0023800-02"
+          ]
+        },
+        {
+          "doc": "ECN40783",
+          "type": "ECN",
+          "product": "PON JETTY",
+          "category": "Hardware",
+          "status": "Completed",
+          "created": "09-04-2026",
+          "approved": "14-04-2026",
+          "cycle_days": 5,
+          "description": "221-0023800-01-01 PCBA MAIN BOARD JETTY-3 ---  UPDATE BOM TOREV 09  WIP/RMA/FGI ",
+          "objects": [
+            "221-0023800-01-01",
+            "SC221-0023800-01"
+          ]
+        },
+        {
+          "doc": "ECN40785",
+          "type": "ECN",
+          "product": "NSGEXO",
+          "category": "Hardware",
+          "status": "Completed",
+          "created": "12-04-2026",
+          "approved": "15-04-2026",
+          "cycle_days": 3,
+          "description": "**** CORRECT ECN40699 ******  RMD TO RPD GEN.2 PROJECT  ----- RELEASE NEW BOM BA",
+          "objects": [
+            "221-0023505-05-01"
+          ]
+        },
+        {
+          "doc": "ECN40787",
+          "type": "ECN",
+          "product": "RFT",
+          "category": "Software",
+          "status": "Completed",
+          "created": "12-04-2026",
+          "approved": "14-04-2026",
+          "cycle_days": 2,
+          "description": "RFT UNIFIED  RELEASE PD241-0052609 \"PD, FAST NEW SW RIPPLE-2 RF TRAY, UNF VER 03",
+          "objects": [
+            "240-0023912-02-01",
+            "PD241-0052609"
+          ]
+        },
+        {
+          "doc": "ECN40788",
+          "type": "ECN",
+          "product": "HOUSING UNIFIED",
+          "category": "Hardware",
+          "status": "Completed",
+          "created": "12-04-2026",
+          "approved": "14-04-2026",
+          "cycle_days": 2,
+          "description": "RELEASE MARKETING FOR RFT UNF DIE-CAST VERSION:  COS-RPL2-RFTP-UNF-U-03-02 240-0",
+          "objects": [
+            "COS-RPL2-RFTP-UNF-U-03-03",
+            "240-0024000-01-02",
+            "COS-RPL2-RFTP-UNF-U-03-02",
+            "205-0056345-02",
+            "COS-RPL2-RFTP-UNF-U-02-03",
+            "COS-RPL2-RFTP-UNF-U-03-01",
+            "COS-RPL2-RFTP-UNF-U-02-01",
+            "COS-RPL2-RFTP-UNF-U-02-02",
+            "COS-RPL2-HW",
+            "MI028-0700-001"
+          ]
+        },
+        {
+          "doc": "ECN40789",
+          "type": "ECN",
+          "product": "HOUSING UNIFIED",
+          "category": "Hardware",
+          "status": "Completed",
+          "created": "12-04-2026",
+          "approved": "19-04-2026",
+          "cycle_days": 7,
+          "description": "205-0056331-03 DIE-CAST DIPLEXER COVER AND EMI GASKET RFT UNIFIED - INITIAL RELE",
+          "objects": [
+            "205-0056330-03",
+            "205-0056331-03",
+            "AD205-0056331-03",
+            "032-0232-02"
+          ]
+        },
+        {
+          "doc": "ECN40791",
+          "type": "ECN",
+          "product": "PEBBLE UNIFIED",
+          "category": "Hardware",
+          "status": "Completed",
+          "created": "13-04-2026",
+          "approved": "16-04-2026",
+          "cycle_days": 3,
+          "description": "--- RELEASE COS-PBL2-UNF-1-HR04-01 WITH NPH TAB ON ---  PBL2 UNF SPIN#6_RELEASE ",
+          "objects": [
+            "FCST-COS-PBL2-UNF-1-HR04",
+            "COS-PBL2-UNF-1-HR04",
+            "COS-PBL2-UNF-1-HR04-01",
+            "COS-PBL2-UNF-1-HR03-01",
+            "COS-PBL2-UNF-1-HR03-04"
+          ]
+        },
+        {
+          "doc": "ECN40793",
+          "type": "ECN",
+          "product": "HOUSING OYSTER",
+          "category": "Hardware",
+          "status": "Completed",
+          "created": "13-04-2026",
+          "approved": "28-04-2026",
+          "cycle_days": 15,
+          "description": "COS-OYSP-PON-AM-U-N-01,OYSTER PLUS NODE ASSY FOR PON (JETTY,PEARL), INCLUDES PSU",
+          "objects": [
+            "COS-OYSP-PON-AM-U-N-01"
+          ]
+        },
+        {
+          "doc": "ECN40795",
+          "type": "ECN",
+          "product": "HOUSING UNIFIED",
+          "category": "Hardware",
+          "status": "Completed",
+          "created": "13-04-2026",
+          "approved": "19-04-2026",
+          "cycle_days": 6,
+          "description": "041-1743-002 RFT HYBRID EMI CONTACT SPRING 50.68X14.20X0.30 SMD  INITIAL RELEASE",
+          "objects": [
+            "041-1743-002"
+          ]
+        },
+        {
+          "doc": "ECN40796",
+          "type": "ECN",
+          "product": "HOUSING UNIFIED",
+          "category": "Hardware",
+          "status": "Completed",
+          "created": "13-04-2026",
+          "approved": "15-04-2026",
+          "cycle_days": 2,
+          "description": "014-2040-001, NEW STANDARD FOR MARKING OF QR CODE  ADDING RPL2 HSG UNF TO HAVE B",
+          "objects": [
+            "014-2040-001"
+          ]
+        },
+        {
+          "doc": "ECN40803",
+          "type": "ECN",
+          "product": "HOUSING GEN2, HOUSING UNIFIED",
+          "category": "Hardware",
+          "status": "Completed",
+          "created": "15-04-2026",
+          "approved": "23-04-2026",
+          "cycle_days": 8,
+          "description": "- 014-2040-001, NEW STANDARD FOR MARKING OF QR CODE   UPDATE HSG UNF AND ESD TO ",
+          "objects": [
+            "240-0024017-01-01",
+            "MI028-0700-001",
+            "014-2040-001"
+          ]
+        },
+        {
+          "doc": "ECN40805",
+          "type": "ECN",
+          "product": "PEBBLE UNIFIED",
+          "category": "Hardware",
+          "status": "Completed",
+          "created": "16-04-2026",
+          "approved": "19-04-2026",
+          "cycle_days": 3,
+          "description": "COS-RPL2-HW COS RPL2 HARDWARE ATO OPTIONS  ***** CONTINUE  OF ECN40791 ****  COS",
+          "objects": [
+            "COS-RPL2-HW"
+          ]
+        },
+        {
+          "doc": "ECN40806",
+          "type": "ECN",
+          "product": "PEBBLE UNIFIED",
+          "category": "HW & SW",
+          "status": "Completed",
+          "created": "16-04-2026",
+          "approved": "29-04-2026",
+          "cycle_days": 13,
+          "description": "RPD UNIFIED 2G -----  221-0023592-01-01 , ASSY RPD MAIN BOARD UNIFIED PEBBLE-2G ",
+          "objects": [
+            "221-0023592-01-01",
+            "221-0023593-01-01",
+            "SC221-0023592-01",
+            "SC221-0023593-01",
+            "154-1321-001",
+            "310-2001550",
+            "151-1137-001"
+          ]
+        },
+        {
+          "doc": "ECN40811",
+          "type": "ECN",
+          "product": "PEBBLE GEN2",
+          "category": "Hardware",
+          "status": "Completed",
+          "created": "19-04-2026",
+          "approved": "20-04-2026",
+          "cycle_days": 1,
+          "description": "221-0023505-05-01 ASSY;RMD TO RPD 1X2 BOARD;NSGEXO  UPDATE BOM 221-0023505-05-01",
+          "objects": [
+            "221-0023505-05-01"
+          ]
+        },
+        {
+          "doc": "ECN40812",
+          "type": "ECN",
+          "product": "NSGEXO",
+          "category": "Hardware",
+          "status": "Completed",
+          "created": "19-04-2026",
+          "approved": "30-04-2026",
+          "cycle_days": 11,
+          "description": "FIBER TRAY OYSTER NODE  -------  1. RELEASE NEW  PARTS : A. 203-0055-001 B. 203-",
+          "objects": [
+            "203-0055-001",
+            "203-0056-001",
+            "028-0503-001"
+          ]
+        },
+        {
+          "doc": "ECN40814",
+          "type": "ECN",
+          "product": "PON JETTY",
+          "category": "Hardware",
+          "status": "Completed",
+          "created": "19-04-2026",
+          "approved": "20-04-2026",
+          "cycle_days": 1,
+          "description": "093-0804-001, DIRECT ATTACH CABLE QSFP28 PASSIVE 100G 30AWG LENGTH=90CM;INDUSTRA",
+          "objects": [
+            "093-0804-001"
+          ]
+        },
+        {
+          "doc": "ECN40823",
+          "type": "ECN",
+          "product": "HOUSING GEN2",
+          "category": "Quality/Document",
+          "status": "Completed",
+          "created": "23-04-2026",
+          "approved": "30-04-2026",
+          "cycle_days": 7,
+          "description": "014-2040-001,\tNEW STANDARD FOR MARKING OF QR CODE  UPDATE FILE WITH ADDING PEBBL",
+          "objects": [
+            "014-2040-001"
+          ]
+        },
+        {
+          "doc": "ECN40827",
+          "type": "ECN",
+          "product": "PON PEARL",
+          "category": "Hardware",
+          "status": "Completed",
+          "created": "27-04-2026",
+          "approved": "29-04-2026",
+          "cycle_days": 2,
+          "description": "205-0056384, \tFAB SEC OP DIE CAST BASE NODE OYSTER PEARL-1XL  REDUCE BOSS MILLIN",
+          "objects": [
+            "205-0056384"
+          ]
+        },
+        {
+          "doc": "ECN40828",
+          "type": "ECN",
+          "product": "PON JETTY",
+          "category": "Hardware",
+          "status": "Completed",
+          "created": "27-04-2026",
+          "approved": "30-04-2026",
+          "cycle_days": 3,
+          "description": "RELEASE DWGS FOR JETTY-3  203-0059-001, LC PARKING CAP FOR SFP CAGE  AD240-00238",
+          "objects": [
+            "203-0059-001",
+            "AD240-0023800-02"
+          ]
+        },
+        {
+          "doc": "ECN40830",
+          "type": "ECN",
+          "product": "PEBBLE UNIFIED",
+          "category": "HW & SW",
+          "status": "Completed",
+          "created": "28-04-2026",
+          "approved": "29-04-2026",
+          "cycle_days": 1,
+          "description": "UNIFIED RPD SPIN #6 --- UPDATING BOM WITH NEW RPD SHIPPING SW VER. 3.9.4.77-195 ",
+          "objects": [
+            "PD241-0052610",
+            "COS-PBL2-UNF-1-HR04-01"
+          ]
+        },
+        {
+          "doc": "ECN40834",
+          "type": "ECN",
+          "product": "RFT",
+          "category": "Hardware",
+          "status": "Completed",
+          "created": "28-04-2026",
+          "approved": "30-04-2026",
+          "cycle_days": 2,
+          "description": "071-1388-001, CONNECTOR HD-AFI 75 OHM TERMINATION  RELEASE AS STAND ALONE FOR SA",
+          "objects": [
+            "071-1388-001"
+          ]
+        },
+        {
+          "doc": "ECN40835",
+          "type": "ECN",
+          "product": "PEBBLE UNIFIED",
+          "category": "Hardware",
+          "status": "Completed",
+          "created": "28-04-2026",
+          "approved": "30-04-2026",
+          "cycle_days": 2,
+          "description": "093-0793-001 RELEASE AS REV A  ALLIGN WITH AMPHENOL REV ROLL DUE TO MOVING TO PR",
+          "objects": [
+            "093-0793-001"
+          ]
+        },
+        {
+          "doc": "ECN40836",
+          "type": "ECN",
+          "product": "PEBBLE UNIFIED",
+          "category": "HW & SW",
+          "status": "Completed",
+          "created": "29-04-2026",
+          "approved": "30-04-2026",
+          "cycle_days": 1,
+          "description": "221-0023998-02-01, ASSY SFP BOARD UNIFIED PEBBLE-2G (AGILEX 043)   --- UPDTAE BO",
+          "objects": [
+            "221-0023998-02-01",
+            "SC221-0023998-02"
+          ]
+        },
+        {
+          "doc": "ECN40837",
+          "type": "ECN",
+          "product": "PEBBLE UNIFIED",
+          "category": "HW & SW",
+          "status": "Completed",
+          "created": "29-04-2026",
+          "approved": "03-05-2026",
+          "cycle_days": 4,
+          "description": "PEARL-1XL POWER BOARD -----  JUSTEFICATION: HW CHANGES AFTER BRINGUP PHASE -----",
+          "objects": [
+            "221-0023993-01-01",
+            "221-0023992-01-01",
+            "SC221-0023992-01-01",
+            "SC221-0023993-01-01",
+            "154-1324-001",
+            "152-2072-001",
+            "030-0312-001"
+          ]
+        },
+        {
+          "doc": "ECN40839",
+          "type": "ECN",
+          "product": "HOUSING OYSTER",
+          "category": "Hardware",
+          "status": "Completed",
+          "created": "29-04-2026",
+          "approved": "30-04-2026",
+          "cycle_days": 1,
+          "description": "RELESE NEW DIPLEXER  COMMERCIAL :COS-OYS2-U-PD-E-204/246  INDUSTRIAL: COS-OYS2-U",
+          "objects": [
+            "COS-OYS2-U-PD-E-204/246",
+            "COS-OYS2-U-PD-E-204/246-01",
+            "FCST-COS-OYS2-U-PD-E-204/246"
+          ]
+        },
+        {
+          "doc": "ECN40842",
+          "type": "ECN",
+          "product": "PEBBLE UNIFIED",
+          "category": "HW & SW",
+          "status": "Completed",
+          "created": "30-04-2026",
+          "approved": "03-05-2026",
+          "cycle_days": 3,
+          "description": "221-0023998-01-01, ASSY SFP BOARD UNIFIED PEBBLE-2G (AGILEX 043)   BOM UPDATED F",
+          "objects": [
+            "SC221-0023998-01",
+            "221-0023998-01-01"
+          ]
+        },
+        {
+          "doc": "ECN40843",
+          "type": "ECN",
+          "product": "PEBBLE GEN2",
+          "category": "Hardware",
+          "status": "Completed",
+          "created": "30-04-2026",
+          "approved": "03-05-2026",
+          "cycle_days": 3,
+          "description": "221-0024026-01-01 PCBA BERTH2 BASE BOARD JETTY-3  RELEASE BOM 221-0024026-01-01 ",
+          "objects": [
+            "221-0024026-01-01",
+            "SC221-0024026-01",
+            "AD221-0024026-01",
+            "220-0024026-01",
+            "171-0885-001"
+          ]
+        },
+        {
+          "doc": "ECN40844",
+          "type": "ECN",
+          "product": "PEBBLE UNIFIED",
+          "category": "Hardware",
+          "status": "Completed",
+          "created": "30-04-2026",
+          "approved": "30-04-2026",
+          "cycle_days": 0,
+          "description": "SC221-0023998-02 SC SFP BOARD UNIFIED 2X2  CORRECT ATTACHMENTS FILES  APPROVED B",
+          "objects": [
+            "SC221-0023998-02"
+          ]
+        }
+      ],
+      "DA": [
+        {
+          "doc": "D40172C",
+          "type": "DA",
+          "product": "PEBBLE GEN2",
+          "category": "HW & SW",
+          "status": "Completed",
+          "created": "13-04-2026",
+          "approved": "15-04-2026",
+          "cycle_days": 2,
+          "description": "-- EXTEND OF D40172B --  COS-PBL2-UNF-1-HR03-01 PEBBLE-2 UNIFIED FOR RIPPLE ----",
+          "objects": [
+            "COS-PBL2-UNF-1-HR03-01"
+          ]
+        },
+        {
+          "doc": "D40173B",
+          "type": "DA",
+          "product": "PEBBLE GEN2",
+          "category": "HW & SW",
+          "status": "Completed",
+          "created": "12-04-2026",
+          "approved": "15-04-2026",
+          "cycle_days": 3,
+          "description": "-- EXTEND OF D40173A--  COS-PBL2-UNF-1-HR03-01 PEBBLE-2 UNIFIED FOR RIPPLE -----",
+          "objects": [
+            "COS-PBL2-UNF-1-HR03-01"
+          ]
+        },
+        {
+          "doc": "D40184A",
+          "type": "DA",
+          "product": "PEBBLE UNIFIED",
+          "category": "HW & SW",
+          "status": "Completed",
+          "created": "13-04-2026",
+          "approved": "15-04-2026",
+          "cycle_days": 2,
+          "description": "--- EXTEND OF DA40184 ---  RPD UNF SPIN #3  COS-PBL2-UNF-1-HR03-01 221-0023514-0",
+          "objects": [
+            "157-0206-001",
+            "221-0023514-03-01",
+            "COS-PBL2-UNF-1-HR03-01",
+            "157-0227-001",
+            "152-0361-001"
+          ]
+        },
+        {
+          "doc": "D40193A",
+          "type": "DA",
+          "product": "PEBBLE GEN2",
+          "category": "HW & SW",
+          "status": "Completed",
+          "created": "13-04-2026",
+          "approved": "15-04-2026",
+          "cycle_days": 2,
+          "description": "****** EXTENSION OF DA40193 ******  COS-PBL2-2X4-P-HR02-03 PEBBLE-2 RPD, 2XDS+4X",
+          "objects": [
+            "COS-PBL2-2X4-P-HR02-03"
+          ]
+        },
+        {
+          "doc": "D40195A",
+          "type": "DA",
+          "product": "PEBBLE UNIFIED",
+          "category": "HW & SW",
+          "status": "Completed",
+          "created": "13-04-2026",
+          "approved": "15-04-2026",
+          "cycle_days": 2,
+          "description": "COS-PBL2-UNF-1-HR03-01, PEBBLE-2 UNIFIED FOR RIPPLE --- MOTIVATION: AN EXPERIMEN",
+          "objects": [
+            "160-1331-001",
+            "221-0023514-03-01",
+            "COS-PBL2-UNF-1-HR03-01"
+          ]
+        },
+        {
+          "doc": "D40206A",
+          "type": "DA",
+          "product": "PEBBLE GEN2",
+          "category": "HW & SW",
+          "status": "Completed",
+          "created": "27-04-2026",
+          "approved": "30-04-2026",
+          "cycle_days": 3,
+          "description": "COS-PBL2-2X4-P-HR02-04 COS-PBL2-2X2-P-HR02-02 --- MOTIVATION: EVALUATION OF LIMI",
+          "objects": [
+            "COS-PBL2-2X2-P-HR02-02",
+            "COS-PBL2-2X4-P-HR02-04",
+            "COS-RPL2-BDL*315991",
+            "COS-RPL2-BDL*315992"
+          ]
+        },
+        {
+          "doc": "D40207A",
+          "type": "DA",
+          "product": "PON PEARL",
+          "category": "HW & SW",
+          "status": "Completed",
+          "created": "19-04-2026",
+          "approved": "23-04-2026",
+          "cycle_days": 4,
+          "description": "COS-PRL1-M1-4P-2Y-HR01-02 --- MOTIVATION: SW SOLUTION FOR LPY ISSUE FROM PLEX-50",
+          "objects": [
+            "COS-PRL1-M1-4P-2Y-HR01-02"
+          ]
+        },
+        {
+          "doc": "D40215A",
+          "type": "DA",
+          "product": "RFT",
+          "category": "Hardware",
+          "status": "Completed",
+          "created": "29-04-2026",
+          "approved": "29-04-2026",
+          "cycle_days": 0,
+          "description": "COS-RPL2-RFTP-UNF-U-03-01 RIPPLE-2 RF TRAY, UNIFIED;PLG-DPLX, DIE-CASTED  ***** ",
+          "objects": [
+            "COS-RPL2-RFTP-UNF-U-03-01"
+          ]
+        },
+        {
+          "doc": "D9002PA",
+          "type": "DA",
+          "product": "HOUSING UNIFIED",
+          "category": "Hardware",
+          "status": "Completed",
+          "created": "09-04-2026",
+          "approved": "15-04-2026",
+          "cycle_days": 6,
+          "description": "RFT UNF- REWORK UNITS   **THIS DA IS REPLACING D9002P**   REWORK 50 RFT FROM REV",
+          "objects": [
+            "COS-RPL2-RFTP-UNF-U-02-01",
+            "221-0023912-02-01",
+            "240-0023912-02-01"
+          ]
+        },
+        {
+          "doc": "D9046P",
+          "type": "DA",
+          "product": "HOUSING OYSTER",
+          "category": "Hardware",
+          "status": "Completed",
+          "created": "13-04-2026",
+          "approved": "18-04-2026",
+          "cycle_days": 5,
+          "description": "BMB XL - NEW BUILD   SMT ON 16 UNITS IS APPROVED.  APPROVED TO SKIP 155-1076-001",
+          "objects": [
+            "221-0024010-01-01"
+          ]
+        },
+        {
+          "doc": "D9047P",
+          "type": "DA",
+          "product": "HOUSING UNIFIED",
+          "category": "Hardware",
+          "status": "Completed",
+          "created": "15-04-2026",
+          "approved": "23-04-2026",
+          "cycle_days": 8,
+          "description": "RFT UNF- NEW BUILD  SMT ON 80 NODES IS APPROVED.  THE 80 NODES WILL BE BUILT ACC",
+          "objects": [
+            "COS-RPL1-BUOY-01-01",
+            "COS-RPL1-PS-180C-07",
+            "COS-RPL2-RPN-HSG-ESD-03",
+            "COS-RPL2-U-PD-E-396/492-02",
+            "COS-RPL2-UNF-AC-ADPTR-KIT",
+            "COS-RPL2-RFTP-UNF-U-03-01"
+          ]
+        },
+        {
+          "doc": "D9048P",
+          "type": "DA",
+          "product": "PEBBLE GEN2",
+          "category": "Hardware",
+          "status": "Completed",
+          "created": "19-04-2026",
+          "approved": "23-04-2026",
+          "cycle_days": 4,
+          "description": "RPD GEN2 – BRING UP  SMT IS APPROVED FOR THE FOLLOWING PNS:       19 × COS-PBL2-",
+          "objects": [
+            "COS-PBL2-2X2-P-HR02-03",
+            "COS-PBL2-2X4-P-HR02-05"
+          ]
+        },
+        {
+          "doc": "D9049P",
+          "type": "DA",
+          "product": "HOUSING UNIFIED",
+          "category": "Hardware",
+          "status": "Completed",
+          "created": "26-04-2026",
+          "approved": "30-04-2026",
+          "cycle_days": 4,
+          "description": "RFT UNF- NEW BUILD  SMT FOR 40 NODES IS APPROVED.  APPROVED TO BUILD: 40 UNITS O",
+          "objects": [
+            "COS-RPL2-RFTP-UNF-U-03-01"
+          ]
+        },
+        {
+          "doc": "D9050P",
+          "type": "DA",
+          "product": "HOUSING UNIFIED",
+          "category": "Hardware",
+          "status": "Completed",
+          "created": "26-04-2026",
+          "approved": "30-04-2026",
+          "cycle_days": 4,
+          "description": "RFT UNF- NEW BUILD  SMT FOR 150 NODES IS APPROVED.  APPROVED TO BUILD: 150 UNITS",
+          "objects": [
+            "COS-RPL2-RFTP-UNF-U-03-01"
+          ]
+        },
+        {
+          "doc": "DA40209",
+          "type": "DA",
+          "product": "RFT",
+          "category": "Hardware",
+          "status": "Completed",
+          "created": "14-04-2026",
+          "approved": "15-04-2026",
+          "cycle_days": 1,
+          "description": "COS-RPL2-RFTP-UNF-U-02-01 RIPPLE-2 RF TRAY, UNIFIED;PLG-DPLX ------  OE INSTRUCT",
+          "objects": [
+            "COS-RPL2-RFTP-UNF-U-02-01"
+          ]
+        },
+        {
+          "doc": "DA40210",
+          "type": "DA",
+          "product": "PEBBLE GEN2",
+          "category": "HW & SW",
+          "status": "Completed",
+          "created": "19-04-2026",
+          "approved": "23-04-2026",
+          "cycle_days": 4,
+          "description": "THIS DA RELATED TO DA10006 TO INCLUDE TEST RESULTS  COS-PBL2-FDX-HR02-02 221-002",
+          "objects": [
+            "COS-PBL2-FDX-HR02-02"
+          ]
+        },
+        {
+          "doc": "DA40212",
+          "type": "DA",
+          "product": "PEBBLE GEN2",
+          "category": "Hardware",
+          "status": "Completed",
+          "created": "23-04-2026",
+          "approved": "29-04-2026",
+          "cycle_days": 6,
+          "description": "COS-PBL2-UNF-1-HR03-03, PEBBLE-2 UNIFIED FOR RIPPLE  ----  CURRENT PROCESS: COS-",
+          "objects": [
+            "COS-PBL2-UNF-1-HR03-03"
+          ]
+        },
+        {
+          "doc": "DA40213",
+          "type": "DA",
+          "product": "HOUSING OYSTER",
+          "category": "Hardware",
+          "status": "Completed",
+          "created": "28-04-2026",
+          "approved": "30-04-2026",
+          "cycle_days": 2,
+          "description": "COS-OYSN-PON-AM-U-N-02  OYSTER NODE ASSY FOR PON (JETTY,PEARL), UNIVERSAL PSU, A",
+          "objects": [
+            "COS-OYSN-PON-AM-U-N-02",
+            "221-0023567-03-01",
+            "221-0023566-02-01"
+          ]
+        },
+        {
+          "doc": "DA40215",
+          "type": "DA",
+          "product": "RFT",
+          "category": "Hardware",
+          "status": "Completed",
+          "created": "28-04-2026",
+          "approved": "28-04-2026",
+          "cycle_days": 0,
+          "description": "COS-RPL2-RFTP-UNF-U-03-01 RIPPLE-2 RF TRAY, UNIFIED;PLG-DPLX, DIE-CASTED   PLEXU",
+          "objects": [
+            "COS-RPL2-RFTP-UNF-U-03-01"
+          ]
+        },
+        {
+          "doc": "DA40217",
+          "type": "DA",
+          "product": "RFT",
+          "category": "Hardware",
+          "status": "Completed",
+          "created": "29-04-2026",
+          "approved": "29-04-2026",
+          "cycle_days": 0,
+          "description": "COS-RPL2-RFTP-UNF-U-03-01 RIPPLE-2 RF TRAY, UNIFIED;PLG-DPLX, DIE-CASTED ---  PL",
+          "objects": [
+            "COS-RPL2-RFTP-UNF-U-03-01"
+          ]
+        },
+        {
+          "doc": "DA40220",
+          "type": "DA",
+          "product": "PEBBLE UNIFIED",
+          "category": "HW & SW",
+          "status": "Completed",
+          "created": "29-04-2026",
+          "approved": "03-05-2026",
+          "cycle_days": 4,
+          "description": "COS-PBL2-UNF-1-HR03-01 221-0023514-03-01 , ASSY;RPD;UNF ;NSGEXO --- MOTIVATION: ",
+          "objects": [
+            "221-0023514-03-01",
+            "COS-PBL2-UNF-1-HR03-01"
+          ]
+        },
+        {
+          "doc": "DA40221",
+          "type": "DA",
+          "product": "PEBBLE GEN2",
+          "category": "HW & SW",
+          "status": "Completed",
+          "created": "30-04-2026",
+          "approved": "03-05-2026",
+          "cycle_days": 3,
+          "description": "THIS DA RELATED TO DA10006 TO INCLUDE TEST RESULTS  COS-PBL2-FDX-HR02-02 221-002",
+          "objects": [
+            "COS-PBL2-FDX-HR02-02"
+          ]
+        }
+      ],
+      "MCO": [
+        {
+          "doc": "MCO40451",
+          "type": "MCO",
+          "product": "HOUSING OYSTER",
+          "category": "Hardware",
+          "status": "Completed",
+          "created": "09-04-2026",
+          "approved": "13-04-2026",
+          "cycle_days": 4,
+          "description": "250-0054490, \tPACKING LIST ENVELOPE; 24CM WIDE X 18CM TALL  ADDING ZW PACKAGING ",
+          "objects": [
+            "250-0054490"
+          ]
+        },
+        {
+          "doc": "MCO40472",
+          "type": "MCO",
+          "product": "HOUSING OYSTER",
+          "category": "Hardware",
+          "status": "Completed",
+          "created": "15-04-2026",
+          "approved": "16-04-2026",
+          "cycle_days": 1,
+          "description": "COS-OYSP-PON-AM-U-N, OYSTER PLUS NODE ASSY FOR PON (JETTY,PEARL), INCLUDES PSU, ",
+          "objects": [
+            "COS-OYSP-PON-AM-U-N",
+            "COS-OYSP-PON-AM-U-N-01"
+          ]
+        },
+        {
+          "doc": "MCO40481",
+          "type": "MCO",
+          "product": "PEBBLE UNIFIED",
+          "category": "Hardware",
+          "status": "Completed",
+          "created": "23-04-2026",
+          "approved": "26-04-2026",
+          "cycle_days": 3,
+          "description": "220-0023998-02 FAB PCB SFP BOARD UNIFIED 2X2  ADDING WUS AS A SECOND SOURCE MFG,",
+          "objects": [
+            "220-0023998-02"
+          ]
+        },
+        {
+          "doc": "MCO40485",
+          "type": "MCO",
+          "product": "HOUSING OYSTER",
+          "category": "Hardware",
+          "status": "Completed",
+          "created": "28-04-2026",
+          "approved": "28-04-2026",
+          "cycle_days": 0,
+          "description": "COS-OYSN-PON-RW-U-N-01, OYSTER NODE ASSY FOR PON (JETTY,PEARL), UNIVERSAL PSU, E",
+          "objects": [
+            "COS-OYSN-PON-RW-U-N-01"
+          ]
+        }
+      ]
+    }
+  },
+  "_updated": "2026-05-11 18:36 UTC"
 }
