@@ -68,7 +68,7 @@
       "LED Board": null,
       "240 Level": "240-0023592-01-01",
       "Important Notes": "* eMMC from WD\n* FPGA Agilx 043\n*Thermal pads have not been defined yet.",
-      "Status": "On Track"
+      "Status": "At Risk"
     },
     {
       "Product Name": "RPD UNF 2G",
@@ -229,9 +229,9 @@
     "mrb_total": 817,
     "mrb_rate": 0.875,
     "npi_count": 4,
-    "npi_at_risk": 1,
+    "npi_at_risk": 2,
     "npi_blocked": 0,
-    "npi_on_track": 2,
+    "npi_on_track": 1,
     "comp_total": 6,
     "comp_otd": 3,
     "comp_max_delay": 24,
@@ -8848,5 +8848,5 @@
       ]
     }
   },
-  "_updated": "2026-05-18 07:00 UTC"
+  "_updated": "2026-05-18 07:19 UTC"
 }
