@@ -341,36 +341,38 @@ select:focus{border-color:var(--blue3);}
 <!-- ═══════ TAB 5: CHANGE ORDER ═══════ -->
 <main id="tab-changeorder" style="display:none">
   <div class="filter-bar">
-    <span class="filter-lbl">Quarter:</span>
+    <span class="filter-lbl">Type:</span>
     <select id="coQFilter" onchange="renderChangeOrder()">
-      <option value="ALL">All Quarters</option>
-      <option>2025 Q1</option><option>2025 Q2</option><option>2025 Q3</option><option selected>2025 Q4</option>
+      <option value="ALL">All Types</option>
+      <option value="ECN">ECN</option>
+      <option value="DA">DA</option>
+      <option value="MCO">MCO</option>
     </select>
     <select id="coFamFilter" onchange="renderChangeOrder()">
-      <option value="ALL">All Families</option>
+      <option value="ALL">All Products</option>
     </select>
   </div>
 
   <div class="g4" style="margin-bottom:18px">
-    <div class="kpi blue fade"><div class="kpi-lbl">Total Volume</div><div class="kpi-val" id="co-total">—</div><div class="kpi-note">Selected period</div></div>
-    <div class="kpi red fade"><div class="kpi-lbl">True Repairs</div><div class="kpi-val" id="co-repair">—</div><div class="kpi-note" id="co-repair-pct">—</div></div>
-    <div class="kpi green fade"><div class="kpi-lbl">NFF</div><div class="kpi-val" id="co-nff">—</div><div class="kpi-note" id="co-nff-pct">—</div></div>
-    <div class="kpi yellow fade"><div class="kpi-lbl">NFF Rate</div><div class="kpi-val" id="co-nff-rate">—</div><div class="kpi-note">No fault found %</div></div>
+    <div class="kpi blue fade"><div class="kpi-lbl">Total Documents</div><div class="kpi-val" id="co-total">—</div><div class="kpi-note">ECN + DA + MCO</div></div>
+    <div class="kpi green fade"><div class="kpi-lbl">ECN</div><div class="kpi-val" id="co-repair">—</div><div class="kpi-note" id="co-repair-pct">Engineering Change</div></div>
+    <div class="kpi yellow fade"><div class="kpi-lbl">DA</div><div class="kpi-val" id="co-nff">—</div><div class="kpi-note" id="co-nff-pct">Design Authorization</div></div>
+    <div class="kpi steel fade"><div class="kpi-lbl">MCO</div><div class="kpi-val" id="co-nff-rate">—</div><div class="kpi-note">Mfg Change Order</div></div>
   </div>
 
   <div class="g2">
     <div class="card">
-      <div class="card-hdr"><div><div class="card-title">Volume by Product Family</div><div class="card-sub">NFF vs Repair breakdown</div></div></div>
+      <div class="card-hdr"><div><div class="card-title">By Product Family</div><div class="card-sub">ECN / DA / MCO breakdown</div></div></div>
       <canvas id="coFamChart" style="max-height:240px"></canvas>
     </div>
     <div class="card">
-      <div class="card-hdr"><div><div class="card-title">Quarterly Trend</div><div class="card-sub">NFF vs Repair over time</div></div></div>
+      <div class="card-hdr"><div><div class="card-title">By Category of Change</div><div class="card-sub">Hardware / Software / Quality breakdown</div></div></div>
       <canvas id="coTrendChart" style="max-height:240px"></canvas>
     </div>
   </div>
 
   <div class="card" style="margin-top:18px">
-    <div class="card-hdr"><div><div class="card-title">Top Defective Parts</div><div class="card-sub">Most frequent repair references · filtered view</div></div></div>
+    <div class="card-hdr"><div><div class="card-title">Top Affected Objects</div><div class="card-sub">Most frequently changed parts / assemblies</div></div></div>
     <canvas id="coPartsChart" style="max-height:200px"></canvas>
   </div>
 </main>
@@ -697,77 +699,80 @@ function renderQuality(){
 }
 
 // ── CHANGE ORDER RENDERING ────────────────────────────────
+let ECN_DATA = null;
 function renderChangeOrder(){
-  const q = document.getElementById('coQFilter')?.value || 'ALL';
-  const fam = document.getElementById('coFamFilter')?.value || 'ALL';
-  const quarters = q==='ALL' ? RMA_DATA.quarters : [q];
-  const families = fam==='ALL' ? RMA_DATA.families : [fam];
+  if(!ECN_DATA) return;
+  const typeFilter = document.getElementById('coQFilter')?.value || 'ALL';
+  const prodFilter = document.getElementById('coFamFilter')?.value || 'ALL';
 
-  let total=0,nff=0,repair=0;
-  const byFam={};
+  const byProduct = ECN_DATA.by_product || [];
+  const byCategory = ECN_DATA.by_category || [];
+  const topObjects = ECN_DATA.top_objects || {};
+  const records = ECN_DATA.records || {};
 
-  quarters.forEach(qt=>{
-    families.forEach(f=>{
-      const key=`${qt}||${f}`;
-      const d=RMA_DATA.by_quarter_family[key];
-      if(d){
-        total+=d.total;nff+=d.nff;repair+=d.repair;
-        if(!byFam[f])byFam[f]={total:0,nff:0,repair:0};
-        byFam[f].total+=d.total;byFam[f].nff+=d.nff;byFam[f].repair+=d.repair;
-      }
-    });
-  });
+  // Filter by product
+  const filtProd = prodFilter==='ALL' ? byProduct : byProduct.filter(r=>r.product===prodFilter);
 
-  document.getElementById('co-total').textContent = total.toLocaleString();
-  document.getElementById('co-repair').textContent = repair.toLocaleString();
-  document.getElementById('co-repair-pct').textContent = total>0?((repair/total)*100).toFixed(1)+'% of total':'';
-  document.getElementById('co-nff').textContent = nff.toLocaleString();
-  document.getElementById('co-nff-pct').textContent = total>0?((nff/total)*100).toFixed(1)+'% of total':'';
-  document.getElementById('co-nff-rate').textContent = total>0?((nff/total)*100).toFixed(1)+'%':'—';
+  // Totals
+  let ecnT=0,daT=0,mcoT=0;
+  filtProd.forEach(r=>{ecnT+=r.ECN||0;daT+=r.DA||0;mcoT+=r.MCO||0;});
+  const showECN = typeFilter==='ALL'||typeFilter==='ECN';
+  const showDA  = typeFilter==='ALL'||typeFilter==='DA';
+  const showMCO = typeFilter==='ALL'||typeFilter==='MCO';
+  const total = (showECN?ecnT:0)+(showDA?daT:0)+(showMCO?mcoT:0);
 
-  // Family breakdown
-  const famE = Object.entries(byFam).filter(([,v])=>v.total>0).sort((a,b)=>b[1].total-a[1].total);
-  makeChart('coFamChart',{
-    type:'bar',
-    data:{
-      labels:famE.map(([k])=>k.replace('GEN1 DOCSIS ','').replace('GEN2 DOCSIS ','')),
-      datasets:[
-        {label:'NFF',data:famE.map(([,v])=>v.nff),backgroundColor:'rgba(34,197,94,.25)',borderColor:'#22c55e',borderWidth:1.5,borderRadius:4},
-        {label:'Repair',data:famE.map(([,v])=>v.repair),backgroundColor:'rgba(239,68,68,.25)',borderColor:'#ef4444',borderWidth:1.5,borderRadius:4}
-      ]
-    },
-    options:{responsive:true,maintainAspectRatio:true,
-      plugins:{legend:{labels:{color:'#64748b',font:FONT,boxWidth:10}}},
-      scales:{x:{grid:{display:false},ticks:{...TICK_STYLE,font:{...FONT,size:9}}},y:{grid:GRID_STYLE,ticks:TICK_STYLE,stacked:false}}}
-  });
+  document.getElementById('co-total').textContent  = total.toLocaleString();
+  document.getElementById('co-repair').textContent = (showECN?ecnT:0).toLocaleString();
+  document.getElementById('co-repair-pct').textContent = 'Engineering Change';
+  document.getElementById('co-nff').textContent    = (showDA?daT:0).toLocaleString();
+  document.getElementById('co-nff-pct').textContent = 'Design Authorization';
+  document.getElementById('co-nff-rate').textContent = (showMCO?mcoT:0).toLocaleString();
 
-  // Quarterly trend
-  makeChart('coTrendChart',{
-    type:'line',
-    data:{
-      labels:RMA_DATA.quarters,
-      datasets:[
-        {label:'NFF',data:RMA_DATA.quarters.map(q=>RMA_DATA.by_quarter[q]?.nff||0),borderColor:'#22c55e',backgroundColor:'rgba(34,197,94,.08)',borderWidth:2,pointRadius:3,tension:.3,fill:true},
-        {label:'Repair',data:RMA_DATA.quarters.map(q=>RMA_DATA.by_quarter[q]?.repair||0),borderColor:'#ef4444',backgroundColor:'rgba(239,68,68,.08)',borderWidth:2,pointRadius:3,tension:.3,fill:true}
-      ]
-    },
-    options:{responsive:true,maintainAspectRatio:true,
-      plugins:{legend:{labels:{color:'#64748b',font:FONT,boxWidth:10}}},
-      scales:{x:{grid:{display:false},ticks:TICK_STYLE},y:{grid:GRID_STYLE,ticks:TICK_STYLE}}}
-  });
+  // Chart 1: By Product
+  const prodRows = filtProd.filter(r=>(showECN&&r.ECN>0)||(showDA&&r.DA>0)||(showMCO&&r.MCO>0));
+  const ds1=[];
+  if(showECN) ds1.push({label:'ECN',data:prodRows.map(r=>r.ECN||0),backgroundColor:'rgba(37,99,235,.3)',borderColor:'#2563eb',borderWidth:1.5,borderRadius:3});
+  if(showDA)  ds1.push({label:'DA', data:prodRows.map(r=>r.DA||0), backgroundColor:'rgba(22,163,74,.3)', borderColor:'#16a34a',borderWidth:1.5,borderRadius:3});
+  if(showMCO) ds1.push({label:'MCO',data:prodRows.map(r=>r.MCO||0),backgroundColor:'rgba(217,119,6,.3)', borderColor:'#d97706',borderWidth:1.5,borderRadius:3});
+  makeChart('coFamChart',{type:'bar',data:{labels:prodRows.map(r=>r.product),datasets:ds1},
+    options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{labels:{color:'#64748b',font:FONT,boxWidth:10}}},
+    scales:{x:{grid:{display:false},ticks:{...TICK_STYLE,font:{...FONT,size:9},maxRotation:30}},y:{grid:GRID_STYLE,ticks:TICK_STYLE}}}});
 
-  // Top parts
-  const parts = fam==='ALL' ? RMA_DATA.top_parts_overall : (RMA_DATA.top_parts_by_family[fam]||[]);
-  makeChart('coPartsChart',{
-    type:'bar',
-    data:{
-      labels:parts.slice(0,10).map(([k])=>k),
-      datasets:[{label:'Count',data:parts.slice(0,10).map(([,v])=>v),backgroundColor:'rgba(37,99,235,.2)',borderColor:'#2563eb',borderWidth:1.5,borderRadius:4}]
-    },
-    options:{responsive:true,maintainAspectRatio:true,
-      plugins:{legend:{display:false}},
-      scales:{x:{grid:{display:false},ticks:{...TICK_STYLE,font:{...FONT,family:'IBM Plex Mono',size:10}}},y:{grid:GRID_STYLE,ticks:TICK_STYLE}}}
-  });
+  // Chart 2: By Category
+  let catRows;
+  if(prodFilter==='ALL'){
+    catRows = byCategory;
+  } else {
+    const catMap={};
+    (ECN_DATA.heatmap||[]).filter(r=>r.product===prodFilter).forEach(r=>{if(!catMap[r.category])catMap[r.category]={ECN:0,DA:0,MCO:0,total:0};catMap[r.category].total+=r.count;});
+    catRows = Object.entries(catMap).map(([category,v])=>({category,...v}));
+  }
+  catRows = catRows.filter(r=>(showECN&&(r.ECN||0)>0)||(showDA&&(r.DA||0)>0)||(showMCO&&(r.MCO||0)>0)||r.total>0);
+  const ds2=[];
+  if(showECN) ds2.push({label:'ECN',data:catRows.map(r=>r.ECN||0),backgroundColor:'rgba(37,99,235,.3)',borderColor:'#2563eb',borderWidth:1.5,borderRadius:3});
+  if(showDA)  ds2.push({label:'DA', data:catRows.map(r=>r.DA||0), backgroundColor:'rgba(22,163,74,.3)', borderColor:'#16a34a',borderWidth:1.5,borderRadius:3});
+  if(showMCO) ds2.push({label:'MCO',data:catRows.map(r=>r.MCO||0),backgroundColor:'rgba(217,119,6,.3)', borderColor:'#d97706',borderWidth:1.5,borderRadius:3});
+  makeChart('coTrendChart',{type:'bar',data:{labels:catRows.map(r=>r.category),datasets:ds2},
+    options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{labels:{color:'#64748b',font:FONT,boxWidth:10}}},
+    scales:{x:{grid:{display:false},ticks:{...TICK_STYLE,font:{...FONT,size:9}}},y:{grid:GRID_STYLE,ticks:TICK_STYLE}}}});
+
+  // Chart 3: Top Affected Objects
+  let parts;
+  if(prodFilter==='ALL'){
+    const key = typeFilter==='ALL'?'ALL':typeFilter;
+    parts = (topObjects[key]||[]).slice(0,10);
+  } else {
+    const allRecs = typeFilter==='ALL'
+      ? [...(records.ECN||[]),...(records.DA||[]),...(records.MCO||[])]
+      : (records[typeFilter]||[]);
+    const cnt={};
+    allRecs.filter(r=>r.product===prodFilter).forEach(r=>(r.objects||[]).forEach(o=>{cnt[o]=(cnt[o]||0)+1;}));
+    parts = Object.entries(cnt).sort((a,b)=>b[1]-a[1]).slice(0,10).map(([obj,count])=>({obj,count}));
+  }
+  makeChart('coPartsChart',{type:'bar',
+    data:{labels:parts.map(p=>p.obj||p[0]),datasets:[{label:'Count',data:parts.map(p=>p.count!=null?p.count:p[1]||0),backgroundColor:'rgba(37,99,235,.2)',borderColor:'#2563eb',borderWidth:1.5,borderRadius:4}]},
+    options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false}},
+    scales:{x:{grid:{display:false},ticks:{...TICK_STYLE,font:{...FONT,family:'IBM Plex Mono',size:10}}},y:{grid:GRID_STYLE,ticks:TICK_STYLE}}}});
 }
 
 // ── MRB RENDERING ─────────────────────────────────────────
@@ -858,13 +863,16 @@ function initFilters(){
   const qualSel = document.getElementById('qualProdFilter');
   Object.keys(YIELD_DATA).forEach(p=>{const o=document.createElement('option');o.value=p;o.text=p;qualSel.appendChild(o);});
 
-  // Change Order family filter
-  const coFamSel = document.getElementById('coFamFilter');
-  RMA_DATA.families.forEach(f=>{const o=document.createElement('option');o.value=f;o.text=f;coFamSel.appendChild(o);});
+  // Change Order product filter populated in renderAll after data fetch
 }
 
 // ── MAIN DATA LOAD ────────────────────────────────────────
 function renderAll(d){
+  // Populate Change Order product filter from ECN data
+  ECN_DATA = d['ECN_MCO_DA'] || {};
+  const coFamSel = document.getElementById('coFamFilter');
+  coFamSel.querySelectorAll('option:not([value="ALL"])').forEach(o=>o.remove());
+  (ECN_DATA.by_product||[]).forEach(r=>{const o=document.createElement('option');o.value=r.product;o.text=r.product;coFamSel.appendChild(o);});
   renderMRB(d); renderCompEng(d); renderCost(d); renderNPI(d);
   renderRMA(); renderQuality(); renderChangeOrder();
   setStatus('ok','Data loaded · '+(d['_updated']||''));
