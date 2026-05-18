@@ -257,9 +257,15 @@ select:focus{border-color:var(--blue3);}
       <div id="mrbMethodRows"></div>
     </div>
   </div>
-  <div class="card" style="margin-top:18px">
-    <div class="card-hdr"><div><div class="card-title">Quarterly Trend — Repairs over Time</div><div class="card-sub">Plan vs. Actual · 2026</div></div></div>
-    <canvas id="mrbTrendChart" style="max-height:220px"></canvas>
+  <div class="g2" style="margin-top:18px">
+    <div class="card">
+      <div class="card-hdr"><div><div class="card-title">Quarterly Trend — Repairs over Time</div><div class="card-sub">Plan vs. Actual · 2026</div></div></div>
+      <canvas id="mrbTrendChart" style="max-height:220px"></canvas>
+    </div>
+    <div class="card">
+      <div class="card-hdr"><div><div class="card-title">Breakdown by Product Type</div><div class="card-sub">Total units repaired · by product</div></div></div>
+      <canvas id="mrbProductChart" style="max-height:220px"></canvas>
+    </div>
   </div>
 </main>
 
@@ -805,6 +811,16 @@ function renderMRB(d){
     return `<div class="method-row"><div style="font-size:11px">${r.product}<br><span style="color:var(--text4);font-size:10px">${r.symptom}</span></div><div><span class="badge ${r.method==='SW'?'blue':'steel'}">${r.method}</span></div><div class="mono">${r.qty.toLocaleString()}</div><div style="display:flex;align-items:center;gap:7px"><div class="rate-track" style="flex:1"><div class="rate-fill" style="width:${pct}%;background:${bc}"></div></div><span class="mono" style="color:${tc};font-weight:600;font-size:10px">${pct}%</span></div><div><span class="pill ${r.status.toLowerCase()==='success'?'success':'fail'}">${r.status}</span></div></div>`;
   }).join('');
   document.getElementById('mrbMethodRows').innerHTML=methodHtml;
+  // Product Type breakdown chart
+  const prodMap={};
+  symptoms.forEach(r=>{if(r.product)prodMap[r.product]=(prodMap[r.product]||0)+r.qty;});
+  const prodLabels=Object.keys(prodMap),prodData=prodLabels.map(k=>prodMap[k]);
+  const PROD_COLORS=['rgba(37,99,235,.75)','rgba(22,163,74,.75)','rgba(217,119,6,.75)','rgba(220,38,38,.75)','rgba(124,58,237,.75)','rgba(14,116,144,.75)','rgba(249,115,22,.75)'];
+  makeChart('mrbProductChart',{type:'doughnut',
+    data:{labels:prodLabels,datasets:[{data:prodData,backgroundColor:PROD_COLORS.slice(0,prodLabels.length),borderColor:'#fff',borderWidth:2,hoverOffset:4}]},
+    options:{responsive:true,maintainAspectRatio:true,cutout:'55%',
+      plugins:{legend:{position:'bottom',labels:{color:'#334155',font:FONT,boxWidth:10,padding:8}},
+               tooltip:{callbacks:{label:ctx=>`${ctx.label}: ${ctx.parsed.toLocaleString()} units`}}}}});
   // Quarterly Trend chart
   makeChart('mrbTrendChart',{type:'line',
     data:{labels:quarterly.map(r=>r.q.replace(/ - 2026/,'')),datasets:[
