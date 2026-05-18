@@ -165,6 +165,18 @@ select:focus{border-color:var(--blue3);}
 .di-row{display:grid;grid-template-columns:1fr 1fr 70px 80px;gap:10px;font-size:10px;padding:5px 0;border-bottom:1px solid #fecaca;align-items:center;}
 .di-row:last-child{border-bottom:none;}
 
+/* COMPONENT MATRIX */
+.comp-matrix{width:100%;border-collapse:collapse;font-size:11px;}
+.comp-matrix th{padding:7px 10px;text-align:left;font-size:9px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);border-bottom:2px solid var(--border2);white-space:nowrap;background:var(--bg);}
+.comp-matrix td{padding:8px 10px;border-bottom:1px solid var(--border2);vertical-align:middle;}
+.comp-matrix tr:last-child td{border-bottom:none;}
+.comp-matrix tr:hover td{background:#f8faff;}
+.ms-pill{display:inline-block;padding:3px 10px;border-radius:20px;font-size:9px;font-weight:600;letter-spacing:.5px;white-space:nowrap;}
+.ms-closed{background:#dcfce7;color:#15803d;}
+.ms-progress{background:#dbeafe;color:#1d4ed8;}
+.ms-open{background:#fef3c7;color:#b45309;}
+.ms-na{background:var(--border2);color:var(--muted);}
+
 /* COMING SOON */
 .coming{display:flex;align-items:center;justify-content:center;min-height:140px;border:2px dashed var(--border2);border-radius:10px;flex-direction:column;gap:8px;}
 .coming-title{font-size:11px;font-weight:600;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;}
@@ -192,6 +204,7 @@ select:focus{border-color:var(--blue3);}
 <div class="status-bar"><div class="sdot idle" id="sdot"></div><span id="stxt">Loading...</span></div>
 <nav>
   <div class="tab active" onclick="switchTab('oe',this)">OE Excellence &amp; Efficiency</div>
+  <div class="tab" onclick="switchTab('mrb',this)">MRB</div>
   <div class="tab" onclick="switchTab('npi',this)">NPI Project Master</div>
   <div class="tab" onclick="switchTab('rma',this)">RMA</div>
   <div class="tab" onclick="switchTab('quality',this)">Quality</div>
@@ -200,35 +213,19 @@ select:focus{border-color:var(--blue3);}
 
 <!-- ═══════ TAB 1: OE EXCELLENCE ═══════ -->
 <main id="tab-oe">
-  <div class="sec-label">MRB — Material Review Board</div>
-  <div class="g2">
-    <div class="card">
-      <div class="card-hdr"><div><div class="card-title">① Quarterly Repair Target — Plan vs. Actual</div><div class="card-sub">Units repaired · 2026</div></div></div>
-      <div id="pvaRows"></div>
-    </div>
-    <div class="card">
-      <div class="card-hdr"><div><div class="card-title">② Symptom-Based Repair — Method &amp; Success Rate</div></div><span class="badge green" id="rateBadge">Avg —%</span></div>
-      <div class="method-row method-hdr"><div>Product · Symptom</div><div>Method</div><div>Qty</div><div>Success Rate</div><div>Status</div></div>
-      <div id="methodRows"></div>
+  <div class="sec-label">2nd source and Alternative component approval</div>
+  <div class="g2" style="margin-bottom:18px">
+    <div class="card" style="grid-column:1/-1">
+      <div class="card-hdr"><div><div class="card-title">Component Status Matrix</div><div class="card-sub">Original component → Alternative · Milestone progress</div></div><span class="badge yellow" id="otdBadge">OTD —%</span></div>
+      <div id="compMatrix" style="overflow-x:auto"></div>
     </div>
   </div>
-
-  <div class="sec-label" style="margin-top:32px">Component Engineering — Implementation Cycle Time</div>
-  <div class="g3">
-    <div class="card">
-      <div class="card-hdr"><div><div class="card-title">Cycle Time per Product / New Component</div><div class="card-sub">Total delay days across all milestones</div></div><span class="badge yellow" id="otdBadge">OTD —%</span></div>
-      <canvas id="cycleChart" style="max-height:200px"></canvas>
+  <div class="card" style="margin-bottom:18px">
+    <div class="card-hdr"><div><div class="card-title">OTD &amp; Root Cause</div></div></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start">
+      <div><canvas id="rootChart" style="max-height:180px"></canvas></div>
+      <div id="rootSummary" style="padding-top:8px"></div>
     </div>
-    <div class="card">
-      <div class="card-hdr"><div><div class="card-title">OTD &amp; Root Cause</div></div></div>
-      <canvas id="rootChart" style="max-height:150px;margin-bottom:10px"></canvas>
-      <div id="rootSummary"></div>
-    </div>
-  </div>
-  <div class="card" style="margin-top:18px">
-    <div class="card-hdr"><div><div class="card-title">Per Product / New Component Summary</div></div></div>
-    <div class="comp-row hdr"><div>Product</div><div>Type</div><div>New Component</div><div>Org. HPN</div><div>Tasks</div><div>First Target</div><div>Last Actual</div><div>Total Delay</div></div>
-    <div id="compRows"></div>
   </div>
 
   <div class="sec-label" style="margin-top:32px">Cost Reduction Activities</div>
@@ -242,6 +239,26 @@ select:focus{border-color:var(--blue3);}
     </div>
     <div class="cost-row hdr"><div>Activity</div><div>Category</div><div>Unit ($)</div><div>Volume</div><div>Total ($)</div><div>Status</div></div>
     <div id="costRows"></div>
+  </div>
+</main>
+
+<!-- ═══════ TAB MRB ═══════ -->
+<main id="tab-mrb" style="display:none">
+  <div class="sec-label">MRB — Material Review Board</div>
+  <div class="g2">
+    <div class="card">
+      <div class="card-hdr"><div><div class="card-title">① Quarterly Repair Target — Plan vs. Actual</div><div class="card-sub">Units repaired · 2026</div></div></div>
+      <div id="mrbPvaRows"></div>
+    </div>
+    <div class="card">
+      <div class="card-hdr"><div><div class="card-title">② Symptom-Based Repair — Method &amp; Success Rate</div></div><span class="badge green" id="mrbRateBadge">Avg —%</span></div>
+      <div class="method-row method-hdr"><div>Product · Symptom</div><div>Method</div><div>Qty</div><div>Success Rate</div><div>Status</div></div>
+      <div id="mrbMethodRows"></div>
+    </div>
+  </div>
+  <div class="card" style="margin-top:18px">
+    <div class="card-hdr"><div><div class="card-title">Quarterly Trend — Repairs over Time</div><div class="card-sub">Plan vs. Actual · 2026</div></div></div>
+    <canvas id="mrbTrendChart" style="max-height:220px"></canvas>
   </div>
 </main>
 
@@ -362,18 +379,13 @@ select:focus{border-color:var(--blue3);}
 
   <div class="g2">
     <div class="card">
-      <div class="card-hdr"><div><div class="card-title">By Product Family</div><div class="card-sub">ECN / DA / MCO breakdown</div></div></div>
+      <div class="card-hdr"><div><div class="card-title">ECN — Reason For Change</div><div class="card-sub">Release / HW change / SW change / Other</div></div></div>
       <canvas id="coFamChart" style="max-height:240px"></canvas>
     </div>
     <div class="card">
       <div class="card-hdr"><div><div class="card-title">By Category of Change</div><div class="card-sub">Hardware / Software / Quality breakdown</div></div></div>
       <canvas id="coTrendChart" style="max-height:240px"></canvas>
     </div>
-  </div>
-
-  <div class="card" style="margin-top:18px">
-    <div class="card-hdr"><div><div class="card-title">Top Affected Objects</div><div class="card-sub">Most frequently changed parts / assemblies</div></div></div>
-    <canvas id="coPartsChart" style="max-height:200px"></canvas>
   </div>
 </main>
 
@@ -464,7 +476,7 @@ tick();setInterval(tick,1000);
 
 // ── TABS ──────────────────────────────────────────────────
 function switchTab(id,el){
-  ['oe','npi','rma','quality','changeorder'].forEach(t=>document.getElementById('tab-'+t).style.display='none');
+  ['oe','mrb','npi','rma','quality','changeorder'].forEach(t=>document.getElementById('tab-'+t).style.display='none');
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
   document.getElementById('tab-'+id).style.display='block';
   el.classList.add('active');
@@ -728,17 +740,31 @@ function renderChangeOrder(){
   document.getElementById('co-nff-pct').textContent = 'Design Authorization';
   document.getElementById('co-nff-rate').textContent = (showMCO?mcoT:0).toLocaleString();
 
-  // Chart 1: By Product
-  const prodRows = filtProd.filter(r=>(showECN&&r.ECN>0)||(showDA&&r.DA>0)||(showMCO&&r.MCO>0));
-  const ds1=[];
-  if(showECN) ds1.push({label:'ECN',data:prodRows.map(r=>r.ECN||0),backgroundColor:'rgba(37,99,235,.3)',borderColor:'#2563eb',borderWidth:1.5,borderRadius:3});
-  if(showDA)  ds1.push({label:'DA', data:prodRows.map(r=>r.DA||0), backgroundColor:'rgba(22,163,74,.3)', borderColor:'#16a34a',borderWidth:1.5,borderRadius:3});
-  if(showMCO) ds1.push({label:'MCO',data:prodRows.map(r=>r.MCO||0),backgroundColor:'rgba(217,119,6,.3)', borderColor:'#d97706',borderWidth:1.5,borderRadius:3});
-  makeChart('coFamChart',{type:'bar',data:{labels:prodRows.map(r=>r.product),datasets:ds1},
-    options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{labels:{color:'#64748b',font:FONT,boxWidth:10}}},
-    scales:{x:{grid:{display:false},ticks:{...TICK_STYLE,font:{...FONT,size:9},maxRotation:30}},y:{grid:GRID_STYLE,ticks:TICK_STYLE}}}});
+  // Chart 1: ECN — Reason For Change breakdown
+  const RFC_COLORS = {
+    'Release':   {bg:'rgba(37,99,235,.3)',  border:'#2563eb'},
+    'HW change': {bg:'rgba(217,119,6,.3)', border:'#d97706'},
+    'SW change': {bg:'rgba(22,163,74,.3)', border:'#16a34a'},
+    'Other':     {bg:'rgba(100,116,139,.25)',border:'#64748b'},
+  };
+  const RFC_ORDER = ['Release','HW change','SW change','Other'];
+  const rfcSource = prodFilter==='ALL'
+    ? (ECN_DATA.rfc_categories||[])
+    : ((ECN_DATA.rfc_by_product||[]).filter(r=>r.product===prodFilter)
+        .map(r=>RFC_ORDER.map(k=>({category:k,count:r[k]||0}))).flat());
+  const rfcMap={}; rfcSource.forEach(r=>{rfcMap[r.category]=(rfcMap[r.category]||0)+(r.count||0);});
+  const rfcLabels=RFC_ORDER.filter(k=>(rfcMap[k]||0)>0);
+  makeChart('coFamChart',{type:'bar',
+    data:{labels:rfcLabels,datasets:[{
+      label:'ECN',data:rfcLabels.map(k=>rfcMap[k]||0),
+      backgroundColor:rfcLabels.map(k=>RFC_COLORS[k]?.bg||'rgba(100,116,139,.25)'),
+      borderColor:rfcLabels.map(k=>RFC_COLORS[k]?.border||'#64748b'),
+      borderWidth:1.5,borderRadius:6
+    }]},
+    options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false}},
+    scales:{x:{grid:{display:false},ticks:{...TICK_STYLE,font:{...FONT,size:11}}},y:{grid:GRID_STYLE,ticks:TICK_STYLE}}}});
 
-  // Chart 2: By Category
+  // Chart 2: By Category of Change
   let catRows;
   if(prodFilter==='ALL'){
     catRows = byCategory;
@@ -755,72 +781,101 @@ function renderChangeOrder(){
   makeChart('coTrendChart',{type:'bar',data:{labels:catRows.map(r=>r.category),datasets:ds2},
     options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{labels:{color:'#64748b',font:FONT,boxWidth:10}}},
     scales:{x:{grid:{display:false},ticks:{...TICK_STYLE,font:{...FONT,size:9}}},y:{grid:GRID_STYLE,ticks:TICK_STYLE}}}});
-
-  // Chart 3: Top Affected Objects
-  let parts;
-  if(prodFilter==='ALL'){
-    const key = typeFilter==='ALL'?'ALL':typeFilter;
-    parts = (topObjects[key]||[]).slice(0,10);
-  } else {
-    const allRecs = typeFilter==='ALL'
-      ? [...(records.ECN||[]),...(records.DA||[]),...(records.MCO||[])]
-      : (records[typeFilter]||[]);
-    const cnt={};
-    allRecs.filter(r=>r.product===prodFilter).forEach(r=>(r.objects||[]).forEach(o=>{cnt[o]=(cnt[o]||0)+1;}));
-    parts = Object.entries(cnt).sort((a,b)=>b[1]-a[1]).slice(0,10).map(([obj,count])=>({obj,count}));
-  }
-  makeChart('coPartsChart',{type:'bar',
-    data:{labels:parts.map(p=>p.obj||p[0]),datasets:[{label:'Count',data:parts.map(p=>p.count!=null?p.count:p[1]||0),backgroundColor:'rgba(37,99,235,.2)',borderColor:'#2563eb',borderWidth:1.5,borderRadius:4}]},
-    options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false}},
-    scales:{x:{grid:{display:false},ticks:{...TICK_STYLE,font:{...FONT,family:'IBM Plex Mono',size:10}}},y:{grid:GRID_STYLE,ticks:TICK_STYLE}}}});
 }
 
 // ── MRB RENDERING ─────────────────────────────────────────
-let cycleChart2=null,rootChart2=null;
 function renderMRB(d){
   const mrb=d['MRB']||{};
   const quarterly=(mrb.quarterly||[]).map(r=>({q:r['Quarter']||'',plan:parseFloat(r['Target'])||0,actual:parseFloat(r['Actual'])||0}));
   const symptoms=(mrb.symptoms||[]).map(r=>({product:r['Product Name']||'',symptom:r['Symptom']||'',method:r['Repair Method']||'',qty:parseFloat(r['Qty. Repaired'])||0,status:r['Repair status']||'',rate:parseFloat(r['Success rate'])||0}));
   const avgRate=symptoms.length?symptoms.reduce((s,r)=>s+r.rate,0)/symptoms.length:0;
-  document.getElementById('rateBadge').textContent='Avg Rate: '+(avgRate?(avgRate*100).toFixed(1)+'%':'—');
+  document.getElementById('mrbRateBadge').textContent='Avg Rate: '+(avgRate?(avgRate*100).toFixed(1)+'%':'—');
   const mx=Math.max(...quarterly.map(r=>Math.max(r.plan,r.actual)),1);
-  document.getElementById('pvaRows').innerHTML=quarterly.map(r=>{
+  const pvaHtml=quarterly.map(r=>{
     const pp=r.plan/mx*100,ap=r.actual>0?r.actual/mx*100:0;
     const ratio=r.actual>0?r.actual/r.plan:null;
     const ac=ratio===null?'var(--muted)':ratio>=1?'var(--green3)':ratio>=0.7?'var(--yellow3)':'var(--red3)';
     const pc=ratio===null?'var(--muted)':ratio>=1?'var(--green2)':ratio>=0.7?'var(--yellow2)':'var(--red2)';
     return `<div class="pva"><div class="pva-lbl">${r.q.replace(/ - 2026/,'')}</div><div class="bar-wrap"><div class="bar-track"><div class="bar-fill" style="width:${pp}%;background:var(--border)"></div></div><div class="bar-track"><div class="bar-fill" style="width:${ap}%;background:${ac}"></div></div></div><div style="font-size:10px;font-family:'IBM Plex Mono',monospace;color:var(--text4);text-align:right;line-height:1.4">${r.plan.toLocaleString()}<br><span style="color:${ac}">${r.actual>0?r.actual.toLocaleString():'—'}</span></div><div style="font-size:11px;font-family:'IBM Plex Mono',monospace;font-weight:600;text-align:right;color:${pc}">${ratio!==null?(ratio*100).toFixed(0)+'%':'—'}</div></div>`;
   }).join('');
-  document.getElementById('methodRows').innerHTML=symptoms.map(r=>{
+  document.getElementById('mrbPvaRows').innerHTML=pvaHtml;
+  const methodHtml=symptoms.map(r=>{
     const pct=(r.rate*100).toFixed(0),bc=r.rate>=.9?'var(--green3)':r.rate>=.8?'var(--yellow3)':'var(--red3)',tc=r.rate>=.9?'var(--green2)':r.rate>=.8?'var(--yellow2)':'var(--red2)';
     return `<div class="method-row"><div style="font-size:11px">${r.product}<br><span style="color:var(--text4);font-size:10px">${r.symptom}</span></div><div><span class="badge ${r.method==='SW'?'blue':'steel'}">${r.method}</span></div><div class="mono">${r.qty.toLocaleString()}</div><div style="display:flex;align-items:center;gap:7px"><div class="rate-track" style="flex:1"><div class="rate-fill" style="width:${pct}%;background:${bc}"></div></div><span class="mono" style="color:${tc};font-weight:600;font-size:10px">${pct}%</span></div><div><span class="pill ${r.status.toLowerCase()==='success'?'success':'fail'}">${r.status}</span></div></div>`;
   }).join('');
+  document.getElementById('mrbMethodRows').innerHTML=methodHtml;
+  // Quarterly Trend chart
+  makeChart('mrbTrendChart',{type:'line',
+    data:{labels:quarterly.map(r=>r.q.replace(/ - 2026/,'')),datasets:[
+      {label:'Plan',data:quarterly.map(r=>r.plan),borderColor:'#94a3b8',backgroundColor:'rgba(148,163,184,.08)',borderWidth:2,borderDash:[5,3],pointRadius:3,tension:.3,fill:false},
+      {label:'Actual',data:quarterly.map(r=>r.actual>0?r.actual:null),borderColor:'#2563eb',backgroundColor:'rgba(37,99,235,.08)',borderWidth:2.5,pointRadius:4,pointBackgroundColor:'#2563eb',tension:.3,fill:true}
+    ]},
+    options:{responsive:true,maintainAspectRatio:true,
+      plugins:{legend:{labels:{color:'#64748b',font:FONT,boxWidth:10}}},
+      scales:{x:{grid:{display:false},ticks:TICK_STYLE},y:{grid:GRID_STYLE,ticks:{...TICK_STYLE,callback:v=>v.toLocaleString()},beginAtZero:true}}}});
 }
 
 function renderCompEng(d){
   const rows=(d['Component Eng. ']||[]).filter(r=>r['Product Name']&&r['New Component']);
+
+  // OTD & Root Cause
   const groups={};
   rows.forEach(r=>{
     const key=`${r['Product Name']}|${r['Type']}|${r['New Component']}|${r['Org. HPN']}`;
-    if(!groups[key])groups[key]={product:r['Product Name'],type:r['Type'],component:r['New Component'],hpn:r['Org. HPN'],tasks:0,firstTarget:null,lastActual:null,totalDelay:0,rootCauses:[]};
-    const g=groups[key];g.tasks++;
-    const delay=parseInt(r['Delay (Days) ']||0)||0;g.totalDelay+=delay;
-    if(!g.firstTarget&&r['Target Date'])g.firstTarget=r['Target Date'];
-    if(r['Actual Date'])g.lastActual=r['Actual Date'];
-    if(delay>0&&r['Root Cause'])g.rootCauses.push(r['Root Cause']);
+    if(!groups[key])groups[key]={product:r['Product Name'],type:r['Type'],component:r['New Component'],hpn:r['Org. HPN'],totalDelay:0};
+    const delay=parseInt(r['Delay (Days) ']||0)||0;
+    groups[key].totalDelay+=delay;
   });
   const grouped=Object.values(groups);
   const otdN=grouped.filter(g=>g.totalDelay===0).length,otdPct=grouped.length?Math.round(otdN/grouped.length*100):0;
   document.getElementById('otdBadge').textContent=`OTD ${otdPct}%`;
   document.getElementById('otdBadge').className='badge '+(otdPct>=80?'green':otdPct>=60?'yellow':'red');
-  if(cycleChart2)cycleChart2.destroy();
-  cycleChart2=new Chart(document.getElementById('cycleChart'),{type:'bar',data:{labels:grouped.map(g=>[g.product,g.component]),datasets:[{label:'Total Delay (days)',data:grouped.map(g=>g.totalDelay),backgroundColor:grouped.map(g=>g.totalDelay===0?'rgba(34,197,94,.2)':g.totalDelay<15?'rgba(245,158,11,.3)':'rgba(239,68,68,.3)'),borderColor:grouped.map(g=>g.totalDelay===0?'#22c55e':g.totalDelay<15?'#f59e0b':'#ef4444'),borderWidth:1.5,borderRadius:5}]},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{labels:{color:'#64748b',font:FONT,boxWidth:10}}},scales:{x:{grid:{display:false},ticks:{...TICK_STYLE,maxRotation:0}},y:{grid:GRID_STYLE,ticks:TICK_STYLE,title:{display:true,text:'Total Days Late',color:'#94a3b8',font:{size:9}}}}}});
   const rcMap={};rows.forEach(r=>{const delay=parseInt(r['Delay (Days) ']||0)||0;if(delay>0){const rc=r['Root Cause']||'Unknown';rcMap[rc]=(rcMap[rc]||0)+1;}});
   const onTime=rows.filter(r=>!(parseInt(r['Delay (Days) ']||0)||0)).length;
-  if(rootChart2)rootChart2.destroy();
-  rootChart2=new Chart(document.getElementById('rootChart'),{type:'doughnut',data:{labels:['On Time',...Object.keys(rcMap)],datasets:[{data:[onTime,...Object.values(rcMap)],backgroundColor:['rgba(34,197,94,.7)','rgba(239,68,68,.7)','rgba(245,158,11,.7)','rgba(59,130,246,.7)'],borderColor:'#fff',borderWidth:2,hoverOffset:4}]},options:{responsive:true,maintainAspectRatio:true,cutout:'60%',plugins:{legend:{position:'bottom',labels:{color:'#334155',font:FONT,boxWidth:10,padding:8}}}}});
-  document.getElementById('rootSummary').innerHTML=[['On Time',onTime],...Object.entries(rcMap)].map(([k,v])=>`<div style="display:flex;justify-content:space-between;font-size:10px;padding:3px 0;border-top:1px solid var(--border2)"><span style="color:var(--text4)">${k}</span><span style="font-family:'IBM Plex Mono',monospace;color:${k==='On Time'?'var(--green2)':'var(--red2)'};font-weight:600">${v} task${v!==1?'s':''}</span></div>`).join('');
-  document.getElementById('compRows').innerHTML=grouped.map(g=>{const dc=g.totalDelay===0?'var(--green2)':g.totalDelay<15?'var(--yellow2)':'var(--red2)';return `<div class="comp-row"><div style="font-size:11px;font-weight:500">${g.product}</div><div style="font-size:10px;color:var(--text3)">${g.type||''}</div><div style="font-size:10px;color:var(--blue2);font-weight:500">${g.component}</div><div class="mono" style="font-size:9px;color:var(--text4)">${g.hpn||''}</div><div class="mono" style="color:var(--text4);text-align:center">${g.tasks}</div><div class="mono" style="color:var(--text4)">${g.firstTarget||'—'}</div><div class="mono">${g.lastActual||'—'}</div><div class="mono" style="color:${dc};font-weight:700">${g.totalDelay===0?'✓ On time':'+'+g.totalDelay+'d'}</div></div>`;}).join('');
+  makeChart('rootChart',{type:'doughnut',data:{labels:['On Time',...Object.keys(rcMap)],datasets:[{data:[onTime,...Object.values(rcMap)],backgroundColor:['rgba(34,197,94,.7)','rgba(239,68,68,.7)','rgba(245,158,11,.7)','rgba(59,130,246,.7)'],borderColor:'#fff',borderWidth:2,hoverOffset:4}]},options:{responsive:true,maintainAspectRatio:true,cutout:'60%',plugins:{legend:{position:'bottom',labels:{color:'#334155',font:FONT,boxWidth:10,padding:8}}}}});
+  document.getElementById('rootSummary').innerHTML=[['On Time',onTime],...Object.entries(rcMap)].map(([k,v])=>`<div style="display:flex;justify-content:space-between;font-size:10px;padding:5px 0;border-bottom:1px solid var(--border2)"><span style="color:var(--text4)">${k}</span><span class="mono" style="color:${k==='On Time'?'var(--green2)':'var(--red2)'};font-weight:600">${v} task${v!==1?'s':''}</span></div>`).join('');
+
+  // Component Status Matrix
+  const matrixGroups={};
+  const allMilestones=[];
+  rows.forEach(r=>{
+    const key=`${r['Product Name']}||${r['Org. HPN']}||${r['New Component']}`;
+    if(!matrixGroups[key]) matrixGroups[key]={
+      product:r['Product Name'],type:r['Type'],
+      orgHpn:r['Org. HPN'],justification:r['Justification'],
+      newComp:r['New Component'],milestones:{}};
+    const ms=r['Milestone']||r['Task Name']||'';
+    if(ms){
+      matrixGroups[key].milestones[ms]=r['Status']||'Open';
+      if(!allMilestones.includes(ms)) allMilestones.push(ms);
+    }
+  });
+  const msClass=s=>{
+    if(!s) return 'ms-na';
+    const sl=s.toLowerCase();
+    if(sl==='closed'||sl==='done'||sl==='complete') return 'ms-closed';
+    if(sl.includes('progress')||sl==='in-progress'||sl==='open') return sl.includes('progress')?'ms-progress':'ms-open';
+    return 'ms-na';
+  };
+  const matrixRows=Object.values(matrixGroups);
+  const thCols=allMilestones.map(m=>`<th>${m}</th>`).join('');
+  const trs=matrixRows.map(g=>{
+    const msCells=allMilestones.map(m=>{
+      const st=g.milestones[m]||'';
+      return st?`<td><span class="ms-pill ${msClass(st)}">${st}</span></td>`:`<td style="color:var(--muted);font-size:10px">—</td>`;
+    }).join('');
+    return `<tr>
+      <td style="font-weight:600;color:var(--text2)">${g.product}</td>
+      <td style="color:var(--text4);font-size:10px">${g.type||''}</td>
+      <td class="mono" style="font-size:10px;color:var(--text4)">${g.orgHpn||''}</td>
+      <td style="font-size:10px;color:var(--text3)">${g.justification||''}</td>
+      <td style="font-size:11px;color:var(--blue2);font-weight:500">${g.newComp||''}</td>
+      ${msCells}
+    </tr>`;
+  }).join('');
+  document.getElementById('compMatrix').innerHTML=`<table class="comp-matrix"><thead><tr>
+    <th>Product</th><th>Type</th><th>Org. HPN</th><th>Justification</th><th>Alt. Component</th>
+    ${thCols}</tr></thead><tbody>${trs}</tbody></table>`;
 }
 
 function renderCost(d){
@@ -835,17 +890,65 @@ function renderNPI(d){
   const npiRows=(d['NPI_Master']||[]).filter(r=>r&&r['Product Name']);
   const diRows=d['Design issue for improvment']||[];
   const tlC={'On Track':'tl-green','At Risk':'tl-yellow','Blocked':'tl-red'};
-  document.getElementById('npiCards').innerHTML=npiRows.map(p=>{
-    const prod=p['Product Name'],status=p['Status']||'On Track',phase=p['Current Phase']||'';
+
+  // Group rows by Product Name
+  const prodMap={};
+  npiRows.forEach(p=>{
+    const prod=p['Product Name'];
+    if(!prodMap[prod]) prodMap[prod]=[];
+    prodMap[prod].push(p);
+  });
+
+  // Collect all board PNs for a product group (for DI correlation)
+  function boardPNs(entries){
+    const pns=new Set();
+    entries.forEach(p=>{
+      ['Main Board','SFP Board','DAUGHTER Board','LED Board'].forEach(k=>{
+        const v=p[k]; if(v&&v!=='TBD') pns.add(v);
+      });
+    });
+    return pns;
+  }
+
+  document.getElementById('npiCards').innerHTML=Object.entries(prodMap).map(([prod,entries])=>{
+    // Use worst status across entries
+    const statuses=entries.map(p=>p['Status']||'On Track');
+    const status=statuses.includes('Blocked')?'Blocked':statuses.includes('At Risk')?'At Risk':'On Track';
+    const stPill=status==='On Track'?'on-track':status==='At Risk'?'at-risk':'blocked';
+
+    // Phase bar — use first entry's phase
+    const phase=entries[0]['Current Phase']||'';
     const curIdx=PHASES.indexOf(phase);
     const phaseBar=PHASES.map((ph,i)=>`<div class="ph ${ph===phase?'active':i<curIdx?'done':''}">${ph}</div>`).join('');
-    const cfgFields=['Marketing PN','Main Board','SFP Board','DAUGHTER Board','LED Board','240 Level'].filter(k=>p[k]!=null&&p[k]!=='').map(k=>`<div class="npi-field"><span class="npi-key">${k}</span>${p[k]==='TBD'?`<span class="npi-v tbd">TBD</span>`:`<span class="npi-v">${p[k]}</span>`}</div>`).join('');
-    const notes=String(p['Important Notes']||'').split('\n').filter(l=>l.trim()).map(l=>`<div style="font-size:11px;color:var(--text2);line-height:1.6">${l}</div>`).join('');
-    const issues=diRows.filter(r=>r['Product Name']===prod);
-    const diBtn=issues.length?`<div class="di-btn" onclick="toggleDI('${prod.replace(/[\s#]/g,'_')}')">⚠ Design Issues (${issues.length})</div>`:'';
-    const diDetail=issues.length?`<div id="di-${prod.replace(/[\s#]/g,'_')}" class="di-detail"><div style="font-size:9px;font-weight:600;color:var(--red2);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px">Design Issues</div>${issues.map(di=>`<div class="di-row"><div style="font-size:11px">${di['Description']||''}</div><div class="mono">${di['PCBA PN']||''}</div><div style="color:var(--text3);font-size:10px">${di['Type issue']||''}</div><div><span class="pill progress">${di['Status']||''}</span></div></div>`).join('')}</div>`:'' ;
-    const stPill=status==='On Track'?'on-track':status==='At Risk'?'at-risk':'blocked';
-    return `<div class="npi-card"><div class="npi-top"><div class="tl ${tlC[status]||'tl-yellow'}"></div><div><div class="npi-name">${prod}</div><div style="margin-top:4px"><span class="pill ${stPill}">${status}</span></div></div><div class="phase-bar">${phaseBar}</div></div><div class="npi-body"><div class="npi-sec"><div class="npi-sec-title">Configuration</div>${cfgFields}${diBtn}</div><div class="npi-divider"></div><div class="npi-sec"><div class="npi-sec-title">Important Notes</div>${notes||'<span style="color:var(--muted);font-size:11px">—</span>'}</div><div class="npi-divider"></div><div class="npi-sec"><div class="npi-sec-title">ECN Key</div><div style="font-size:11px;color:var(--muted);font-style:italic">TBD</div></div></div>${diDetail}</div>`;
+
+    // Design Issues — correlate by PCBA PN
+    const pns=boardPNs(entries);
+    const issues=diRows.filter(r=>pns.has(r['PCBA PN']));
+    const diId=prod.replace(/[\s#]/g,'_');
+    const diBtn=issues.length?`<div class="di-btn" onclick="toggleDI('${diId}')">⚠ Design Issues (${issues.length})</div>`:'';
+    const diDetail=issues.length?`<div id="di-${diId}" class="di-detail"><div style="font-size:9px;font-weight:600;color:var(--red2);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px">Design Issues</div>${issues.map(di=>`<div class="di-row"><div style="font-size:11px">${di['Description']||''}</div><div class="mono">${di['PCBA PN']||''}</div><div style="color:var(--text3);font-size:10px">${di['Type issue']||''}</div><div><span class="pill progress">${di['Status']||''}</span></div></div>`).join('')}</div>`:'';
+
+    // Sub-entries (one per row)
+    const subBodies=entries.map((p,idx)=>{
+      const cfgFields=['High Level Justification','Marketing PN','Main Board','BCM Series','SFP Board','DAUGHTER Board','LED Board','240 Level'].filter(k=>p[k]!=null&&p[k]!=='').map(k=>{
+        const val=p[k];
+        const valHtml=val==='TBD'?`<span class="npi-v tbd">TBD</span>`:`<span class="npi-v">${val}</span>`;
+        return `<div class="npi-field"><span class="npi-key">${k}</span>${valHtml}</div>`;
+      }).join('');
+      const notes=String(p['Important Notes']||'').split('\n').filter(l=>l.trim()).map(l=>`<div style="font-size:11px;color:var(--text2);line-height:1.6">${l}</div>`).join('');
+      const subStatus=p['Status']||'On Track';
+      const subPill=subStatus==='On Track'?'on-track':subStatus==='At Risk'?'at-risk':'blocked';
+      const border=idx<entries.length-1?'border-bottom:1px solid var(--border2);':'';
+      return `<div class="npi-body" style="${border}">
+        <div class="npi-sec"><div class="npi-sec-title">Configuration${entries.length>1?` <span class="badge steel">#${idx+1}</span>`:''}</div>${cfgFields}${idx===entries.length-1?diBtn:''}</div>
+        <div class="npi-divider"></div>
+        <div class="npi-sec"><div class="npi-sec-title">Important Notes</div>${notes||'<span style="color:var(--muted);font-size:11px">—</span>'}</div>
+        <div class="npi-divider"></div>
+        <div class="npi-sec"><div class="npi-sec-title">Working Time</div><div style="font-size:11px;color:var(--muted);font-style:italic">—</div>${entries.length>1?`<div style="margin-top:8px"><span class="pill ${subPill}">${subStatus}</span></div>`:''}</div>
+      </div>`;
+    }).join('');
+
+    return `<div class="npi-card"><div class="npi-top"><div class="tl ${tlC[status]||'tl-yellow'}"></div><div><div class="npi-name">${prod}</div><div style="margin-top:4px"><span class="pill ${stPill}">${status}</span></div></div><div class="phase-bar">${phaseBar}</div></div>${subBodies}${diDetail}</div>`;
   }).join('');
 }
 
