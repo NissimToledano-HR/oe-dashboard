@@ -59,10 +59,26 @@
   },
   "NPI_Master": [
     {
+      "Product Name": "RPD UNF Spin #3",
+      "Current Phase": "MP",
+      "High Level Justification": "Release",
+      "Marketing PN": "COS-PBL2-UNF-1-HR04-01",
+      "Main Board": "221-0023514-06-01",
+      "BCM Series": "BCM31621",
+      "SFP Board": "221-0023502-06-01",
+      "DAUGHTER Board": null,
+      "LED Board": null,
+      "240 Level": "240-0023514-13-10",
+      "Important Notes": "* eMMC from WD\n* with Power Cycle\n*Comcast configuration",
+      "Status": "On Track"
+    },
+    {
       "Product Name": "RPD UNF 2G",
       "Current Phase": "Prototype",
+      "High Level Justification": "Release",
       "Marketing PN": "COS-PBL2-UNF-G-2-HR01-01",
       "Main Board": "221-0023592-01-01",
+      "BCM Series": null,
       "SFP Board": "221-0023998-01-01",
       "DAUGHTER Board": null,
       "LED Board": null,
@@ -73,9 +89,11 @@
     {
       "Product Name": "RPD UNF 2G",
       "Current Phase": "Prototype",
+      "High Level Justification": "Mech. Re-Design + Spin#2",
       "Marketing PN": "TBD",
       "Main Board": "221-0023592-02-01",
-      "SFP Board": "221-0023998-21-01",
+      "BCM Series": null,
+      "SFP Board": "221-0023998-02-01",
       "DAUGHTER Board": null,
       "LED Board": null,
       "240 Level": "240-0023592-02-01",
@@ -85,8 +103,10 @@
     {
       "Product Name": "PEARL XL",
       "Current Phase": "Design",
+      "High Level Justification": "Release",
       "Marketing PN": "TBD",
       "Main Board": "221-0023992-01-01",
+      "BCM Series": null,
       "SFP Board": "221-0023993-01-01",
       "DAUGHTER Board": null,
       "LED Board": null,
@@ -97,8 +117,10 @@
     {
       "Product Name": "JETTY-2S",
       "Current Phase": "Design",
+      "High Level Justification": "Release",
       "Marketing PN": "TBD",
       "Main Board": "221-0023760-02-01",
+      "BCM Series": null,
       "SFP Board": null,
       "DAUGHTER Board": null,
       "LED Board": "221-0023762-01-01",
@@ -112,6 +134,7 @@
       "Product Name": "PEARL-1",
       "Type": "eMMC",
       "Org. HPN": "160-1331-001",
+      "Justification": "EOL",
       "New Component": "WD",
       "Task Name": "Phase#1 :  10 devices with full production flow",
       "Milestone": "PLX Pilot #1",
@@ -125,6 +148,7 @@
       "Product Name": "PEARL-1",
       "Type": "eMMC",
       "Org. HPN": "160-1331-001",
+      "Justification": "EOL",
       "New Component": "WD",
       "Task Name": "R&D validation (HW and SW)",
       "Milestone": "R&D Validation",
@@ -138,6 +162,7 @@
       "Product Name": "PEARL-1",
       "Type": "eMMC",
       "Org. HPN": "160-1331-001",
+      "Justification": "EOL",
       "New Component": "WD",
       "Task Name": "Phase #2 : 46 devices with full prodcution flow + Stability test",
       "Milestone": "Control Prod.",
@@ -151,6 +176,7 @@
       "Product Name": "PEARL-1",
       "Type": "eMMC",
       "Org. HPN": "160-1331-001",
+      "Justification": "EOL",
       "New Component": "WD",
       "Task Name": "ECN implmentation, with BOX method",
       "Milestone": "Released",
@@ -164,6 +190,7 @@
       "Product Name": "PEARL XL",
       "Type": "DDR3",
       "Org. HPN": "160-1321-220",
+      "Justification": "Availability",
       "New Component": "Winbond",
       "Task Name": null,
       "Milestone": "Released",
@@ -176,7 +203,8 @@
     {
       "Product Name": "RPD UNF Spin #6",
       "Type": "eMMC",
-      "Org. HPN": "160-1331-001",
+      "Org. HPN": "160-0000-001",
+      "Justification": "Single source",
       "New Component": "WD",
       "Task Name": null,
       "Milestone": "Released",
@@ -228,10 +256,10 @@
   "_kpis": {
     "mrb_total": 817,
     "mrb_rate": 0.875,
-    "npi_count": 4,
+    "npi_count": 5,
     "npi_at_risk": 2,
     "npi_blocked": 0,
-    "npi_on_track": 1,
+    "npi_on_track": 2,
     "comp_total": 6,
     "comp_otd": 3,
     "comp_max_delay": 24,
@@ -7969,7 +7997,9 @@
             "SC221-0023800-02",
             "AD221-0023800-02",
             "220-0023800-02"
-          ]
+          ],
+          "rfc": "RELEASE BOM REV 01",
+          "rfc_category": "Release"
         },
         {
           "doc": "ECN40775",
@@ -7983,7 +8013,9 @@
           "description": "041-1841-001, QSFP-DD 1X1 TH CAGE 71.23 X 21.38MM HEIGHT=11.57MM, LEG 2.86MM  RE",
           "objects": [
             "041-1841-001"
-          ]
+          ],
+          "rfc": "RELEASE TO SYSTEM IN ORDER TO RECEIVE 40U THAT DOCK AT PLEXUS",
+          "rfc_category": "Release"
         },
         {
           "doc": "ECN40776",
@@ -8000,7 +8032,9 @@
             "GB220-0023998-02",
             "AD221-0023998-02",
             "220-0023998-02"
-          ]
+          ],
+          "rfc": "RELEASE PCB FILES",
+          "rfc_category": "Release"
         },
         {
           "doc": "ECN40778",
@@ -8015,7 +8049,9 @@
           "objects": [
             "221-0023998-02-01",
             "SC221-0023998-02"
-          ]
+          ],
+          "rfc": "BRING-UP FINDINGS IMPROVEMENTS",
+          "rfc_category": "Other"
         },
         {
           "doc": "ECN40781",
@@ -8032,7 +8068,9 @@
             "GB220-0023800-02",
             "FD220-0023800-02",
             "AD221-0023800-02"
-          ]
+          ],
+          "rfc": "RELEASE PCB FILES\n\nFIXING SPIN-1 ERRORS, IMPROVING EMC PERFORMANCE AND ADJUSTING LAYOUT FOR UPDATING MECHANICS.",
+          "rfc_category": "Release"
         },
         {
           "doc": "ECN40783",
@@ -8047,7 +8085,9 @@
           "objects": [
             "221-0023800-01-01",
             "SC221-0023800-01"
-          ]
+          ],
+          "rfc": "UPDATE BOM TOREV 09\n1. CHANGE DC/DC COMPENSATION VALUES - UPDATED VALUES SHOWED IMPROVED PERFORMANCE DURING DVT\n2. REMOVE MANUAL ASSEMBLY INSTRUCTIONS INVOLVING C656 AND C657 - SOFTWARE FIX. HW REWORK NOT REQUIRED.",
+          "rfc_category": "HW change"
         },
         {
           "doc": "ECN40785",
@@ -8061,7 +8101,9 @@
           "description": "**** CORRECT ECN40699 ******  RMD TO RPD GEN.2 PROJECT  ----- RELEASE NEW BOM BA",
           "objects": [
             "221-0023505-05-01"
-          ]
+          ],
+          "rfc": "*** SYSTEM ERROR AT ECN40699 ****\n1. RELEASED CORRECTION BOM DUE TO DUPLICATE ITEMS.\n2. UPDATE REV TO 02 TO ALIGN WITH REV SYSTEM,\n    NO CHANGE AT HW.",
+          "rfc_category": "HW change"
         },
         {
           "doc": "ECN40787",
@@ -8076,7 +8118,9 @@
           "objects": [
             "240-0023912-02-01",
             "PD241-0052609"
-          ]
+          ],
+          "rfc": "SUPPORT NEW RFT ROW PN AND TEST PROCESS FOR RL TUNING & TEST, UPDATE LIMITS FOR MEDIACOM UNTIS.",
+          "rfc_category": "Other"
         },
         {
           "doc": "ECN40788",
@@ -8099,7 +8143,9 @@
             "COS-RPL2-RFTP-UNF-U-02-02",
             "COS-RPL2-HW",
             "MI028-0700-001"
-          ]
+          ],
+          "rfc": "RELEASE MARKETING FOR RFT UNF DIE-CAST VERSION",
+          "rfc_category": "Release"
         },
         {
           "doc": "ECN40789",
@@ -8116,7 +8162,9 @@
             "205-0056331-03",
             "AD205-0056331-03",
             "032-0232-02"
-          ]
+          ],
+          "rfc": "RELEASE FOR SAMPLES ONLY",
+          "rfc_category": "Release"
         },
         {
           "doc": "ECN40791",
@@ -8134,7 +8182,9 @@
             "COS-PBL2-UNF-1-HR04-01",
             "COS-PBL2-UNF-1-HR03-01",
             "COS-PBL2-UNF-1-HR03-04"
-          ]
+          ],
+          "rfc": "PBL2 UNF SPIN#6_RELEASE MARKETING LEVEL",
+          "rfc_category": "Release"
         },
         {
           "doc": "ECN40793",
@@ -8148,7 +8198,9 @@
           "description": "COS-OYSP-PON-AM-U-N-01,OYSTER PLUS NODE ASSY FOR PON (JETTY,PEARL), INCLUDES PSU",
           "objects": [
             "COS-OYSP-PON-AM-U-N-01"
-          ]
+          ],
+          "rfc": "UPDATED BOM",
+          "rfc_category": "Other"
         },
         {
           "doc": "ECN40795",
@@ -8162,7 +8214,9 @@
           "description": "041-1743-002 RFT HYBRID EMI CONTACT SPRING 50.68X14.20X0.30 SMD  INITIAL RELEASE",
           "objects": [
             "041-1743-002"
-          ]
+          ],
+          "rfc": "INITIAL RELEASE FOR SAMPLES ORDER (NON-PRODUCTION)",
+          "rfc_category": "Release"
         },
         {
           "doc": "ECN40796",
@@ -8176,7 +8230,9 @@
           "description": "014-2040-001, NEW STANDARD FOR MARKING OF QR CODE  ADDING RPL2 HSG UNF TO HAVE B",
           "objects": [
             "014-2040-001"
-          ]
+          ],
+          "rfc": "ADDING RPL2 HSG UNF TO HAVE BEID",
+          "rfc_category": "Other"
         },
         {
           "doc": "ECN40803",
@@ -8192,7 +8248,9 @@
             "240-0024017-01-01",
             "MI028-0700-001",
             "014-2040-001"
-          ]
+          ],
+          "rfc": "UPDATE DOCUMENTS WITH BEID CODE",
+          "rfc_category": "Other"
         },
         {
           "doc": "ECN40805",
@@ -8206,7 +8264,9 @@
           "description": "COS-RPL2-HW COS RPL2 HARDWARE ATO OPTIONS  ***** CONTINUE  OF ECN40791 ****  COS",
           "objects": [
             "COS-RPL2-HW"
-          ]
+          ],
+          "rfc": "PBL2 UNF SPIN#6_RELEASE MARKETING LEVEL\nCOS-RPL2-HW -- UPDATE BOM",
+          "rfc_category": "HW change"
         },
         {
           "doc": "ECN40806",
@@ -8226,7 +8286,9 @@
             "154-1321-001",
             "310-2001550",
             "151-1137-001"
-          ]
+          ],
+          "rfc": "HW BOM UPDATE FOR MB",
+          "rfc_category": "HW change"
         },
         {
           "doc": "ECN40811",
@@ -8240,7 +8302,9 @@
           "description": "221-0023505-05-01 ASSY;RMD TO RPD 1X2 BOARD;NSGEXO  UPDATE BOM 221-0023505-05-01",
           "objects": [
             "221-0023505-05-01"
-          ]
+          ],
+          "rfc": "CORRECT BOM MISTAKE",
+          "rfc_category": "Other"
         },
         {
           "doc": "ECN40812",
@@ -8256,7 +8320,9 @@
             "203-0055-001",
             "203-0056-001",
             "028-0503-001"
-          ]
+          ],
+          "rfc": "IMPROVE DURABILITY OF THE FIBER TRAY SCREW ROD IN OYSTER.",
+          "rfc_category": "Other"
         },
         {
           "doc": "ECN40814",
@@ -8270,7 +8336,9 @@
           "description": "093-0804-001, DIRECT ATTACH CABLE QSFP28 PASSIVE 100G 30AWG LENGTH=90CM;INDUSTRA",
           "objects": [
             "093-0804-001"
-          ]
+          ],
+          "rfc": "RELEASE CABLE AS PILOT FOR TESTING",
+          "rfc_category": "Release"
         },
         {
           "doc": "ECN40823",
@@ -8284,7 +8352,9 @@
           "description": "014-2040-001,\tNEW STANDARD FOR MARKING OF QR CODE  UPDATE FILE WITH ADDING PEBBL",
           "objects": [
             "014-2040-001"
-          ]
+          ],
+          "rfc": "UPDATE FILE WITH ADDING PEBBLE 2G TO HAVE BEID RP8",
+          "rfc_category": "Other"
         },
         {
           "doc": "ECN40827",
@@ -8298,7 +8368,9 @@
           "description": "205-0056384, \tFAB SEC OP DIE CAST BASE NODE OYSTER PEARL-1XL  REDUCE BOSS MILLIN",
           "objects": [
             "205-0056384"
-          ]
+          ],
+          "rfc": "REDUCE BOSS MILLING FROM QTY X 7 TO BE X 6",
+          "rfc_category": "Other"
         },
         {
           "doc": "ECN40828",
@@ -8313,7 +8385,9 @@
           "objects": [
             "203-0059-001",
             "AD240-0023800-02"
-          ]
+          ],
+          "rfc": "RELEASE DWGS FOR JETTY-3",
+          "rfc_category": "Release"
         },
         {
           "doc": "ECN40830",
@@ -8328,7 +8402,9 @@
           "objects": [
             "PD241-0052610",
             "COS-PBL2-UNF-1-HR04-01"
-          ]
+          ],
+          "rfc": "SW SHIPPING VER RELEASE",
+          "rfc_category": "SW change"
         },
         {
           "doc": "ECN40834",
@@ -8342,7 +8418,9 @@
           "description": "071-1388-001, CONNECTOR HD-AFI 75 OHM TERMINATION  RELEASE AS STAND ALONE FOR SA",
           "objects": [
             "071-1388-001"
-          ]
+          ],
+          "rfc": "RELEASE AS STAND ALONE FOR SAMPLES",
+          "rfc_category": "Release"
         },
         {
           "doc": "ECN40835",
@@ -8356,7 +8434,9 @@
           "description": "093-0793-001 RELEASE AS REV A  ALLIGN WITH AMPHENOL REV ROLL DUE TO MOVING TO PR",
           "objects": [
             "093-0793-001"
-          ]
+          ],
+          "rfc": "ALLIGN WITH AMPHENOL REV ROLL DUE TO MOVING TO PRODUCTION",
+          "rfc_category": "Other"
         },
         {
           "doc": "ECN40836",
@@ -8371,7 +8451,9 @@
           "objects": [
             "221-0023998-02-01",
             "SC221-0023998-02"
-          ]
+          ],
+          "rfc": "CHANGE PULLUP RESISTOR VALUE OF LAST_GASP, PWR_OFF_IND, PWR_CYC_IND",
+          "rfc_category": "Other"
         },
         {
           "doc": "ECN40837",
@@ -8391,7 +8473,9 @@
             "154-1324-001",
             "152-2072-001",
             "030-0312-001"
-          ]
+          ],
+          "rfc": "HW CHANGES AFTER BRINGUP PHASE",
+          "rfc_category": "HW change"
         },
         {
           "doc": "ECN40839",
@@ -8407,7 +8491,9 @@
             "COS-OYS2-U-PD-E-204/246",
             "COS-OYS2-U-PD-E-204/246-01",
             "FCST-COS-OYS2-U-PD-E-204/246"
-          ]
+          ],
+          "rfc": "RELEASE NEW DIPLEXER 204/246",
+          "rfc_category": "Release"
         },
         {
           "doc": "ECN40842",
@@ -8422,7 +8508,9 @@
           "objects": [
             "SC221-0023998-01",
             "221-0023998-01-01"
-          ]
+          ],
+          "rfc": "CHANGE PULLUP RESISTOR VALUE OF LAST_GASP, PWR_OFF_IND, PWR_CYC_IND",
+          "rfc_category": "Other"
         },
         {
           "doc": "ECN40843",
@@ -8440,7 +8528,9 @@
             "AD221-0024026-01",
             "220-0024026-01",
             "171-0885-001"
-          ]
+          ],
+          "rfc": "RELEASE BOM 221-0024026-01-01 REV 01",
+          "rfc_category": "Release"
         },
         {
           "doc": "ECN40844",
@@ -8454,7 +8544,9 @@
           "description": "SC221-0023998-02 SC SFP BOARD UNIFIED 2X2  CORRECT ATTACHMENTS FILES  APPROVED B",
           "objects": [
             "SC221-0023998-02"
-          ]
+          ],
+          "rfc": "CORRECT ATTACHMENTS FILES",
+          "rfc_category": "Other"
         }
       ],
       "DA": [
@@ -8470,7 +8562,9 @@
           "description": "-- EXTEND OF D40172B --  COS-PBL2-UNF-1-HR03-01 PEBBLE-2 UNIFIED FOR RIPPLE ----",
           "objects": [
             "COS-PBL2-UNF-1-HR03-01"
-          ]
+          ],
+          "rfc": "POTENTIAL SW SOLUTION OF PBL UNF FROM PLEX-504 (INIT PROGRAMMING),",
+          "rfc_category": ""
         },
         {
           "doc": "D40173B",
@@ -8484,7 +8578,9 @@
           "description": "-- EXTEND OF D40173A--  COS-PBL2-UNF-1-HR03-01 PEBBLE-2 UNIFIED FOR RIPPLE -----",
           "objects": [
             "COS-PBL2-UNF-1-HR03-01"
-          ]
+          ],
+          "rfc": "POTENTIAL SW SOLUTION OF PBL UNF FROM PLEX-451 (OTP PROGRAMMING)",
+          "rfc_category": ""
         },
         {
           "doc": "D40184A",
@@ -8502,7 +8598,9 @@
             "COS-PBL2-UNF-1-HR03-01",
             "157-0227-001",
             "152-0361-001"
-          ]
+          ],
+          "rfc": "QUALIFICATION FOR 2ND SOURCE FOR 157-0206-001",
+          "rfc_category": ""
         },
         {
           "doc": "D40193A",
@@ -8516,7 +8614,9 @@
           "description": "****** EXTENSION OF DA40193 ******  COS-PBL2-2X4-P-HR02-03 PEBBLE-2 RPD, 2XDS+4X",
           "objects": [
             "COS-PBL2-2X4-P-HR02-03"
-          ]
+          ],
+          "rfc": "EXPERIMENT TO SOLVE LPY ISSUE PLEX-477 INITIALIZATION",
+          "rfc_category": ""
         },
         {
           "doc": "D40195A",
@@ -8532,7 +8632,9 @@
             "160-1331-001",
             "221-0023514-03-01",
             "COS-PBL2-UNF-1-HR03-01"
-          ]
+          ],
+          "rfc": "AN EXPERIMENT OF FEASIBILITY OF A HW SOLUTION, PLEX-450",
+          "rfc_category": ""
         },
         {
           "doc": "D40206A",
@@ -8549,7 +8651,9 @@
             "COS-PBL2-2X4-P-HR02-04",
             "COS-RPL2-BDL*315991",
             "COS-RPL2-BDL*315992"
-          ]
+          ],
+          "rfc": "SOLUTION FOR BCM ISSUE FROM DS FLATNESS , GEN.2",
+          "rfc_category": ""
         },
         {
           "doc": "D40207A",
@@ -8563,7 +8667,9 @@
           "description": "COS-PRL1-M1-4P-2Y-HR01-02 --- MOTIVATION: SW SOLUTION FOR LPY ISSUE FROM PLEX-50",
           "objects": [
             "COS-PRL1-M1-4P-2Y-HR01-02"
-          ]
+          ],
+          "rfc": "MRB PEARL-1  , EMMC LINUX PROGRAMMING - FEASIBILITY STUDY",
+          "rfc_category": ""
         },
         {
           "doc": "D40215A",
@@ -8577,7 +8683,9 @@
           "description": "COS-RPL2-RFTP-UNF-U-03-01 RIPPLE-2 RF TRAY, UNIFIED;PLG-DPLX, DIE-CASTED  ***** ",
           "objects": [
             "COS-RPL2-RFTP-UNF-U-03-01"
-          ]
+          ],
+          "rfc": "SOLVE PROBLEM OF UNIFY MEDIACOM REV 7",
+          "rfc_category": ""
         },
         {
           "doc": "D9002PA",
@@ -8593,7 +8701,9 @@
             "COS-RPL2-RFTP-UNF-U-02-01",
             "221-0023912-02-01",
             "240-0023912-02-01"
-          ]
+          ],
+          "rfc": "RFT UNF- REWORK UNITS",
+          "rfc_category": ""
         },
         {
           "doc": "D9046P",
@@ -8607,7 +8717,9 @@
           "description": "BMB XL - NEW BUILD   SMT ON 16 UNITS IS APPROVED.  APPROVED TO SKIP 155-1076-001",
           "objects": [
             "221-0024010-01-01"
-          ]
+          ],
+          "rfc": "BMB XL - NEW BUILD",
+          "rfc_category": ""
         },
         {
           "doc": "D9047P",
@@ -8626,7 +8738,9 @@
             "COS-RPL2-U-PD-E-396/492-02",
             "COS-RPL2-UNF-AC-ADPTR-KIT",
             "COS-RPL2-RFTP-UNF-U-03-01"
-          ]
+          ],
+          "rfc": "RFT UNF- NEW BUILD",
+          "rfc_category": ""
         },
         {
           "doc": "D9048P",
@@ -8641,7 +8755,9 @@
           "objects": [
             "COS-PBL2-2X2-P-HR02-03",
             "COS-PBL2-2X4-P-HR02-05"
-          ]
+          ],
+          "rfc": "RPD GEN2 – BRING UP",
+          "rfc_category": ""
         },
         {
           "doc": "D9049P",
@@ -8655,7 +8771,9 @@
           "description": "RFT UNF- NEW BUILD  SMT FOR 40 NODES IS APPROVED.  APPROVED TO BUILD: 40 UNITS O",
           "objects": [
             "COS-RPL2-RFTP-UNF-U-03-01"
-          ]
+          ],
+          "rfc": "RFT UNF- NEW BUILD",
+          "rfc_category": ""
         },
         {
           "doc": "D9050P",
@@ -8669,7 +8787,9 @@
           "description": "RFT UNF- NEW BUILD  SMT FOR 150 NODES IS APPROVED.  APPROVED TO BUILD: 150 UNITS",
           "objects": [
             "COS-RPL2-RFTP-UNF-U-03-01"
-          ]
+          ],
+          "rfc": "RFT UNF- NEW BUILD",
+          "rfc_category": ""
         },
         {
           "doc": "DA40209",
@@ -8683,7 +8803,9 @@
           "description": "COS-RPL2-RFTP-UNF-U-02-01 RIPPLE-2 RF TRAY, UNIFIED;PLG-DPLX ------  OE INSTRUCT",
           "objects": [
             "COS-RPL2-RFTP-UNF-U-02-01"
-          ]
+          ],
+          "rfc": "NEED TO HAVE URGENT INFORMATION FOR ROW PROJECT.",
+          "rfc_category": ""
         },
         {
           "doc": "DA40210",
@@ -8697,7 +8819,9 @@
           "description": "THIS DA RELATED TO DA10006 TO INCLUDE TEST RESULTS  COS-PBL2-FDX-HR02-02 221-002",
           "objects": [
             "COS-PBL2-FDX-HR02-02"
-          ]
+          ],
+          "rfc": "WAIVER FOR RMA UNITS",
+          "rfc_category": ""
         },
         {
           "doc": "DA40212",
@@ -8711,7 +8835,9 @@
           "description": "COS-PBL2-UNF-1-HR03-03, PEBBLE-2 UNIFIED FOR RIPPLE  ----  CURRENT PROCESS: COS-",
           "objects": [
             "COS-PBL2-UNF-1-HR03-03"
-          ]
+          ],
+          "rfc": "IMPROVE TESTING PROCESS FOR MEDIACOM NODE RPD P/N COS-PBL2-UNF-1-HR03-03 REDUCE TESTING TIME [ POTENTIAL OF  ~1.5H FOR EACH RPD ]",
+          "rfc_category": ""
         },
         {
           "doc": "DA40213",
@@ -8727,7 +8853,9 @@
             "COS-OYSN-PON-AM-U-N-02",
             "221-0023567-03-01",
             "221-0023566-02-01"
-          ]
+          ],
+          "rfc": "TO USE THE FINAL PCB APPROVAL 220-0023567-01 TILL WE WILL HAVE THE TVS APPROVAL",
+          "rfc_category": ""
         },
         {
           "doc": "DA40215",
@@ -8741,7 +8869,9 @@
           "description": "COS-RPL2-RFTP-UNF-U-03-01 RIPPLE-2 RF TRAY, UNIFIED;PLG-DPLX, DIE-CASTED   PLEXU",
           "objects": [
             "COS-RPL2-RFTP-UNF-U-03-01"
-          ]
+          ],
+          "rfc": "SOLVE PROBLEM OF UNIFY MEDIACOM REV 7",
+          "rfc_category": ""
         },
         {
           "doc": "DA40217",
@@ -8755,7 +8885,9 @@
           "description": "COS-RPL2-RFTP-UNF-U-03-01 RIPPLE-2 RF TRAY, UNIFIED;PLG-DPLX, DIE-CASTED ---  PL",
           "objects": [
             "COS-RPL2-RFTP-UNF-U-03-01"
-          ]
+          ],
+          "rfc": "PLEXUS ALLOWED TO SHIP DIE CAST UNITS ,PN COS-RPL2-RFTP-UNF-U-03-01 WHICH TESTED AS  CNC  UNITS P/N COS-RPL2-RFTP-UNF-U-02-01.",
+          "rfc_category": ""
         },
         {
           "doc": "DA40220",
@@ -8770,7 +8902,9 @@
           "objects": [
             "221-0023514-03-01",
             "COS-PBL2-UNF-1-HR03-01"
-          ]
+          ],
+          "rfc": "SOLUTION FOR LPY ISSUE FROM PLEX-450",
+          "rfc_category": ""
         },
         {
           "doc": "DA40221",
@@ -8784,7 +8918,9 @@
           "description": "THIS DA RELATED TO DA10006 TO INCLUDE TEST RESULTS  COS-PBL2-FDX-HR02-02 221-002",
           "objects": [
             "COS-PBL2-FDX-HR02-02"
-          ]
+          ],
+          "rfc": "WAIVER FOR RMA UNITS",
+          "rfc_category": ""
         }
       ],
       "MCO": [
@@ -8800,7 +8936,9 @@
           "description": "250-0054490, \tPACKING LIST ENVELOPE; 24CM WIDE X 18CM TALL  ADDING ZW PACKAGING ",
           "objects": [
             "250-0054490"
-          ]
+          ],
+          "rfc": "ZW PACKAGING IS DIFFERENT SUPPLIERM NO DIFFERENCE BETWEEN PRECO",
+          "rfc_category": ""
         },
         {
           "doc": "MCO40472",
@@ -8815,7 +8953,9 @@
           "objects": [
             "COS-OYSP-PON-AM-U-N",
             "COS-OYSP-PON-AM-U-N-01"
-          ]
+          ],
+          "rfc": "OYSTER XL CHANGE DESCRIPTION",
+          "rfc_category": ""
         },
         {
           "doc": "MCO40481",
@@ -8829,7 +8969,9 @@
           "description": "220-0023998-02 FAB PCB SFP BOARD UNIFIED 2X2  ADDING WUS AS A SECOND SOURCE MFG,",
           "objects": [
             "220-0023998-02"
-          ]
+          ],
+          "rfc": "ADDING WUS AS A SECOND SOURCE MFG",
+          "rfc_category": ""
         },
         {
           "doc": "MCO40485",
@@ -8843,10 +8985,102 @@
           "description": "COS-OYSN-PON-RW-U-N-01, OYSTER NODE ASSY FOR PON (JETTY,PEARL), UNIVERSAL PSU, E",
           "objects": [
             "COS-OYSN-PON-RW-U-N-01"
-          ]
+          ],
+          "rfc": "CHANGE STATUS TO LAST SUPPLY",
+          "rfc_category": ""
         }
       ]
-    }
+    },
+    "rfc_categories": [
+      {
+        "category": "Release",
+        "count": 13
+      },
+      {
+        "category": "HW change",
+        "count": 5
+      },
+      {
+        "category": "SW change",
+        "count": 1
+      },
+      {
+        "category": "Other",
+        "count": 13
+      }
+    ],
+    "rfc_by_product": [
+      {
+        "product": "PON JETTY",
+        "Release": 5,
+        "HW change": 1,
+        "SW change": 0,
+        "Other": 0
+      },
+      {
+        "product": "PEBBLE UNIFIED",
+        "Release": 2,
+        "HW change": 3,
+        "SW change": 1,
+        "Other": 5
+      },
+      {
+        "product": "NSGEXO",
+        "Release": 0,
+        "HW change": 1,
+        "SW change": 0,
+        "Other": 1
+      },
+      {
+        "product": "RFT",
+        "Release": 1,
+        "HW change": 0,
+        "SW change": 0,
+        "Other": 1
+      },
+      {
+        "product": "HOUSING UNIFIED",
+        "Release": 3,
+        "HW change": 0,
+        "SW change": 0,
+        "Other": 1
+      },
+      {
+        "product": "HOUSING OYSTER",
+        "Release": 1,
+        "HW change": 0,
+        "SW change": 0,
+        "Other": 1
+      },
+      {
+        "product": "HOUSING GEN2, HOUSING UNIFIED",
+        "Release": 0,
+        "HW change": 0,
+        "SW change": 0,
+        "Other": 1
+      },
+      {
+        "product": "PEBBLE GEN2",
+        "Release": 1,
+        "HW change": 0,
+        "SW change": 0,
+        "Other": 1
+      },
+      {
+        "product": "HOUSING GEN2",
+        "Release": 0,
+        "HW change": 0,
+        "SW change": 0,
+        "Other": 1
+      },
+      {
+        "product": "PON PEARL",
+        "Release": 0,
+        "HW change": 0,
+        "SW change": 0,
+        "Other": 1
+      }
+    ]
   },
-  "_updated": "2026-05-18 12:07 UTC"
+  "_updated": "2026-05-18 13:10 UTC"
 }
