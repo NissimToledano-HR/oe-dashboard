@@ -394,6 +394,10 @@ select:focus{border-color:var(--blue3);}
       <canvas id="coTrendChart" style="max-height:240px"></canvas>
     </div>
   </div>
+  <div class="card" style="margin-top:18px">
+    <div class="card-hdr"><div><div class="card-title">By Product Family</div><div class="card-sub">ECN / DA / MCO distribution per product</div></div></div>
+    <canvas id="coProdChart" style="max-height:240px"></canvas>
+  </div>
 </main>
 
 <script>
@@ -788,6 +792,18 @@ function renderChangeOrder(){
   makeChart('coTrendChart',{type:'bar',data:{labels:catRows.map(r=>r.category),datasets:ds2},
     options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{labels:{color:'#64748b',font:FONT,boxWidth:10}}},
     scales:{x:{grid:{display:false},ticks:{...TICK_STYLE,font:{...FONT,size:9}}},y:{grid:GRID_STYLE,ticks:TICK_STYLE}}}});
+
+  // Chart 3: By Product Family
+  const prodRows = prodFilter==='ALL' ? filtProd : filtProd;
+  const ds3=[];
+  if(showECN) ds3.push({label:'ECN',data:prodRows.map(r=>r.ECN||0),backgroundColor:'rgba(37,99,235,.35)',borderColor:'#2563eb',borderWidth:1.5,borderRadius:3});
+  if(showDA)  ds3.push({label:'DA', data:prodRows.map(r=>r.DA||0), backgroundColor:'rgba(22,163,74,.35)', borderColor:'#16a34a',borderWidth:1.5,borderRadius:3});
+  if(showMCO) ds3.push({label:'MCO',data:prodRows.map(r=>r.MCO||0),backgroundColor:'rgba(217,119,6,.35)', borderColor:'#d97706',borderWidth:1.5,borderRadius:3});
+  makeChart('coProdChart',{type:'bar',data:{labels:prodRows.map(r=>r.product),datasets:ds3},
+    options:{responsive:true,maintainAspectRatio:true,
+      plugins:{legend:{labels:{color:'#64748b',font:FONT,boxWidth:10}}},
+      scales:{x:{stacked:true,grid:{display:false},ticks:{...TICK_STYLE,font:{...FONT,size:9}}},
+              y:{stacked:true,grid:GRID_STYLE,ticks:TICK_STYLE}}}});
 }
 
 // ── MRB RENDERING ─────────────────────────────────────────
@@ -970,7 +986,10 @@ function renderNPI(d){
       const eDiDetail=entryIssues.length?`<div id="di-${eDiId}" class="di-detail"><div style="font-size:9px;font-weight:600;color:var(--red2);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px">Design Issues</div>${entryIssues.map(di=>`<div class="di-row"><div style="font-size:11px">${di['Description']||''}</div><div class="mono">${di['PCBA PN']||''}</div><div style="color:var(--text3);font-size:10px">${di['Type issue']||''}</div><div><span class="pill progress">${di['Status']||''}</span></div></div>`).join('')}</div>`:'';
       // High Level Justification shown as subtitle after Configuration title
       const hlj=p['High Level Justification'];
-      const cfgFields=['Marketing PN','Main Board','BCM Series','SFP Board','DAUGHTER Board','LED Board','240 Level'].filter(k=>p[k]!=null&&p[k]!=='').map(k=>{
+      // Marketing PN + BCM Series on the same row
+      const mktPN=p['Marketing PN'], bcmS=p['BCM Series'];
+      const pnBcmHtml=(mktPN||bcmS)?`<div class="npi-field" style="flex-wrap:nowrap;gap:14px">${mktPN?`<span class="npi-key">Marketing PN</span><span class="npi-v">${mktPN}</span>`:''}${mktPN&&bcmS?`<span style="color:var(--border);padding:0 2px">|</span>`:''}${bcmS?`<span class="npi-key">BCM Series</span><span class="npi-v">${bcmS}</span>`:''}</div>`:'';
+      const cfgFields=['Main Board','SFP Board','DAUGHTER Board','LED Board','240 Level'].filter(k=>p[k]!=null&&p[k]!=='').map(k=>{
         const val=p[k];
         const valHtml=val==='TBD'?`<span class="npi-v tbd">TBD</span>`:`<span class="npi-v">${val}</span>`;
         return `<div class="npi-field"><span class="npi-key">${k}</span>${valHtml}</div>`;
@@ -980,7 +999,7 @@ function renderNPI(d){
       const subPill=subStatus==='On Track'?'on-track':subStatus==='At Risk'?'at-risk':'blocked';
       const border=idx<entries.length-1?'border-bottom:1px solid var(--border2);':'';
       return `<div class="npi-body" style="${border}">
-        <div class="npi-sec"><div class="npi-sec-title">Configuration${entries.length>1?` <span class="badge steel">#${idx+1}</span> <span class="pill ${subPill}" style="margin-left:4px">${subStatus}</span>`:''}</div>${hlj?`<div style="font-size:10px;color:var(--text3);font-style:italic;margin-bottom:8px">${hlj}</div>`:''}${cfgFields}${eDiBtn}</div>
+        <div class="npi-sec"><div class="npi-sec-title">Configuration${entries.length>1?` <span class="badge steel">#${idx+1}</span> <span class="pill ${subPill}" style="margin-left:4px">${subStatus}</span>`:''}</div>${hlj?`<div style="font-size:10px;color:var(--text3);font-style:italic;margin-bottom:8px">${hlj}</div>`:''}${pnBcmHtml}${cfgFields}${eDiBtn}</div>
         <div class="npi-divider"></div>
         <div class="npi-sec"><div class="npi-sec-title">Important Notes</div>${notes||'<span style="color:var(--muted);font-size:11px">—</span>'}</div>
         <div class="npi-divider"></div>
