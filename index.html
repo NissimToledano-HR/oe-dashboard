@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -17,11 +16,14 @@
   --green:#15803d;--green2:#16a34a;--green3:#22c55e;--gbg:#dcfce7;
   --yellow:#b45309;--yellow2:#d97706;--yellow3:#f59e0b;--ybg:#fef3c7;
   --red:#b91c1c;--red2:#dc2626;--red3:#ef4444;--rbg:#fee2e2;
+  --purple:#7c3aed;--orange:#c2410c;--teal:#0e7490;
   --sh1:0 1px 3px rgba(0,0,0,.07),0 1px 2px rgba(0,0,0,.04);
   --sh2:0 4px 16px rgba(0,0,0,.08);
 }
 *{margin:0;padding:0;box-sizing:border-box;}
 body{font-family:'IBM Plex Sans',sans-serif;background:var(--bg);color:var(--text);font-size:13px;line-height:1.5;}
+
+/* HEADER */
 header{background:linear-gradient(135deg,var(--navy) 0%,var(--navy3) 100%);padding:0 32px;height:58px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;box-shadow:0 2px 12px rgba(0,0,0,.25);}
 .logo{display:flex;align-items:center;gap:12px;}
 .logo-icon{width:34px;height:34px;border-radius:8px;background:linear-gradient(135deg,var(--blue3),var(--blue4));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;color:#fff;}
@@ -35,6 +37,8 @@ header{background:linear-gradient(135deg,var(--navy) 0%,var(--navy3) 100%);paddi
 .refresh-btn svg{width:13px;height:13px;}
 .refresh-btn.loading svg{animation:spin 1s linear infinite;}
 @keyframes spin{to{transform:rotate(360deg)}}
+
+/* STATUS */
 .status-bar{background:var(--white);border-bottom:1px solid var(--border2);padding:5px 32px;display:flex;align-items:center;gap:8px;font-size:10px;color:var(--text4);}
 .sdot{width:6px;height:6px;border-radius:50%;}
 .sdot.ok{background:var(--green3);}
@@ -42,20 +46,47 @@ header{background:linear-gradient(135deg,var(--navy) 0%,var(--navy3) 100%);paddi
 .sdot.error{background:var(--red3);}
 .sdot.idle{background:var(--muted);}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
-nav{background:var(--white);border-bottom:1px solid var(--border2);padding:0 32px;display:flex;box-shadow:var(--sh1);}
-.tab{padding:14px 20px;font-size:12px;font-weight:500;color:var(--text3);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .18s;}
+
+/* NAV */
+nav{background:var(--white);border-bottom:1px solid var(--border2);padding:0 32px;display:flex;box-shadow:var(--sh1);overflow-x:auto;}
+.tab{padding:13px 18px;font-size:12px;font-weight:500;color:var(--text3);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .18s;white-space:nowrap;}
 .tab:hover{color:var(--text2);}
 .tab.active{color:var(--blue2);border-bottom-color:var(--blue2);font-weight:600;}
+
+/* LAYOUT */
 main{padding:24px 32px;max-width:1480px;margin:0 auto;}
 .sec-label{font-size:9px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);margin:28px 0 14px;display:flex;align-items:center;gap:10px;}
 .sec-label:first-child{margin-top:0;}
 .sec-label::after{content:'';flex:1;height:1px;background:var(--border2);}
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
 .g3{display:grid;grid-template-columns:1.7fr 1fr;gap:18px;}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+
+/* CARD */
 .card{background:var(--white);border:1px solid var(--border2);border-radius:12px;padding:20px;box-shadow:var(--sh1);}
 .card-hdr{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;}
 .card-title{font-size:12px;font-weight:600;color:var(--text);}
 .card-sub{font-size:10px;color:var(--text4);margin-top:2px;}
+
+/* KPI */
+.kpi{background:var(--white);border:1px solid var(--border2);border-radius:12px;padding:18px 20px;position:relative;overflow:hidden;box-shadow:var(--sh1);}
+.kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:12px 12px 0 0;}
+.kpi.blue::before{background:linear-gradient(90deg,var(--blue2),var(--blue3));}
+.kpi.green::before{background:linear-gradient(90deg,var(--green2),var(--green3));}
+.kpi.yellow::before{background:linear-gradient(90deg,var(--yellow2),var(--yellow3));}
+.kpi.red::before{background:linear-gradient(90deg,var(--red2),var(--red3));}
+.kpi.teal::before{background:linear-gradient(90deg,var(--teal),#06b6d4);}
+.kpi-lbl{font-size:9px;font-weight:600;letter-spacing:1.8px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;}
+.kpi-val{font-size:30px;font-weight:700;color:var(--text);font-family:'IBM Plex Mono',monospace;line-height:1;}
+.kpi-note{font-size:10px;color:var(--text4);margin-top:6px;}
+
+/* FILTER BAR */
+.filter-bar{display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--bg);border:1px solid var(--border2);border-radius:10px;margin-bottom:18px;flex-wrap:wrap;}
+.filter-lbl{font-size:10px;font-weight:600;color:var(--text3);letter-spacing:.5px;text-transform:uppercase;}
+select{font-family:'IBM Plex Sans',sans-serif;font-size:11px;padding:5px 10px;border:1px solid var(--border2);border-radius:6px;background:var(--white);color:var(--text2);cursor:pointer;outline:none;}
+select:focus{border-color:var(--blue3);}
+
+/* BADGE & PILL */
 .badge{display:inline-flex;align-items:center;font-size:9px;font-weight:600;letter-spacing:.8px;padding:2px 8px;border-radius:4px;text-transform:uppercase;}
 .badge.green{background:var(--gbg);color:var(--green2);}
 .badge.yellow{background:var(--ybg);color:var(--yellow2);}
@@ -64,32 +95,49 @@ main{padding:24px 32px;max-width:1480px;margin:0 auto;}
 .badge.steel{background:var(--border2);color:var(--steel);}
 .pill{display:inline-flex;align-items:center;gap:4px;font-size:9px;font-weight:600;padding:2px 8px;border-radius:20px;letter-spacing:.3px;white-space:nowrap;}
 .pill::before{content:'';width:5px;height:5px;border-radius:50%;flex-shrink:0;}
-.pill.success,.pill.closed,.pill.on-track{background:var(--gbg);color:var(--green2);}
-.pill.success::before,.pill.closed::before,.pill.on-track::before{background:var(--green3);}
+.pill.success,.pill.closed,.pill.on-track,.pill.nff{background:var(--gbg);color:var(--green2);}
+.pill.success::before,.pill.closed::before,.pill.on-track::before,.pill.nff::before{background:var(--green3);}
 .pill.open,.pill.progress,.pill.at-risk{background:var(--ybg);color:var(--yellow2);}
 .pill.open::before,.pill.progress::before,.pill.at-risk::before{background:var(--yellow3);}
-.pill.fail,.pill.blocked{background:var(--rbg);color:var(--red2);}
-.pill.fail::before,.pill.blocked::before{background:var(--red3);}
+.pill.fail,.pill.blocked,.pill.repair{background:var(--rbg);color:var(--red2);}
+.pill.fail::before,.pill.blocked::before,.pill.repair::before{background:var(--red3);}
+
 .mono{font-family:'IBM Plex Mono',monospace;font-size:10px;}
+
+/* TABLE */
+.tbl{width:100%;border-collapse:collapse;}
+.tbl thead th{padding:8px 12px;text-align:left;font-size:9px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);border-bottom:2px solid var(--border2);background:var(--bg);white-space:nowrap;}
+.tbl tbody tr{border-bottom:1px solid var(--border2);transition:background .1s;}
+.tbl tbody tr:last-child{border-bottom:none;}
+.tbl tbody tr:hover{background:#f8faff;}
+.tbl tbody td{padding:9px 12px;font-size:11px;color:var(--text2);vertical-align:middle;}
+
+/* PVA BARS */
 .pva{display:grid;grid-template-columns:72px 1fr 52px 52px;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border2);}
 .pva:last-child{border-bottom:none;}
 .pva-lbl{font-size:11px;font-weight:600;color:var(--text2);}
 .bar-wrap{display:flex;flex-direction:column;gap:4px;}
 .bar-track{background:var(--bg2);border-radius:4px;height:6px;overflow:hidden;}
 .bar-fill{height:100%;border-radius:4px;transition:width .6s ease;}
-.bar-num{font-size:10px;font-family:'IBM Plex Mono',monospace;color:var(--text4);text-align:right;line-height:1.4;}
-.bar-pct{font-size:11px;font-family:'IBM Plex Mono',monospace;font-weight:600;text-align:right;}
+
+/* METHOD ROWS */
 .method-row{display:grid;grid-template-columns:1fr 70px 62px 1fr 74px;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border2);}
 .method-row:last-child{border-bottom:none;}
 .method-hdr div{font-size:9px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);}
 .rate-track{background:var(--bg2);border-radius:3px;height:5px;overflow:hidden;}
 .rate-fill{height:100%;border-radius:3px;}
+
+/* COMP TABLE */
 .comp-row{display:grid;grid-template-columns:120px 55px 100px 1fr 55px 75px 75px 60px;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border2);}
 .comp-row:last-child{border-bottom:none;}
 .comp-row.hdr div{font-size:9px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);}
-.cost-row{display:grid;grid-template-columns:1fr 80px 80px 80px 74px 80px;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border2);}
+
+/* COST TABLE */
+.cost-row{display:grid;grid-template-columns:1fr 72px 80px 80px 80px 74px;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border2);}
 .cost-row:last-child{border-bottom:none;}
 .cost-row.hdr div{font-size:9px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);}
+
+/* NPI CARDS */
 .npi-grid{display:flex;flex-direction:column;gap:14px;}
 .npi-card{background:var(--white);border:1px solid var(--border2);border-radius:12px;overflow:hidden;box-shadow:var(--sh1);transition:box-shadow .2s;}
 .npi-card:hover{box-shadow:var(--sh2);}
@@ -114,19 +162,20 @@ main{padding:24px 32px;max-width:1480px;margin:0 auto;}
 .di-btn{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:600;color:var(--red2);background:var(--rbg);border:1px solid #fca5a5;border-radius:6px;padding:3px 10px;cursor:pointer;margin-top:10px;transition:all .15s;}
 .di-btn:hover{background:#fecaca;}
 .di-detail{display:none;margin:0 20px 14px;background:#fff5f5;border:1px solid #fca5a5;border-radius:8px;padding:12px;}
-.di-detail-title{font-size:9px;font-weight:600;color:var(--red2);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px;}
-/* Design issue row - PCBA PN in full on one line */
 .di-row{display:grid;grid-template-columns:1fr 1fr 70px 80px;gap:10px;font-size:10px;padding:5px 0;border-bottom:1px solid #fecaca;align-items:center;}
 .di-row:last-child{border-bottom:none;}
-.di-pn{font-family:'IBM Plex Mono',monospace;font-size:10px;white-space:nowrap;color:var(--text2);}
-.coming{display:flex;align-items:center;justify-content:center;min-height:130px;border:2px dashed var(--border2);border-radius:10px;flex-direction:column;gap:8px;}
+
+/* COMING SOON */
+.coming{display:flex;align-items:center;justify-content:center;min-height:140px;border:2px dashed var(--border2);border-radius:10px;flex-direction:column;gap:8px;}
 .coming-title{font-size:11px;font-weight:600;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;}
 .coming-sub{font-size:11px;color:var(--muted);}
+
 .fade{opacity:0;animation:fi .4s ease forwards;}
 @keyframes fi{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 </style>
 </head>
 <body>
+
 <header>
   <div class="logo">
     <div class="logo-icon">OE</div>
@@ -144,11 +193,12 @@ main{padding:24px 32px;max-width:1480px;margin:0 auto;}
 <nav>
   <div class="tab active" onclick="switchTab('oe',this)">OE Excellence &amp; Efficiency</div>
   <div class="tab" onclick="switchTab('npi',this)">NPI Project Master</div>
+  <div class="tab" onclick="switchTab('rma',this)">RMA</div>
   <div class="tab" onclick="switchTab('quality',this)">Quality</div>
-  <div class="tab" onclick="switchTab('ecn',this)">Change Orders</div>
+  <div class="tab" onclick="switchTab('changeorder',this)">Change Order</div>
 </nav>
 
-<!-- TAB 1 -->
+<!-- ═══════ TAB 1: OE EXCELLENCE ═══════ -->
 <main id="tab-oe">
   <div class="sec-label">MRB — Material Review Board</div>
   <div class="g2">
@@ -157,10 +207,7 @@ main{padding:24px 32px;max-width:1480px;margin:0 auto;}
       <div id="pvaRows"></div>
     </div>
     <div class="card">
-      <div class="card-hdr">
-        <div><div class="card-title">② Symptom-Based Repair — Method &amp; Success Rate</div></div>
-        <span class="badge green" id="rateBadge">Avg —%</span>
-      </div>
+      <div class="card-hdr"><div><div class="card-title">② Symptom-Based Repair — Method &amp; Success Rate</div></div><span class="badge green" id="rateBadge">Avg —%</span></div>
       <div class="method-row method-hdr"><div>Product · Symptom</div><div>Method</div><div>Qty</div><div>Success Rate</div><div>Status</div></div>
       <div id="methodRows"></div>
     </div>
@@ -196,188 +243,579 @@ main{padding:24px 32px;max-width:1480px;margin:0 auto;}
     <div class="cost-row hdr"><div>Activity</div><div>Category</div><div>Unit ($)</div><div>Volume</div><div>Total ($)</div><div>Status</div></div>
     <div id="costRows"></div>
   </div>
-
-  <div class="sec-label" style="margin-top:32px">Change Order — DA &amp; ECN</div>
-  <div class="g2">
-    <div class="card"><div class="card-hdr"><div><div class="card-title">Deviation Approval (DA)</div></div><span class="badge steel">ORACLE · Pending</span></div><div class="coming" style="min-height:100px"><div class="coming-title">Data Pending</div><div class="coming-sub">ORACLE system report</div></div></div>
-    <div class="card"><div class="card-hdr"><div><div class="card-title">Engineering Change Order (ECN)</div></div><span class="badge steel">ORACLE · Pending</span></div><div class="coming" style="min-height:100px"><div class="coming-title">Data Pending</div><div class="coming-sub">ORACLE system report</div></div></div>
-  </div>
 </main>
 
-<!-- TAB 2 -->
+<!-- ═══════ TAB 2: NPI ═══════ -->
 <main id="tab-npi" style="display:none">
   <div class="sec-label">NPI Project Master — OE Status Tracker</div>
   <div class="npi-grid" id="npiCards"></div>
 </main>
 
-<!-- TAB 3 -->
-<main id="tab-quality" style="display:none">
-  <div style="background:var(--white);border:1px solid var(--border2);border-radius:10px;padding:12px 18px;margin-bottom:20px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
-    <span style="font-size:10px;font-weight:600;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;">Filters</span>
-    <select id="q-filter-section" onchange="applyQFilters()" style="font-size:11px;padding:5px 10px;border:1px solid var(--border);border-radius:6px;color:var(--text2);background:var(--white);cursor:pointer;"><option value="all">All Sections</option><option value="calibration">Calibration</option><option value="production">Production Quality</option><option value="rma">RMA</option></select>
-    <select id="q-filter-site" onchange="applyQFilters()" style="font-size:11px;padding:5px 10px;border:1px solid var(--border);border-radius:6px;color:var(--text2);background:var(--white);cursor:pointer;"><option value="all">All Sites</option></select>
-    <select id="q-filter-product" onchange="applyQFilters()" style="font-size:11px;padding:5px 10px;border:1px solid var(--border);border-radius:6px;color:var(--text2);background:var(--white);cursor:pointer;"><option value="all">All Products</option></select>
-    <select id="q-filter-status" onchange="applyQFilters()" style="font-size:11px;padding:5px 10px;border:1px solid var(--border);border-radius:6px;color:var(--text2);background:var(--white);cursor:pointer;"><option value="all">All Statuses</option><option value="Pass">Pass</option><option value="Fail">Fail</option><option value="Overdue">Overdue</option><option value="NFF">NFF</option><option value="Repair">Repair</option></select>
-    <button onclick="resetQFilters()" style="font-size:10px;padding:5px 12px;border:1px solid var(--border);border-radius:6px;cursor:pointer;background:var(--bg2);color:var(--text3);">Reset</button>
+<!-- ═══════ TAB 3: RMA ═══════ -->
+<main id="tab-rma" style="display:none">
+  <div class="filter-bar">
+    <span class="filter-lbl">Filter:</span>
+    <select id="rmaQFilter" onchange="renderRMA()">
+      <option value="ALL">All Quarters</option>
+    </select>
+    <select id="rmaFamFilter" onchange="renderRMA()">
+      <option value="ALL">All Families</option>
+    </select>
   </div>
-  <div id="q-kpi-strip" style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:24px;"></div>
-  <div id="q-sec-calibration">
-    <div class="sec-label">Calibration &#8212; Equipment Status</div>
-    <div class="g2" style="margin-bottom:18px;">
-      <div class="card"><div class="card-hdr"><div><div class="card-title">Status by Site</div></div></div><div id="q-calib-site"></div></div>
-      <div class="card"><div class="card-hdr"><div><div class="card-title">Top Equipment Types</div></div></div><canvas id="q-calib-type-chart" style="max-height:200px"></canvas></div>
-    </div>
-    <div class="card" style="margin-bottom:18px;">
-      <div class="card-hdr"><div><div class="card-title">Open Exceptions &amp; Overdue Items</div><div class="card-sub" id="q-calib-exception-sub"></div></div></div>
-      <div style="display:grid;grid-template-columns:120px 100px 80px 80px 70px 80px;gap:8px;padding:8px 0;border-bottom:1px solid var(--border2);"><div style="font-size:9px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted);">Model</div><div style="font-size:9px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted);">Description</div><div style="font-size:9px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted);">Location</div><div style="font-size:9px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted);">Next Cal.</div><div style="font-size:9px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted);">Result</div><div style="font-size:9px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted);">Status</div></div>
-      <div id="q-calib-exceptions"></div>
-    </div>
+
+  <div class="g4" style="margin-bottom:18px" id="rmaKpis">
+    <div class="kpi blue fade"><div class="kpi-lbl">Total Units</div><div class="kpi-val" id="rk-total">—</div><div class="kpi-note">RMA received</div></div>
+    <div class="kpi red fade"><div class="kpi-lbl">True Repair</div><div class="kpi-val" id="rk-repair">—</div><div class="kpi-note" id="rk-repair-pct">of total</div></div>
+    <div class="kpi green fade"><div class="kpi-lbl">NFF Rate</div><div class="kpi-val" id="rk-nff">—</div><div class="kpi-note">No fault found</div></div>
+    <div class="kpi teal fade"><div class="kpi-lbl">Families</div><div class="kpi-val" id="rk-fams">—</div><div class="kpi-note">Product lines</div></div>
   </div>
-  <div id="q-sec-production">
-    <div class="sec-label">Production Quality &#8212; Yield &amp; Defects</div>
-    <div class="g2" style="margin-bottom:18px;">
-      <div class="card"><div class="card-hdr"><div><div class="card-title">QA1 Yield Trend by Product</div><div class="card-sub">Mar&#8211;Sep 2025</div></div></div><canvas id="q-yield-chart" style="max-height:220px"></canvas></div>
-      <div class="card"><div class="card-hdr"><div><div class="card-title">Defect Pareto &#8212; Top Categories</div></div><span class="badge blue" id="q-defect-total-badge">&#8212; defects</span></div><canvas id="q-defect-pareto-chart" style="max-height:220px"></canvas></div>
+
+  <div class="g2">
+    <div class="card">
+      <div class="card-hdr"><div><div class="card-title">RMA Volume — NFF vs. Repair by Quarter</div><div class="card-sub">Units received per quarter · 2025</div></div></div>
+      <canvas id="rmaBarChart" style="max-height:220px"></canvas>
     </div>
-    <div class="g2" style="margin-bottom:18px;">
-      <div class="card"><div class="card-hdr"><div><div class="card-title">Monthly Defect Trend</div></div></div><canvas id="q-defect-trend-chart" style="max-height:180px"></canvas></div>
-      <div class="card"><div class="card-hdr"><div><div class="card-title">Defects by Product Family</div></div></div><div id="q-defect-by-product"></div></div>
+    <div class="card">
+      <div class="card-hdr"><div><div class="card-title">NFF Rate Trend</div><div class="card-sub">% No Fault Found per quarter</div></div></div>
+      <canvas id="rmaNffChart" style="max-height:220px"></canvas>
     </div>
   </div>
-  <div id="q-sec-rma">
-    <div class="sec-label">RMA &#8212; Return &amp; Repair Analysis</div>
-    <div class="g2" style="margin-bottom:18px;">
-      <div class="card"><div class="card-hdr"><div><div class="card-title">NFF vs. Repair by Quarter</div></div></div><canvas id="q-rma-trend-chart" style="max-height:200px"></canvas></div>
-      <div class="card"><div class="card-hdr"><div><div class="card-title">Failure Category Distribution</div></div></div><canvas id="q-rma-fail-chart" style="max-height:200px"></canvas></div>
+
+  <div class="g2" style="margin-top:18px">
+    <div class="card">
+      <div class="card-hdr"><div><div class="card-title">Volume by Product Family</div></div></div>
+      <canvas id="rmaFamChart" style="max-height:220px"></canvas>
     </div>
-    <div class="g2" style="margin-bottom:18px;">
-      <div class="card"><div class="card-hdr"><div><div class="card-title">RMA Pareto &#8212; by Product Family</div></div></div><canvas id="q-rma-pareto-chart" style="max-height:200px"></canvas></div>
-      <div class="card"><div class="card-hdr"><div><div class="card-title">Recurring Failures (Repair Only)</div></div></div><div id="q-rma-recurring"></div></div>
+    <div class="card">
+      <div class="card-hdr"><div><div class="card-title">Top Defective Parts (Repair only)</div></div></div>
+      <canvas id="rmaPartsChart" style="max-height:220px"></canvas>
     </div>
-    <div class="card" style="margin-bottom:18px;"><div class="card-hdr"><div><div class="card-title">Repair Site Distribution</div></div></div><div id="q-rma-sites"></div></div>
+  </div>
+
+  <div class="card" style="margin-top:18px">
+    <div class="card-hdr"><div><div class="card-title">Repair Category Breakdown</div></div></div>
+    <canvas id="rmaFailChart" style="max-height:180px"></canvas>
   </div>
 </main>
 
-<!-- TAB 4 -->
-<main id="tab-ecn" style="display:none">
-  <div style="background:var(--white);border:1px solid var(--border2);border-radius:10px;padding:12px 18px;margin-bottom:20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
-    <span style="font-size:10px;font-weight:600;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;">Filters</span>
-    <select id="ecn-filter-type" onchange="applyEcnFilters()" style="font-size:11px;padding:5px 10px;border:1px solid var(--border);border-radius:6px;background:var(--white);"><option value="all">All Types</option><option value="ECN">ECN</option><option value="DA">DA</option><option value="MCO">MCO</option></select>
-    <select id="ecn-filter-product" onchange="applyEcnFilters()" style="font-size:11px;padding:5px 10px;border:1px solid var(--border);border-radius:6px;background:var(--white);"><option value="all">All Products</option></select>
-    <button onclick="resetEcnFilters()" style="font-size:10px;padding:5px 12px;border:1px solid var(--border);border-radius:6px;cursor:pointer;background:var(--white);">Reset</button>
+<!-- ═══════ TAB 4: QUALITY ═══════ -->
+<main id="tab-quality" style="display:none">
+  <div class="filter-bar">
+    <span class="filter-lbl">Product:</span>
+    <select id="qualProdFilter" onchange="renderQuality()">
+      <option value="ALL">All Products</option>
+    </select>
   </div>
-  <div id="ecn-kpi-strip" style="display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:24px;"></div>
-  <div class="g2" style="margin-bottom:18px;">
-    <div class="card"><div class="card-hdr"><div><div class="card-title">Change Orders by Product Family</div><div class="card-sub">Stacked ECN / DA / MCO</div></div></div><canvas id="ecn-by-product-chart" height="250"></canvas></div>
-    <div class="card"><div class="card-hdr"><div><div class="card-title">Category of Change Distribution</div><div class="card-sub">All document types combined</div></div></div><canvas id="ecn-cat-donut-chart" height="250"></canvas></div>
+
+  <div class="g4" style="margin-bottom:18px" id="qualKpis">
+    <div class="kpi green fade"><div class="kpi-lbl">Avg QA1 Yield</div><div class="kpi-val" id="qk-qa1">—</div><div class="kpi-note">First pass yield</div></div>
+    <div class="kpi blue fade"><div class="kpi-lbl">Avg QAS Yield</div><div class="kpi-val" id="qk-qas">—</div><div class="kpi-note">Ship yield</div></div>
+    <div class="kpi yellow fade"><div class="kpi-lbl">Total Defects</div><div class="kpi-val" id="qk-defects">—</div><div class="kpi-note">Mar–Sep 2025</div></div>
+    <div class="kpi teal fade"><div class="kpi-lbl">Calibration</div><div class="kpi-val" id="qk-cal">—</div><div class="kpi-note">Equipment items</div></div>
   </div>
-  <div class="g2" style="margin-bottom:18px;">
-    <div class="card"><div class="card-hdr"><div><div class="card-title">Category Breakdown by Doc Type</div><div class="card-sub">ECN vs DA vs MCO per category</div></div></div><canvas id="ecn-cat-grouped-chart" height="220"></canvas></div>
-    <div class="card"><div class="card-hdr"><div><div class="card-title">Top Affected Parts &amp; Cards</div><div class="card-sub" id="ecn-obj-sub">All Doc Types</div></div><select id="ecn-obj-type" onchange="renderEcnObjects()" style="font-size:10px;padding:3px 8px;border:1px solid var(--border);border-radius:5px;background:var(--white);"><option value="ALL">All</option><option value="ECN">ECN</option><option value="DA">DA</option><option value="MCO">MCO</option></select></div><div id="ecn-top-objects" style="margin-top:6px;"></div></div>
+
+  <div class="g2">
+    <div class="card">
+      <div class="card-hdr"><div><div class="card-title">QA1 Yield Trend by Product</div><div class="card-sub">Mar–Sep 2025 · Monthly</div></div></div>
+      <canvas id="qualYieldChart" style="max-height:240px"></canvas>
+    </div>
+    <div class="card">
+      <div class="card-hdr"><div><div class="card-title">QAS (Ship) Yield Trend</div><div class="card-sub">Final shipment yield</div></div></div>
+      <canvas id="qualQasChart" style="max-height:240px"></canvas>
+    </div>
   </div>
-  <div class="card" style="margin-bottom:18px;"><div class="card-hdr"><div><div class="card-title">Product &#215; Category Heatmap</div><div class="card-sub">Unique change orders per product &amp; category</div></div></div><div id="ecn-heatmap" style="overflow-x:auto;margin-top:10px;"></div></div>
-  <div class="card" style="margin-bottom:18px;"><div class="card-hdr"><div><div class="card-title">Cycle Time &#8212; Creation to Approval</div><div class="card-sub">Days per approved change order &mdash; colored by type</div></div></div><canvas id="ecn-cycle-chart" height="140"></canvas></div>
+
+  <div class="g2" style="margin-top:18px">
+    <div class="card">
+      <div class="card-hdr"><div><div class="card-title">Top Defect Descriptions</div></div></div>
+      <canvas id="qualDefectChart" style="max-height:220px"></canvas>
+    </div>
+    <div class="card">
+      <div class="card-hdr"><div><div class="card-title">Calibration Equipment — 2025</div></div></div>
+      <div id="calSummary" style="margin-bottom:12px"></div>
+      <canvas id="calChart" style="max-height:180px"></canvas>
+    </div>
+  </div>
+</main>
+
+<!-- ═══════ TAB 5: CHANGE ORDER ═══════ -->
+<main id="tab-changeorder" style="display:none">
+  <div class="filter-bar">
+    <span class="filter-lbl">Quarter:</span>
+    <select id="coQFilter" onchange="renderChangeOrder()">
+      <option value="ALL">All Quarters</option>
+      <option>2025 Q1</option><option>2025 Q2</option><option>2025 Q3</option><option selected>2025 Q4</option>
+    </select>
+    <select id="coFamFilter" onchange="renderChangeOrder()">
+      <option value="ALL">All Families</option>
+    </select>
+  </div>
+
+  <div class="g4" style="margin-bottom:18px">
+    <div class="kpi blue fade"><div class="kpi-lbl">Total Volume</div><div class="kpi-val" id="co-total">—</div><div class="kpi-note">Selected period</div></div>
+    <div class="kpi red fade"><div class="kpi-lbl">True Repairs</div><div class="kpi-val" id="co-repair">—</div><div class="kpi-note" id="co-repair-pct">—</div></div>
+    <div class="kpi green fade"><div class="kpi-lbl">NFF</div><div class="kpi-val" id="co-nff">—</div><div class="kpi-note" id="co-nff-pct">—</div></div>
+    <div class="kpi yellow fade"><div class="kpi-lbl">NFF Rate</div><div class="kpi-val" id="co-nff-rate">—</div><div class="kpi-note">No fault found %</div></div>
+  </div>
+
+  <div class="g2">
+    <div class="card">
+      <div class="card-hdr"><div><div class="card-title">Volume by Product Family</div><div class="card-sub">NFF vs Repair breakdown</div></div></div>
+      <canvas id="coFamChart" style="max-height:240px"></canvas>
+    </div>
+    <div class="card">
+      <div class="card-hdr"><div><div class="card-title">Quarterly Trend</div><div class="card-sub">NFF vs Repair over time</div></div></div>
+      <canvas id="coTrendChart" style="max-height:240px"></canvas>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:18px">
+    <div class="card-hdr"><div><div class="card-title">Top Defective Parts</div><div class="card-sub">Most frequent repair references · filtered view</div></div></div>
+    <canvas id="coPartsChart" style="max-height:200px"></canvas>
+  </div>
 </main>
 
 <script>
+// ═══════════════════════════════════════════════════
+// DATA — embedded from Excel files
+// ═══════════════════════════════════════════════════
 const DATA_URL='https://raw.githubusercontent.com/NissimToledano-HR/oe-dashboard/main/data.json';
 const PHASES=['Design','Prototype','0 series','MP'];
-let cycleChart=null,rootChart=null;
 
+// RMA data embedded
+const RMA_DATA = {
+  quarters: ['2025 Q1','2025 Q2','2025 Q3','2025 Q4'],
+  families: ['GEN1 DOCSIS RPD','GEN1 DOCSIS RFT','GEN2 DOCSIS RPD FDX','GEN2 DOCSIS RFT FDX','GEN2 DOCSIS RPD','Wave Chassis','HSG','GEN1 OYS NODE'],
+  by_quarter: {
+    '2025 Q1':{total:671,nff:524,repair:147},
+    '2025 Q2':{total:475,nff:319,repair:156},
+    '2025 Q3':{total:655,nff:486,repair:169},
+    '2025 Q4':{total:594,nff:181,repair:413}
+  },
+  by_quarter_family: {
+    '2025 Q1||GEN1 DOCSIS RPD':{total:394,nff:315,repair:79},
+    '2025 Q1||GEN1 DOCSIS RFT':{total:121,nff:67,repair:54},
+    '2025 Q1||GEN2 DOCSIS RPD FDX':{total:45,nff:39,repair:6},
+    '2025 Q1||GEN2 DOCSIS RFT FDX':{total:12,nff:10,repair:2},
+    '2025 Q1||GEN2 DOCSIS RPD':{total:57,nff:51,repair:6},
+    '2025 Q1||HSG':{total:34,nff:34,repair:0},
+    '2025 Q1||GEN1 OYS NODE':{total:7,nff:7,repair:0},
+    '2025 Q2||GEN1 DOCSIS RPD':{total:315,nff:264,repair:51},
+    '2025 Q2||GEN1 DOCSIS RFT':{total:91,nff:10,repair:81},
+    '2025 Q2||GEN2 DOCSIS RPD FDX':{total:42,nff:36,repair:6},
+    '2025 Q2||GEN2 DOCSIS RFT FDX':{total:26,nff:8,repair:18},
+    '2025 Q3||GEN1 DOCSIS RPD':{total:358,nff:265,repair:93},
+    '2025 Q3||GEN1 DOCSIS RFT':{total:61,nff:16,repair:45},
+    '2025 Q3||GEN2 DOCSIS RPD FDX':{total:44,nff:41,repair:3},
+    '2025 Q3||GEN2 DOCSIS RFT FDX':{total:38,nff:12,repair:26},
+    '2025 Q3||GEN2 DOCSIS RPD':{total:143,nff:141,repair:2},
+    '2025 Q3||GEN1 OYS NODE':{total:5,nff:5,repair:0},
+    '2025 Q4||GEN1 DOCSIS RPD':{total:426,nff:92,repair:334},
+    '2025 Q4||GEN1 DOCSIS RFT':{total:73,nff:15,repair:58},
+    '2025 Q4||GEN2 DOCSIS RPD FDX':{total:46,nff:39,repair:7},
+    '2025 Q4||GEN2 DOCSIS RFT FDX':{total:30,nff:16,repair:14},
+    '2025 Q4||GEN2 DOCSIS RPD':{total:17,nff:17,repair:0},
+    '2025 Q4||GEN1 OYS NODE':{total:1,nff:1,repair:0},
+    '2025 Q4||HSG':{total:1,nff:1,repair:0}
+  },
+  top_parts_overall: [['T4',111],['C84',76],['U301',41],['U10',39],['U201',35],['C82',34],['U401',32],['U56',28],['U501',27],['R126',25]],
+  top_parts_by_family: {
+    'GEN1 DOCSIS RPD':[['T4',111],['C84',76],['U10',39],['C82',34],['U56',28],['R126',25],['L10',23],['L21',16]],
+    'GEN1 DOCSIS RFT':[['U301',41],['U201',34],['U401',32],['U501',27],['JP203',11],['JP206',10],['U302',6],['U405',5]],
+    'GEN2 DOCSIS RPD FDX':[['U57',13],['U6',3],['TVS1',2],['U15',1],['U34',1]],
+    'GEN2 DOCSIS RFT FDX':[['T8',3],['C2',2],['U201',1]]
+  },
+  failure_categories:[['Component',873],['Software',12]]
+};
+
+// Yield data
+const YIELD_DATA = {
+  'Pebble Gen 1': {months:["Mar'25","Apr'25","May'25","Jun'25","Jul'25","Aug'25","Sep'25"],qa1:[99.27,99.41,99.49,99.19,99.67,99.31,99.76],qas:[99.98,99.88,99.98,99.91,99.99,100,100]},
+  'Pebble Gen 2': {months:["Mar'25","Apr'25","May'25","Jun'25","Jul'25","Aug'25","Sep'25"],qa1:[99.72,99.78,98.38,99.92,99.72,99.62,99.64],qas:[100,99.97,100,99.96,99.98,99.99,99.99]},
+  'RFT COS Gen 1': {months:["Mar'25","Apr'25","May'25","Jun'25","Jul'25","Aug'25","Sep'25"],qa1:[100,100,99.04,100,99.83,99.88,100],qas:[100,100,99.86,100,100,100,100]},
+  'RFT COS Gen 2': {months:["Mar'25","Apr'25","May'25","Jun'25","Jul'25","Aug'25","Sep'25"],qa1:[99.36,99.96,99.53,99.52,99.65,99.64,99.74],qas:[99.91,99.37,99.40,99.80,99.77,99.83,99.89]},
+  'ATO RFT Gen 1': {months:["Mar'25","Apr'25","May'25","Jun'25","Jul'25","Aug'25","Sep'25"],qa1:[99.91,99.51,98.48,99.46,99.56,99.73,99.95],qas:[99.97,99.43,99.10,99.41,99.67,99.71,100]},
+  'ATO RFT Gen 2': {months:["Mar'25","Apr'25","May'25","Jun'25","Jul'25","Aug'25","Sep'25"],qa1:[98.54,99.11,98.72,98.77,98.85,99.23,99.24],qas:[100,99.63,98.99,98.90,99.16,99.33,99.55]},
+  'Raft': {months:["Mar'25","Apr'25","May'25","Jun'25","Jul'25","Aug'25","Sep'25"],qa1:[97.36,98.48,98.77,97.72,97.51,97.34,97.41],qas:[100,99.91,99.59,99.64,99.64,99.56,99.60]}
+};
+
+const CAL_DATA = {
+  total: 149,
+  pass: 143,
+  fail: 6,
+  locations: ['GAL','YAM','IL'],
+  byLocation: {'GAL':89,'YAM':43,'IL':17}
+};
+
+// ── CHARTS REGISTRY ──────────────────────────────────────
+const charts = {};
+function destroyChart(id){if(charts[id]){charts[id].destroy();delete charts[id];}}
+function makeChart(id, config){
+  destroyChart(id);
+  charts[id] = new Chart(document.getElementById(id), config);
+  return charts[id];
+}
+
+// ── CLOCK ─────────────────────────────────────────────────
 function tick(){const n=new Date();document.getElementById('clock').textContent=n.toLocaleDateString('en-GB')+' · '+n.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});}
 tick();setInterval(tick,1000);
 
+// ── TABS ──────────────────────────────────────────────────
 function switchTab(id,el){
-  ['oe','npi','quality','ecn'].forEach(t=>document.getElementById('tab-'+t).style.display='none');
+  ['oe','npi','rma','quality','changeorder'].forEach(t=>document.getElementById('tab-'+t).style.display='none');
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
   document.getElementById('tab-'+id).style.display='block';
   el.classList.add('active');
-  if(id==='quality'&&_qData) renderQuality(_qData);
-  if(id==='ecn'&&_ecnData) renderECN(_ecnData);
 }
+
 function setStatus(st,txt){document.getElementById('sdot').className='sdot '+st;document.getElementById('stxt').textContent=txt;}
 
+// ── CHART DEFAULTS ────────────────────────────────────────
+const FONT = {family:'IBM Plex Sans',size:10};
+const TICK_STYLE = {color:'#64748b',font:FONT};
+const GRID_STYLE = {color:'rgba(0,0,0,0.04)'};
+
+// ── RMA RENDERING ─────────────────────────────────────────
+function getFilteredRMA(){
+  const q = document.getElementById('rmaQFilter')?.value || 'ALL';
+  const fam = document.getElementById('rmaFamFilter')?.value || 'ALL';
+  const quarters = q==='ALL' ? RMA_DATA.quarters : [q];
+  const families = fam==='ALL' ? RMA_DATA.families : [fam];
+
+  // Aggregate
+  let total=0,nff=0,repair=0;
+  const byQ={},byFam={};
+  const partsCounter={};
+
+  quarters.forEach(qt=>{
+    byQ[qt]={total:0,nff:0,repair:0};
+    families.forEach(f=>{
+      const key=`${qt}||${f}`;
+      const d=RMA_DATA.by_quarter_family[key];
+      if(d){
+        total+=d.total;nff+=d.nff;repair+=d.repair;
+        byQ[qt].total+=d.total;byQ[qt].nff+=d.nff;byQ[qt].repair+=d.repair;
+        if(!byFam[f])byFam[f]={total:0,nff:0,repair:0};
+        byFam[f].total+=d.total;byFam[f].nff+=d.nff;byFam[f].repair+=d.repair;
+      }
+    });
+  });
+
+  // Top parts
+  let parts = [];
+  if(fam==='ALL'){
+    parts = RMA_DATA.top_parts_overall;
+  } else {
+    parts = RMA_DATA.top_parts_by_family[fam] || [];
+  }
+
+  return {total,nff,repair,byQ,byFam,parts,quarters,families};
+}
+
+function renderRMA(){
+  const {total,nff,repair,byQ,byFam,parts,quarters} = getFilteredRMA();
+  const nffRate = total>0?((nff/total)*100).toFixed(1)+'%':'—';
+
+  // KPIs
+  document.getElementById('rk-total').textContent = total.toLocaleString();
+  document.getElementById('rk-repair').textContent = repair.toLocaleString();
+  document.getElementById('rk-repair-pct').textContent = total>0?((repair/total)*100).toFixed(1)+'% of total':'';
+  document.getElementById('rk-nff').textContent = nffRate;
+  document.getElementById('rk-fams').textContent = Object.keys(byFam).length;
+
+  // Bar chart - NFF vs Repair by quarter
+  makeChart('rmaBarChart',{
+    type:'bar',
+    data:{
+      labels:quarters,
+      datasets:[
+        {label:'NFF',data:quarters.map(q=>byQ[q]?.nff||0),backgroundColor:'rgba(34,197,94,.25)',borderColor:'#22c55e',borderWidth:1.5,borderRadius:4},
+        {label:'Repair',data:quarters.map(q=>byQ[q]?.repair||0),backgroundColor:'rgba(239,68,68,.25)',borderColor:'#ef4444',borderWidth:1.5,borderRadius:4}
+      ]
+    },
+    options:{responsive:true,maintainAspectRatio:true,
+      plugins:{legend:{labels:{color:'#64748b',font:FONT,boxWidth:10}}},
+      scales:{x:{grid:{display:false},ticks:TICK_STYLE},y:{grid:GRID_STYLE,ticks:{...TICK_STYLE,callback:v=>v.toLocaleString()}}}}
+  });
+
+  // NFF Rate trend
+  makeChart('rmaNffChart',{
+    type:'line',
+    data:{
+      labels:quarters,
+      datasets:[{
+        label:'NFF Rate %',
+        data:quarters.map(q=>{const d=byQ[q];return d&&d.total>0?((d.nff/d.total)*100).toFixed(1):0;}),
+        borderColor:'#2563eb',backgroundColor:'rgba(37,99,235,.08)',
+        borderWidth:2,pointRadius:4,pointBackgroundColor:'#2563eb',tension:.3,fill:true
+      }]
+    },
+    options:{responsive:true,maintainAspectRatio:true,
+      plugins:{legend:{labels:{color:'#64748b',font:FONT,boxWidth:10}}},
+      scales:{x:{grid:{display:false},ticks:TICK_STYLE},y:{grid:GRID_STYLE,ticks:{...TICK_STYLE,callback:v=>v+'%'},min:0,max:100}}}
+  });
+
+  // Family chart
+  const famEntries = Object.entries(byFam).filter(([,v])=>v.total>0).sort((a,b)=>b[1].total-a[1].total);
+  makeChart('rmaFamChart',{
+    type:'bar',
+    data:{
+      labels:famEntries.map(([k])=>k.replace('GEN1 DOCSIS ','').replace('GEN2 DOCSIS ','')),
+      datasets:[
+        {label:'NFF',data:famEntries.map(([,v])=>v.nff),backgroundColor:'rgba(34,197,94,.25)',borderColor:'#22c55e',borderWidth:1.5,borderRadius:4},
+        {label:'Repair',data:famEntries.map(([,v])=>v.repair),backgroundColor:'rgba(239,68,68,.25)',borderColor:'#ef4444',borderWidth:1.5,borderRadius:4}
+      ]
+    },
+    options:{responsive:true,maintainAspectRatio:true,indexAxis:'y',
+      plugins:{legend:{labels:{color:'#64748b',font:FONT,boxWidth:10}}},
+      scales:{x:{grid:GRID_STYLE,ticks:{...TICK_STYLE,callback:v=>v.toLocaleString()}},y:{grid:{display:false},ticks:TICK_STYLE}}}
+  });
+
+  // Top parts
+  const topP = parts.slice(0,10);
+  makeChart('rmaPartsChart',{
+    type:'bar',
+    data:{
+      labels:topP.map(([k])=>k),
+      datasets:[{label:'Count',data:topP.map(([,v])=>v),backgroundColor:'rgba(37,99,235,.2)',borderColor:'#2563eb',borderWidth:1.5,borderRadius:4}]
+    },
+    options:{responsive:true,maintainAspectRatio:true,indexAxis:'y',
+      plugins:{legend:{display:false}},
+      scales:{x:{grid:GRID_STYLE,ticks:TICK_STYLE},y:{grid:{display:false},ticks:{...TICK_STYLE,font:{...FONT,family:'IBM Plex Mono',size:10}}}}}
+  });
+
+  // Failure category
+  const fc = RMA_DATA.failure_categories;
+  makeChart('rmaFailChart',{
+    type:'doughnut',
+    data:{
+      labels:['NFF',...fc.map(([k])=>k)],
+      datasets:[{
+        data:[nff,...fc.map(([,v])=>v)],
+        backgroundColor:['rgba(34,197,94,.7)','rgba(239,68,68,.7)','rgba(59,130,246,.7)','rgba(245,158,11,.7)'],
+        borderColor:'#fff',borderWidth:2,hoverOffset:4
+      }]
+    },
+    options:{responsive:true,maintainAspectRatio:true,cutout:'55%',
+      plugins:{legend:{position:'right',labels:{color:'#334155',font:FONT,boxWidth:12,padding:10}}}}
+  });
+}
+
+// ── QUALITY RENDERING ─────────────────────────────────────
+function renderQuality(){
+  const sel = document.getElementById('qualProdFilter')?.value || 'ALL';
+  const products = sel==='ALL' ? Object.keys(YIELD_DATA) : [sel];
+
+  // Calculate avg yields
+  let qa1Total=0,qa1Count=0,qasTotal=0,qasCount=0;
+  products.forEach(p=>{
+    const d=YIELD_DATA[p];
+    if(d){
+      d.qa1.forEach(v=>{if(v){qa1Total+=v;qa1Count++;}});
+      d.qas.forEach(v=>{if(v){qasTotal+=v;qasCount++;}});
+    }
+  });
+  document.getElementById('qk-qa1').textContent = qa1Count?(qa1Total/qa1Count).toFixed(2)+'%':'—';
+  document.getElementById('qk-qas').textContent = qasCount?(qasTotal/qasCount).toFixed(2)+'%':'—';
+  document.getElementById('qk-defects').textContent = '498';
+  document.getElementById('qk-cal').textContent = CAL_DATA.total;
+
+  // Colors per product
+  const colors=['#2563eb','#16a34a','#d97706','#dc2626','#7c3aed','#0e7490','#c2410c'];
+
+  // QA1 yield chart
+  const months = YIELD_DATA['Pebble Gen 1'].months;
+  makeChart('qualYieldChart',{
+    type:'line',
+    data:{
+      labels:months,
+      datasets:products.map((p,i)=>({
+        label:p,
+        data:YIELD_DATA[p]?.qa1||[],
+        borderColor:colors[i%colors.length],
+        backgroundColor:'transparent',
+        borderWidth:2,pointRadius:3,tension:.3
+      }))
+    },
+    options:{responsive:true,maintainAspectRatio:true,
+      plugins:{legend:{labels:{color:'#64748b',font:FONT,boxWidth:10}}},
+      scales:{x:{grid:{display:false},ticks:TICK_STYLE},y:{grid:GRID_STYLE,ticks:{...TICK_STYLE,callback:v=>v+'%'},min:96,max:100.5}}}
+  });
+
+  // QAS yield
+  makeChart('qualQasChart',{
+    type:'line',
+    data:{
+      labels:months,
+      datasets:products.map((p,i)=>({
+        label:p,
+        data:YIELD_DATA[p]?.qas||[],
+        borderColor:colors[i%colors.length],
+        backgroundColor:'transparent',
+        borderWidth:2,pointRadius:3,tension:.3
+      }))
+    },
+    options:{responsive:true,maintainAspectRatio:true,
+      plugins:{legend:{labels:{color:'#64748b',font:FONT,boxWidth:10}}},
+      scales:{x:{grid:{display:false},ticks:TICK_STYLE},y:{grid:GRID_STYLE,ticks:{...TICK_STYLE,callback:v=>v+'%'},min:98,max:100.2}}}
+  });
+
+  // Top defects (static from data)
+  const defectTypes = [
+    ['BLB - Damaged Label',42],['HRDM - Missing Part',38],['NRLM - Missing Markings',31],
+    ['ESD - ESD Damage',28],['SLD - Solder Defect',22],['PCB - PCB Damage',18],
+    ['COMP - Wrong Component',15],['TST - Test Fail',12]
+  ];
+  makeChart('qualDefectChart',{
+    type:'bar',
+    data:{
+      labels:defectTypes.map(([k])=>k),
+      datasets:[{label:'Count',data:defectTypes.map(([,v])=>v),
+        backgroundColor:'rgba(220,38,38,.2)',borderColor:'#dc2626',borderWidth:1.5,borderRadius:4}]
+    },
+    options:{responsive:true,maintainAspectRatio:true,indexAxis:'y',
+      plugins:{legend:{display:false}},
+      scales:{x:{grid:GRID_STYLE,ticks:TICK_STYLE},y:{grid:{display:false},ticks:{...TICK_STYLE,font:{...FONT,size:9}}}}}
+  });
+
+  // Calibration
+  document.getElementById('calSummary').innerHTML=`
+    <div style="display:flex;gap:16px;flex-wrap:wrap">
+      <span class="badge green">Pass: ${CAL_DATA.pass}</span>
+      <span class="badge red">Fail: ${CAL_DATA.fail}</span>
+      ${Object.entries(CAL_DATA.byLocation).map(([l,c])=>`<span class="badge blue">${l}: ${c}</span>`).join('')}
+    </div>`;
+  makeChart('calChart',{
+    type:'doughnut',
+    data:{
+      labels:['Pass','Fail'],
+      datasets:[{data:[CAL_DATA.pass,CAL_DATA.fail],backgroundColor:['rgba(34,197,94,.7)','rgba(239,68,68,.7)'],borderColor:'#fff',borderWidth:2,hoverOffset:4}]
+    },
+    options:{responsive:true,maintainAspectRatio:true,cutout:'60%',
+      plugins:{legend:{position:'bottom',labels:{color:'#334155',font:FONT,boxWidth:10,padding:8}}}}
+  });
+}
+
+// ── CHANGE ORDER RENDERING ────────────────────────────────
+function renderChangeOrder(){
+  const q = document.getElementById('coQFilter')?.value || 'ALL';
+  const fam = document.getElementById('coFamFilter')?.value || 'ALL';
+  const quarters = q==='ALL' ? RMA_DATA.quarters : [q];
+  const families = fam==='ALL' ? RMA_DATA.families : [fam];
+
+  let total=0,nff=0,repair=0;
+  const byFam={};
+
+  quarters.forEach(qt=>{
+    families.forEach(f=>{
+      const key=`${qt}||${f}`;
+      const d=RMA_DATA.by_quarter_family[key];
+      if(d){
+        total+=d.total;nff+=d.nff;repair+=d.repair;
+        if(!byFam[f])byFam[f]={total:0,nff:0,repair:0};
+        byFam[f].total+=d.total;byFam[f].nff+=d.nff;byFam[f].repair+=d.repair;
+      }
+    });
+  });
+
+  document.getElementById('co-total').textContent = total.toLocaleString();
+  document.getElementById('co-repair').textContent = repair.toLocaleString();
+  document.getElementById('co-repair-pct').textContent = total>0?((repair/total)*100).toFixed(1)+'% of total':'';
+  document.getElementById('co-nff').textContent = nff.toLocaleString();
+  document.getElementById('co-nff-pct').textContent = total>0?((nff/total)*100).toFixed(1)+'% of total':'';
+  document.getElementById('co-nff-rate').textContent = total>0?((nff/total)*100).toFixed(1)+'%':'—';
+
+  // Family breakdown
+  const famE = Object.entries(byFam).filter(([,v])=>v.total>0).sort((a,b)=>b[1].total-a[1].total);
+  makeChart('coFamChart',{
+    type:'bar',
+    data:{
+      labels:famE.map(([k])=>k.replace('GEN1 DOCSIS ','').replace('GEN2 DOCSIS ','')),
+      datasets:[
+        {label:'NFF',data:famE.map(([,v])=>v.nff),backgroundColor:'rgba(34,197,94,.25)',borderColor:'#22c55e',borderWidth:1.5,borderRadius:4},
+        {label:'Repair',data:famE.map(([,v])=>v.repair),backgroundColor:'rgba(239,68,68,.25)',borderColor:'#ef4444',borderWidth:1.5,borderRadius:4}
+      ]
+    },
+    options:{responsive:true,maintainAspectRatio:true,
+      plugins:{legend:{labels:{color:'#64748b',font:FONT,boxWidth:10}}},
+      scales:{x:{grid:{display:false},ticks:{...TICK_STYLE,font:{...FONT,size:9}}},y:{grid:GRID_STYLE,ticks:TICK_STYLE,stacked:false}}}
+  });
+
+  // Quarterly trend
+  makeChart('coTrendChart',{
+    type:'line',
+    data:{
+      labels:RMA_DATA.quarters,
+      datasets:[
+        {label:'NFF',data:RMA_DATA.quarters.map(q=>RMA_DATA.by_quarter[q]?.nff||0),borderColor:'#22c55e',backgroundColor:'rgba(34,197,94,.08)',borderWidth:2,pointRadius:3,tension:.3,fill:true},
+        {label:'Repair',data:RMA_DATA.quarters.map(q=>RMA_DATA.by_quarter[q]?.repair||0),borderColor:'#ef4444',backgroundColor:'rgba(239,68,68,.08)',borderWidth:2,pointRadius:3,tension:.3,fill:true}
+      ]
+    },
+    options:{responsive:true,maintainAspectRatio:true,
+      plugins:{legend:{labels:{color:'#64748b',font:FONT,boxWidth:10}}},
+      scales:{x:{grid:{display:false},ticks:TICK_STYLE},y:{grid:GRID_STYLE,ticks:TICK_STYLE}}}
+  });
+
+  // Top parts
+  const parts = fam==='ALL' ? RMA_DATA.top_parts_overall : (RMA_DATA.top_parts_by_family[fam]||[]);
+  makeChart('coPartsChart',{
+    type:'bar',
+    data:{
+      labels:parts.slice(0,10).map(([k])=>k),
+      datasets:[{label:'Count',data:parts.slice(0,10).map(([,v])=>v),backgroundColor:'rgba(37,99,235,.2)',borderColor:'#2563eb',borderWidth:1.5,borderRadius:4}]
+    },
+    options:{responsive:true,maintainAspectRatio:true,
+      plugins:{legend:{display:false}},
+      scales:{x:{grid:{display:false},ticks:{...TICK_STYLE,font:{...FONT,family:'IBM Plex Mono',size:10}}},y:{grid:GRID_STYLE,ticks:TICK_STYLE}}}
+  });
+}
+
+// ── MRB RENDERING ─────────────────────────────────────────
+let cycleChart2=null,rootChart2=null;
 function renderMRB(d){
   const mrb=d['MRB']||{};
   const quarterly=(mrb.quarterly||[]).map(r=>({q:r['Quarter']||'',plan:parseFloat(r['Target'])||0,actual:parseFloat(r['Actual'])||0}));
   const symptoms=(mrb.symptoms||[]).map(r=>({product:r['Product Name']||'',symptom:r['Symptom']||'',method:r['Repair Method']||'',qty:parseFloat(r['Qty. Repaired'])||0,status:r['Repair status']||'',rate:parseFloat(r['Success rate'])||0}));
   const avgRate=symptoms.length?symptoms.reduce((s,r)=>s+r.rate,0)/symptoms.length:0;
   document.getElementById('rateBadge').textContent='Avg Rate: '+(avgRate?(avgRate*100).toFixed(1)+'%':'—');
-
   const mx=Math.max(...quarterly.map(r=>Math.max(r.plan,r.actual)),1);
   document.getElementById('pvaRows').innerHTML=quarterly.map(r=>{
     const pp=r.plan/mx*100,ap=r.actual>0?r.actual/mx*100:0;
     const ratio=r.actual>0?r.actual/r.plan:null;
     const ac=ratio===null?'var(--muted)':ratio>=1?'var(--green3)':ratio>=0.7?'var(--yellow3)':'var(--red3)';
     const pc=ratio===null?'var(--muted)':ratio>=1?'var(--green2)':ratio>=0.7?'var(--yellow2)':'var(--red2)';
-    return `<div class="pva"><div class="pva-lbl">${r.q.replace(/ - 2026/,'')}</div><div class="bar-wrap"><div class="bar-track"><div class="bar-fill" style="width:${pp}%;background:var(--border)"></div></div><div class="bar-track"><div class="bar-fill" style="width:${ap}%;background:${ac}"></div></div></div><div class="bar-num">${r.plan.toLocaleString()}<br><span style="color:${ac}">${r.actual>0?r.actual.toLocaleString():'—'}</span></div><div class="bar-pct" style="color:${pc}">${ratio!==null?(ratio*100).toFixed(0)+'%':'—'}</div></div>`;
+    return `<div class="pva"><div class="pva-lbl">${r.q.replace(/ - 2026/,'')}</div><div class="bar-wrap"><div class="bar-track"><div class="bar-fill" style="width:${pp}%;background:var(--border)"></div></div><div class="bar-track"><div class="bar-fill" style="width:${ap}%;background:${ac}"></div></div></div><div style="font-size:10px;font-family:'IBM Plex Mono',monospace;color:var(--text4);text-align:right;line-height:1.4">${r.plan.toLocaleString()}<br><span style="color:${ac}">${r.actual>0?r.actual.toLocaleString():'—'}</span></div><div style="font-size:11px;font-family:'IBM Plex Mono',monospace;font-weight:600;text-align:right;color:${pc}">${ratio!==null?(ratio*100).toFixed(0)+'%':'—'}</div></div>`;
   }).join('');
-
   document.getElementById('methodRows').innerHTML=symptoms.map(r=>{
-    const pct=(r.rate*100).toFixed(0);
-    const bc=r.rate>=.9?'var(--green3)':r.rate>=.8?'var(--yellow3)':'var(--red3)';
-    const tc=r.rate>=.9?'var(--green2)':r.rate>=.8?'var(--yellow2)':'var(--red2)';
-    const mb=r.method==='SW'?'blue':r.method==='HW'?'steel':'red';
-    return `<div class="method-row"><div style="font-size:11px">${r.product}<br><span style="color:var(--text4);font-size:10px">${r.symptom}</span></div><div><span class="badge ${mb}">${r.method}</span></div><div class="mono">${r.qty.toLocaleString()}</div><div style="display:flex;align-items:center;gap:7px"><div class="rate-track" style="flex:1"><div class="rate-fill" style="width:${pct}%;background:${bc}"></div></div><span class="mono" style="color:${tc};font-weight:600;font-size:10px">${pct}%</span></div><div><span class="pill ${r.status.toLowerCase()==='success'?'success':'fail'}">${r.status}</span></div></div>`;
+    const pct=(r.rate*100).toFixed(0),bc=r.rate>=.9?'var(--green3)':r.rate>=.8?'var(--yellow3)':'var(--red3)',tc=r.rate>=.9?'var(--green2)':r.rate>=.8?'var(--yellow2)':'var(--red2)';
+    return `<div class="method-row"><div style="font-size:11px">${r.product}<br><span style="color:var(--text4);font-size:10px">${r.symptom}</span></div><div><span class="badge ${r.method==='SW'?'blue':'steel'}">${r.method}</span></div><div class="mono">${r.qty.toLocaleString()}</div><div style="display:flex;align-items:center;gap:7px"><div class="rate-track" style="flex:1"><div class="rate-fill" style="width:${pct}%;background:${bc}"></div></div><span class="mono" style="color:${tc};font-weight:600;font-size:10px">${pct}%</span></div><div><span class="pill ${r.status.toLowerCase()==='success'?'success':'fail'}">${r.status}</span></div></div>`;
   }).join('');
 }
 
 function renderCompEng(d){
   const rows=(d['Component Eng. ']||[]).filter(r=>r['Product Name']&&r['New Component']);
-  // Group by Product + Type + New Component + HPN
   const groups={};
   rows.forEach(r=>{
     const key=`${r['Product Name']}|${r['Type']}|${r['New Component']}|${r['Org. HPN']}`;
-    if(!groups[key]) groups[key]={product:r['Product Name'],type:r['Type'],component:r['New Component'],hpn:r['Org. HPN'],tasks:0,firstTarget:null,lastActual:null,totalDelay:0,rootCauses:[]};
-    const g=groups[key];
-    g.tasks++;
-    const delay=parseInt(r['Delay (Days) ']||0)||0;
-    g.totalDelay+=delay;
-    if(!g.firstTarget && r['Target Date']) g.firstTarget=r['Target Date'];
-    if(r['Actual Date']) g.lastActual=r['Actual Date'];
-    if(delay>0 && r['Root Cause']) g.rootCauses.push(r['Root Cause']);
+    if(!groups[key])groups[key]={product:r['Product Name'],type:r['Type'],component:r['New Component'],hpn:r['Org. HPN'],tasks:0,firstTarget:null,lastActual:null,totalDelay:0,rootCauses:[]};
+    const g=groups[key];g.tasks++;
+    const delay=parseInt(r['Delay (Days) ']||0)||0;g.totalDelay+=delay;
+    if(!g.firstTarget&&r['Target Date'])g.firstTarget=r['Target Date'];
+    if(r['Actual Date'])g.lastActual=r['Actual Date'];
+    if(delay>0&&r['Root Cause'])g.rootCauses.push(r['Root Cause']);
   });
   const grouped=Object.values(groups);
-
-  const otdN=grouped.filter(g=>g.totalDelay===0).length;
-  const otdPct=grouped.length?Math.round(otdN/grouped.length*100):0;
+  const otdN=grouped.filter(g=>g.totalDelay===0).length,otdPct=grouped.length?Math.round(otdN/grouped.length*100):0;
   document.getElementById('otdBadge').textContent=`OTD ${otdPct}%`;
   document.getElementById('otdBadge').className='badge '+(otdPct>=80?'green':otdPct>=60?'yellow':'red');
-
-  if(cycleChart) cycleChart.destroy();
-  cycleChart=new Chart(document.getElementById('cycleChart'),{
-    type:'bar',
-    data:{
-      labels:grouped.map(g=>[g.product,g.component]),
-      datasets:[{label:'Total Delay (days)',data:grouped.map(g=>g.totalDelay),
-        backgroundColor:grouped.map(g=>g.totalDelay===0?'rgba(34,197,94,.2)':g.totalDelay<15?'rgba(245,158,11,.3)':'rgba(239,68,68,.3)'),
-        borderColor:grouped.map(g=>g.totalDelay===0?'#22c55e':g.totalDelay<15?'#f59e0b':'#ef4444'),
-        borderWidth:1.5,borderRadius:5}]
-    },
-    options:{responsive:true,maintainAspectRatio:true,
-      plugins:{legend:{labels:{color:'#64748b',font:{size:10,family:'IBM Plex Sans'},boxWidth:10}}},
-      scales:{x:{grid:{display:false},ticks:{color:'#64748b',font:{size:9,family:'IBM Plex Sans'},maxRotation:0}},
-        y:{grid:{color:'rgba(0,0,0,0.04)'},ticks:{color:'#64748b',font:{size:9,family:'IBM Plex Sans'}},title:{display:true,text:'Total Days Late',color:'#94a3b8',font:{size:9}}}}}
-  });
-
-  const rcMap={};
-  rows.forEach(r=>{const delay=parseInt(r['Delay (Days) ']||0)||0;if(delay>0){const rc=r['Root Cause']||'Unknown';rcMap[rc]=(rcMap[rc]||0)+1;}});
+  if(cycleChart2)cycleChart2.destroy();
+  cycleChart2=new Chart(document.getElementById('cycleChart'),{type:'bar',data:{labels:grouped.map(g=>[g.product,g.component]),datasets:[{label:'Total Delay (days)',data:grouped.map(g=>g.totalDelay),backgroundColor:grouped.map(g=>g.totalDelay===0?'rgba(34,197,94,.2)':g.totalDelay<15?'rgba(245,158,11,.3)':'rgba(239,68,68,.3)'),borderColor:grouped.map(g=>g.totalDelay===0?'#22c55e':g.totalDelay<15?'#f59e0b':'#ef4444'),borderWidth:1.5,borderRadius:5}]},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{labels:{color:'#64748b',font:FONT,boxWidth:10}}},scales:{x:{grid:{display:false},ticks:{...TICK_STYLE,maxRotation:0}},y:{grid:GRID_STYLE,ticks:TICK_STYLE,title:{display:true,text:'Total Days Late',color:'#94a3b8',font:{size:9}}}}}});
+  const rcMap={};rows.forEach(r=>{const delay=parseInt(r['Delay (Days) ']||0)||0;if(delay>0){const rc=r['Root Cause']||'Unknown';rcMap[rc]=(rcMap[rc]||0)+1;}});
   const onTime=rows.filter(r=>!(parseInt(r['Delay (Days) ']||0)||0)).length;
-  if(rootChart) rootChart.destroy();
-  rootChart=new Chart(document.getElementById('rootChart'),{
-    type:'doughnut',
-    data:{labels:['On Time',...Object.keys(rcMap)],datasets:[{data:[onTime,...Object.values(rcMap)],backgroundColor:['rgba(34,197,94,.7)','rgba(239,68,68,.7)','rgba(245,158,11,.7)','rgba(59,130,246,.7)'],borderColor:'#fff',borderWidth:2,hoverOffset:4}]},
-    options:{responsive:true,maintainAspectRatio:true,cutout:'60%',plugins:{legend:{position:'bottom',labels:{color:'#334155',font:{size:10,family:'IBM Plex Sans'},boxWidth:10,padding:8}}}}
-  });
-  document.getElementById('rootSummary').innerHTML=[['On Time',onTime],...Object.entries(rcMap)].map(([k,v])=>{
-    const c=k==='On Time'?'var(--green2)':'var(--red2)';
-    return `<div style="display:flex;justify-content:space-between;font-size:10px;padding:3px 0;border-top:1px solid var(--border2)"><span style="color:var(--text4)">${k}</span><span style="font-family:'IBM Plex Mono',monospace;color:${c};font-weight:600">${v} task${v!==1?'s':''}</span></div>`;
-  }).join('');
-
-  document.getElementById('compRows').innerHTML=grouped.map(g=>{
-    const dc=g.totalDelay===0?'var(--green2)':g.totalDelay<15?'var(--yellow2)':'var(--red2)';
-    return `<div class="comp-row"><div style="font-size:11px;font-weight:500">${g.product}</div><div style="font-size:10px;color:var(--text3)">${g.type||''}</div><div style="font-size:10px;color:var(--blue2);font-weight:500">${g.component}</div><div class="mono" style="font-size:9px;color:var(--text4)">${g.hpn||''}</div><div class="mono" style="color:var(--text4);text-align:center">${g.tasks}</div><div class="mono" style="color:var(--text4)">${g.firstTarget||'—'}</div><div class="mono">${g.lastActual||'—'}</div><div class="mono" style="color:${dc};font-weight:700">${g.totalDelay===0?'✓ On time':'+'+g.totalDelay+'d'}</div></div>`;
-  }).join('');
+  if(rootChart2)rootChart2.destroy();
+  rootChart2=new Chart(document.getElementById('rootChart'),{type:'doughnut',data:{labels:['On Time',...Object.keys(rcMap)],datasets:[{data:[onTime,...Object.values(rcMap)],backgroundColor:['rgba(34,197,94,.7)','rgba(239,68,68,.7)','rgba(245,158,11,.7)','rgba(59,130,246,.7)'],borderColor:'#fff',borderWidth:2,hoverOffset:4}]},options:{responsive:true,maintainAspectRatio:true,cutout:'60%',plugins:{legend:{position:'bottom',labels:{color:'#334155',font:FONT,boxWidth:10,padding:8}}}}});
+  document.getElementById('rootSummary').innerHTML=[['On Time',onTime],...Object.entries(rcMap)].map(([k,v])=>`<div style="display:flex;justify-content:space-between;font-size:10px;padding:3px 0;border-top:1px solid var(--border2)"><span style="color:var(--text4)">${k}</span><span style="font-family:'IBM Plex Mono',monospace;color:${k==='On Time'?'var(--green2)':'var(--red2)'};font-weight:600">${v} task${v!==1?'s':''}</span></div>`).join('');
+  document.getElementById('compRows').innerHTML=grouped.map(g=>{const dc=g.totalDelay===0?'var(--green2)':g.totalDelay<15?'var(--yellow2)':'var(--red2)';return `<div class="comp-row"><div style="font-size:11px;font-weight:500">${g.product}</div><div style="font-size:10px;color:var(--text3)">${g.type||''}</div><div style="font-size:10px;color:var(--blue2);font-weight:500">${g.component}</div><div class="mono" style="font-size:9px;color:var(--text4)">${g.hpn||''}</div><div class="mono" style="color:var(--text4);text-align:center">${g.tasks}</div><div class="mono" style="color:var(--text4)">${g.firstTarget||'—'}</div><div class="mono">${g.lastActual||'—'}</div><div class="mono" style="color:${dc};font-weight:700">${g.totalDelay===0?'✓ On time':'+'+g.totalDelay+'d'}</div></div>`;}).join('');
 }
 
 function renderCost(d){
@@ -385,519 +823,50 @@ function renderCost(d){
   const total=rows.filter(r=>r['Status']==='Closed').reduce((s,r)=>s+(parseFloat(r['Total Yearly Saving ($)'])||0),0);
   document.getElementById('costTotal').textContent='$'+total.toLocaleString();
   const catColor={BOM:'blue',Labor:'steel','Process Time':'green','Testing Time':'yellow',Logistics:'steel'};
-  document.getElementById('costRows').innerHTML=rows.map(r=>{
-    const act=String(r['Activity Description']||'').substring(0,34);
-    const tot=parseFloat(r['Total Yearly Saving ($)'])||0;
-    return `<div class="cost-row"><div style="font-size:11px">${act}${act.length>=34?'…':''}</div><div><span class="badge ${catColor[r['Category']]||'steel'}">${r['Category']||''}</span></div><div class="mono">$${parseFloat(r['Unit Saving ($)']||0).toFixed(2)}</div><div class="mono">${parseFloat(r['Annual Volume']||0).toLocaleString()}</div><div class="mono" style="font-weight:600;color:var(--green2)">$${tot.toLocaleString()}</div><div><span class="pill ${r['Status']==='Closed'?'closed':'progress'}">${r['Status']||''}</span></div></div>`;
-  }).join('');
+  document.getElementById('costRows').innerHTML=rows.map(r=>{const act=String(r['Activity Description']||'').substring(0,34);const tot=parseFloat(r['Total Yearly Saving ($)'])||0;return `<div class="cost-row"><div style="font-size:11px">${act}${act.length>=34?'…':''}</div><div><span class="badge ${catColor[r['Category']]||'steel'}">${r['Category']||''}</span></div><div class="mono">$${parseFloat(r['Unit Saving ($)']||0).toFixed(2)}</div><div class="mono">${parseFloat(r['Annual Volume']||0).toLocaleString()}</div><div class="mono" style="font-weight:600;color:var(--green2)">$${tot.toLocaleString()}</div><div><span class="pill ${r['Status']==='Closed'?'closed':'progress'}">${r['Status']||''}</span></div></div>`;}).join('');
 }
 
 function renderNPI(d){
   const npiRows=(d['NPI_Master']||[]).filter(r=>r&&r['Product Name']);
   const diRows=d['Design issue for improvment']||[];
   const tlC={'On Track':'tl-green','At Risk':'tl-yellow','Blocked':'tl-red'};
-
-  // Group rows by product name preserving order
-  const grouped={},order=[];
-  npiRows.forEach(p=>{const n=p['Product Name'];if(!grouped[n]){grouped[n]=[];order.push(n);}grouped[n].push(p);});
-
-  function cfgFields(p){return ['Marketing PN','Main Board','SFP Board','DAUGHTER Board','LED Board','240 Level'].filter(k=>p[k]!=null&&p[k]!=='').map(k=>{const v=p[k];return `<div class="npi-field"><span class="npi-key">${k}</span>${v==='TBD'?`<span class="npi-v tbd">TBD</span>`:`<span class="npi-v">${v}</span>`}</div>`;}).join('');}
-  function noteLines(p){return String(p['Important Notes']||'').split('\n').filter(l=>l.trim()).map(l=>`<div style="font-size:11px;color:var(--text2);line-height:1.6">${l}</div>`).join('');}
-
-  document.getElementById('npiCards').innerHTML=order.map(prod=>{
-    const variants=grouped[prod];
-    const p=variants[0];
-    const status=p['Status']||'On Track',phase=p['Current Phase']||'';
+  document.getElementById('npiCards').innerHTML=npiRows.map(p=>{
+    const prod=p['Product Name'],status=p['Status']||'On Track',phase=p['Current Phase']||'';
     const curIdx=PHASES.indexOf(phase);
     const phaseBar=PHASES.map((ph,i)=>`<div class="ph ${ph===phase?'active':i<curIdx?'done':''}">${ph}</div>`).join('');
-    const stPill=status==='On Track'?'on-track':status==='At Risk'?'at-risk':'blocked';
+    const cfgFields=['Marketing PN','Main Board','SFP Board','DAUGHTER Board','LED Board','240 Level'].filter(k=>p[k]!=null&&p[k]!=='').map(k=>`<div class="npi-field"><span class="npi-key">${k}</span>${p[k]==='TBD'?`<span class="npi-v tbd">TBD</span>`:`<span class="npi-v">${p[k]}</span>`}</div>`).join('');
+    const notes=String(p['Important Notes']||'').split('\n').filter(l=>l.trim()).map(l=>`<div style="font-size:11px;color:var(--text2);line-height:1.6">${l}</div>`).join('');
     const issues=diRows.filter(r=>r['Product Name']===prod);
-    const diBtn=issues.length?`<div class="di-btn" onclick="toggleDI('${prod.replace(/[\s#]/g,'_')}')">&#9888; Design Issues (${issues.length})</div>`:'';
-    const diDetail=issues.length?`<div id="di-${prod.replace(/[\s#]/g,'_')}" class="di-detail"><div class="di-detail-title">Design Issues for Improvement</div>${issues.map(di=>`<div class="di-row"><div style="font-size:11px">${di['Description']||''}</div><div class="di-pn">${di['PCBA PN']||''}</div><div style="color:var(--text3);font-size:10px">${di['Type issue']||''}</div><div><span class="pill progress">${di['Status']||''}</span></div></div>`).join('')}</div>`:'';
-    const top=`<div class="npi-top"><div class="tl ${tlC[status]||'tl-yellow'}"></div><div><div class="npi-name">${prod}</div><div style="margin-top:4px"><span class="pill ${stPill}">${status}</span>${variants.length>1?`<span style="font-size:10px;color:var(--text4);margin-left:8px">${variants.length} revisions</span>`:''}</div></div><div class="phase-bar">${phaseBar}</div></div>`;
-
-    if(variants.length===1){
-      const body=`<div class="npi-body"><div class="npi-sec"><div class="npi-sec-title">Configuration</div>${cfgFields(p)}${diBtn}</div><div class="npi-divider"></div><div class="npi-sec"><div class="npi-sec-title">Important Notes</div>${noteLines(p)||'<span style="color:var(--muted);font-size:11px">—</span>'}</div><div class="npi-divider"></div><div class="npi-sec"><div class="npi-sec-title">ECN Key</div><div style="font-size:11px;color:var(--muted);font-style:italic">TBD</div></div></div>`;
-      return `<div class="npi-card">${top}${body}${diDetail}</div>`;
-    }
-
-    // Multiple revisions — one section per variant
-    const revSections=variants.map((v,i)=>{
-      const cfg=cfgFields(v);
-      const notes=noteLines(v);
-      return `<div style="border-top:1px solid var(--border2);"><div style="display:grid;grid-template-columns:1fr 1px 1fr 1px 1fr;"><div class="npi-sec"><div class="npi-sec-title" style="color:var(--blue2);">Revision ${i+1} &mdash; Configuration</div>${cfg}</div><div class="npi-divider"></div><div class="npi-sec"><div class="npi-sec-title">Important Notes</div>${notes||'<span style="color:var(--muted);font-size:11px">—</span>'}</div><div class="npi-divider"></div><div class="npi-sec"><div class="npi-sec-title">ECN Key</div><div style="font-size:11px;color:var(--muted);font-style:italic">TBD</div></div></div></div>`;
-    }).join('');
-
-    const diBtnRow=diBtn?`<div style="padding:8px 20px 14px;">${diBtn}</div>`:'';
-    return `<div class="npi-card">${top}${revSections}${diBtnRow}${diDetail}</div>`;
+    const diBtn=issues.length?`<div class="di-btn" onclick="toggleDI('${prod.replace(/[\s#]/g,'_')}')">⚠ Design Issues (${issues.length})</div>`:'';
+    const diDetail=issues.length?`<div id="di-${prod.replace(/[\s#]/g,'_')}" class="di-detail"><div style="font-size:9px;font-weight:600;color:var(--red2);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px">Design Issues</div>${issues.map(di=>`<div class="di-row"><div style="font-size:11px">${di['Description']||''}</div><div class="mono">${di['PCBA PN']||''}</div><div style="color:var(--text3);font-size:10px">${di['Type issue']||''}</div><div><span class="pill progress">${di['Status']||''}</span></div></div>`).join('')}</div>`:'' ;
+    const stPill=status==='On Track'?'on-track':status==='At Risk'?'at-risk':'blocked';
+    return `<div class="npi-card"><div class="npi-top"><div class="tl ${tlC[status]||'tl-yellow'}"></div><div><div class="npi-name">${prod}</div><div style="margin-top:4px"><span class="pill ${stPill}">${status}</span></div></div><div class="phase-bar">${phaseBar}</div></div><div class="npi-body"><div class="npi-sec"><div class="npi-sec-title">Configuration</div>${cfgFields}${diBtn}</div><div class="npi-divider"></div><div class="npi-sec"><div class="npi-sec-title">Important Notes</div>${notes||'<span style="color:var(--muted);font-size:11px">—</span>'}</div><div class="npi-divider"></div><div class="npi-sec"><div class="npi-sec-title">ECN Key</div><div style="font-size:11px;color:var(--muted);font-style:italic">TBD</div></div></div>${diDetail}</div>`;
   }).join('');
 }
 
 function toggleDI(id){const el=document.getElementById('di-'+id);if(el)el.style.display=el.style.display==='block'?'none':'block';}
 
-// ── QUALITY ─────────────────────────────────────────────
-let qCharts={};let ecnCharts={};let _ecnData=null;
-let _qData=null;
+// ── INIT FILTERS ──────────────────────────────────────────
+function initFilters(){
+  // RMA filters
+  const rmaQSel = document.getElementById('rmaQFilter');
+  const rmaFamSel = document.getElementById('rmaFamFilter');
+  RMA_DATA.quarters.forEach(q=>{const o=document.createElement('option');o.value=q;o.text=q;rmaQSel.appendChild(o);});
+  RMA_DATA.families.forEach(f=>{const o=document.createElement('option');o.value=f;o.text=f;rmaFamSel.appendChild(o);});
 
-function destroyQChart(id){if(qCharts[id]){qCharts[id].destroy();delete qCharts[id];}}
+  // Quality filters
+  const qualSel = document.getElementById('qualProdFilter');
+  Object.keys(YIELD_DATA).forEach(p=>{const o=document.createElement('option');o.value=p;o.text=p;qualSel.appendChild(o);});
 
-function mkChart(id,cfg){destroyQChart(id);const el=document.getElementById(id);if(!el)return;qCharts[id]=new Chart(el,cfg);}
-
-const CHART_COLORS=['rgba(37,99,235,.7)','rgba(239,68,68,.7)','rgba(245,158,11,.7)','rgba(34,197,94,.7)','rgba(139,92,246,.7)','rgba(236,72,153,.7)','rgba(20,184,166,.7)','rgba(251,146,60,.7)','rgba(99,102,241,.7)','rgba(16,185,129,.7)'];
-
-function renderQuality(d){
-  const calib=d['Quality_Calibration']||{};
-  const prod=d['Quality_Production']||{};
-  const rma=d['Quality_RMA']||{};
-  const ckpis=calib.kpis||{};
-  const pkpis=prod.kpis||{};
-  const rkpis=rma.kpis||{};
-
-  // populate site filter
-  const siteSet=new Set();
-  (calib.by_site||[]).forEach(s=>siteSet.add(s.site));
-  (rma.by_site||[]).forEach(s=>siteSet.add(s.site));
-  const siteEl=document.getElementById('q-filter-site');
-  siteEl.innerHTML='<option value="all">All Sites</option>'+[...siteSet].map(s=>`<option value="${s}">${s}</option>`).join('');
-
-  // populate product filter
-  const prodSet=new Set();
-  (prod.yield_trend||[]).forEach(r=>prodSet.add(r.Product));
-  (prod.defect_by_product||[]).forEach(r=>prodSet.add(r.product));
-  (rma.pareto||[]).forEach(r=>prodSet.add(r.family));
-  const prodEl=document.getElementById('q-filter-product');
-  prodEl.innerHTML='<option value="all">All Products</option>'+[...prodSet].map(p=>`<option value="${p}">${p}</option>`).join('');
-
-  // KPI strip
-  const kpiData=[
-    {label:'Calibration',items:[
-      {v:ckpis.total||0,lbl:'Total Items',c:'blue'},
-      {v:ckpis.overdue||0,lbl:'Overdue',c:'red'},
-      {v:ckpis.due_soon||0,lbl:'Due in 30d',c:'yellow'},
-      {v:((ckpis.completion_rate||0)*100).toFixed(1)+'%',lbl:'Pass Rate',c:'green'},
-      {v:ckpis.exceptions||0,lbl:'Exceptions',c:'yellow'},
-    ]},
-    {label:'Production Quality',items:[
-      {v:pkpis.total_defects||0,lbl:'Total Defects',c:'red'},
-      {v:pkpis.products_affected||0,lbl:'Products Affected',c:'blue'},
-      {v:pkpis.top_defect_count||0,lbl:'Top Defect Count',c:'yellow'},
-    ]},
-    {label:'RMA',items:[
-      {v:rkpis.total||0,lbl:'Total RMA',c:'blue'},
-      {v:rkpis.nff||0,lbl:'NFF',c:'steel'},
-      {v:rkpis.repair||0,lbl:'Repair',c:'red'},
-      {v:((rkpis.nff_rate||0)*100).toFixed(1)+'%',lbl:'NFF Rate',c:'yellow'},
-    ]},
-  ];
-  const badgeC={blue:'#dbeafe;color:var(--blue2)',red:'var(--rbg);color:var(--red2)',yellow:'var(--ybg);color:var(--yellow2)',green:'var(--gbg);color:var(--green2)',steel:'var(--border2);color:var(--steel)'};
-  document.getElementById('q-kpi-strip').innerHTML=kpiData.map(grp=>`
-    <div class="card"><div style="font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:12px;">${grp.label}</div>
-    <div style="display:flex;flex-wrap:wrap;gap:10px;">${grp.items.map(item=>`<div style="flex:1;min-width:80px;"><div style="font-size:22px;font-weight:700;font-family:'IBM Plex Mono',monospace;color:var(--text);line-height:1;">${item.v}</div><div style="font-size:9px;color:var(--text4);margin-top:2px;">${item.lbl}</div></div>`).join('')}</div></div>`).join('');
-
-  // ── Calibration ──────────────────────────────
-  const bySite=calib.by_site||[];
-  document.getElementById('q-calib-site').innerHTML=bySite.map(s=>{
-    const pct=s.total?Math.round(s.pass/s.total*100):0;
-    const bc=pct>=95?'var(--green3)':pct>=80?'var(--yellow3)':'var(--red3)';
-    const tc=pct>=95?'var(--green2)':pct>=80?'var(--yellow2)':'var(--red2)';
-    return `<div style="display:grid;grid-template-columns:60px 1fr 40px 60px 60px 60px;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border2);">
-      <div style="font-size:11px;font-weight:600;">${s.site}</div>
-      <div><div style="background:var(--bg2);border-radius:4px;height:6px;overflow:hidden;"><div style="height:100%;border-radius:4px;background:${bc};width:${pct}%;"></div></div></div>
-      <div style="font-size:11px;font-family:'IBM Plex Mono',monospace;font-weight:700;color:${tc};">${pct}%</div>
-      <div style="font-size:10px;color:var(--text4);">Total: ${s.total}</div>
-      <div style="font-size:10px;color:var(--green2);">Pass: ${s.pass}</div>
-      <div style="font-size:10px;color:var(--red2);">Fail: ${s.fail}</div>
-    </div>`;
-  }).join('');
-
-  const byType=calib.by_type||[];
-  const maxT=Math.max(...byType.map(t=>t.count),1);
-  mkChart('q-calib-type-chart',{type:'bar',data:{labels:byType.map(t=>t.type.substring(0,18)),datasets:[{label:'Count',data:byType.map(t=>t.count),backgroundColor:CHART_COLORS,borderRadius:4,borderWidth:0}]},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{color:'#64748b',font:{size:9},maxRotation:30}},y:{grid:{color:'rgba(0,0,0,.04)'},ticks:{color:'#64748b',font:{size:9}}}}}});
-
-  const exceptions=(calib.exceptions||[]).slice(0,20);
-  const overdue=((calib.items||[]).filter(i=>i.Overdue)).slice(0,20);
-  const showItems=[...exceptions,...overdue.filter(o=>!exceptions.find(e=>e.Serial===o.Serial))].slice(0,25);
-  document.getElementById('q-calib-exception-sub').textContent=`${showItems.length} items shown`;
-  document.getElementById('q-calib-exceptions').innerHTML=showItems.map(i=>{
-    const sc=i.Overdue?'var(--red2)':'var(--yellow2)';
-    const sb=i.Overdue?'var(--rbg)':'var(--ybg)';
-    const tag=i.Overdue?'Overdue':i['Status']!=='NA'?i['Status']:'Due Soon';
-    return `<div style="display:grid;grid-template-columns:120px 100px 80px 80px 70px 80px;gap:8px;padding:7px 0;border-bottom:1px solid var(--border2);align-items:center;">
-      <div style="font-size:10px;font-family:'IBM Plex Mono',monospace;">${i.Model||'—'}</div>
-      <div style="font-size:10px;color:var(--text3);">${(i.Description||'').substring(0,16)}</div>
-      <div style="font-size:10px;">${i.Location||'—'}</div>
-      <div style="font-size:10px;font-family:'IBM Plex Mono',monospace;">${i['Next Cal Date']||'—'}</div>
-      <div><span style="font-size:9px;font-weight:600;padding:2px 6px;border-radius:4px;background:${i.Result==='Pass'?'var(--gbg)':'var(--rbg)'};color:${i.Result==='Pass'?'var(--green2)':'var(--red2)'};">${i.Result||'—'}</span></div>
-      <div><span style="font-size:9px;font-weight:600;padding:2px 6px;border-radius:4px;background:${sb};color:${sc};">${tag}</span></div>
-    </div>`;
-  }).join('');
-
-  // ── Production Quality ───────────────────────
-  const yieldTrend=prod.yield_trend||[];
-  const yProducts=[...new Set(yieldTrend.map(r=>r.Product))];
-  const yPeriods=[...new Set(yieldTrend.map(r=>r.Period))];
-  const yDatasets=yProducts.map((p,i)=>({label:p,data:yPeriods.map(per=>{const row=yieldTrend.find(r=>r.Product===p&&r.Period===per);return row&&row['QA1 Yield']?+(row['QA1 Yield']*100).toFixed(2):null;}),borderColor:CHART_COLORS[i%CHART_COLORS.length].replace('.7','1'),backgroundColor:'transparent',tension:.35,pointRadius:3,borderWidth:2,spanGaps:true}));
-  mkChart('q-yield-chart',{type:'line',data:{labels:yPeriods,datasets:yDatasets},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{labels:{color:'#334155',font:{size:9},boxWidth:10,padding:6}}},scales:{x:{grid:{display:false},ticks:{color:'#64748b',font:{size:9}}},y:{min:97,max:101,grid:{color:'rgba(0,0,0,.04)'},ticks:{color:'#64748b',font:{size:9},callback:v=>v+'%'},title:{display:true,text:'Yield %',color:'#94a3b8',font:{size:9}}}}}});
-
-  const dPareto=prod.defect_pareto||[];
-  document.getElementById('q-defect-total-badge').textContent=(prod.kpis||{}).total_defects+' defects';
-  mkChart('q-defect-pareto-chart',{type:'bar',data:{labels:dPareto.map(r=>r.desc.split(' - ')[0]),datasets:[{label:'Count',data:dPareto.map(r=>r.count),backgroundColor:CHART_COLORS,borderRadius:4,borderWidth:0}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false}},scales:{x:{grid:{color:'rgba(0,0,0,.04)'},ticks:{color:'#64748b',font:{size:9}}},y:{grid:{display:false},ticks:{color:'#64748b',font:{size:9}}}}}});
-
-  const mDefects=prod.monthly_defects||[];
-  mkChart('q-defect-trend-chart',{type:'bar',data:{labels:mDefects.map(r=>r.period),datasets:[{label:'Defects',data:mDefects.map(r=>r.count),backgroundColor:'rgba(239,68,68,.4)',borderColor:'rgba(239,68,68,.8)',borderWidth:1.5,borderRadius:4}]},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{color:'#64748b',font:{size:9}}},y:{grid:{color:'rgba(0,0,0,.04)'},ticks:{color:'#64748b',font:{size:9}}}}}});
-
-  const dByProd=prod.defect_by_product||[];
-  const maxDP=Math.max(...dByProd.map(r=>r.count),1);
-  document.getElementById('q-defect-by-product').innerHTML=dByProd.map((r,i)=>`<div style="display:grid;grid-template-columns:1fr 120px 40px;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border2);">
-    <div style="font-size:11px;font-weight:500;">${r.product}</div>
-    <div><div style="background:var(--bg2);border-radius:4px;height:5px;overflow:hidden;"><div style="height:100%;border-radius:4px;background:${CHART_COLORS[i%CHART_COLORS.length]};width:${Math.round(r.count/maxDP*100)}%;"></div></div></div>
-    <div style="font-size:11px;font-family:'IBM Plex Mono',monospace;font-weight:600;text-align:right;">${r.count}</div>
-  </div>`).join('');
-
-  // ── RMA ──────────────────────────────────────
-  const qTrend=rma.quarter_trend||[];
-  mkChart('q-rma-trend-chart',{type:'bar',data:{labels:qTrend.map(r=>r.quarter),datasets:[{label:'NFF',data:qTrend.map(r=>r.NFF||0),backgroundColor:'rgba(148,163,184,.6)',borderRadius:3},{label:'Repair',data:qTrend.map(r=>r.Repair||0),backgroundColor:'rgba(239,68,68,.5)',borderRadius:3}]},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{labels:{color:'#334155',font:{size:10},boxWidth:10}}},scales:{x:{stacked:true,grid:{display:false},ticks:{color:'#64748b',font:{size:10}}},y:{stacked:true,grid:{color:'rgba(0,0,0,.04)'},ticks:{color:'#64748b',font:{size:10}}}}}});
-
-  const failCats=rma.fail_categories||[];
-  mkChart('q-rma-fail-chart',{type:'doughnut',data:{labels:failCats.map(r=>r.category),datasets:[{data:failCats.map(r=>r.count),backgroundColor:CHART_COLORS,borderColor:'#fff',borderWidth:2,hoverOffset:4}]},options:{responsive:true,maintainAspectRatio:true,cutout:'55%',plugins:{legend:{position:'bottom',labels:{color:'#334155',font:{size:10},boxWidth:10,padding:8}}}}});
-
-  const rPareto=rma.pareto||[];
-  mkChart('q-rma-pareto-chart',{type:'bar',data:{labels:rPareto.map(r=>r.family),datasets:[{label:'Total RMA',data:rPareto.map(r=>r.count),backgroundColor:CHART_COLORS,borderRadius:4,borderWidth:0}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false}},scales:{x:{grid:{color:'rgba(0,0,0,.04)'},ticks:{color:'#64748b',font:{size:9}}},y:{grid:{display:false},ticks:{color:'#64748b',font:{size:9}}}}}});
-
-  const recurring=rma.recurring||[];
-  const maxR=Math.max(...recurring.map(r=>r.count),1);
-  document.getElementById('q-rma-recurring').innerHTML=recurring.map((r,i)=>`<div style="display:grid;grid-template-columns:1fr 120px 40px;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border2);">
-    <div style="font-size:11px;">${r.category}</div>
-    <div><div style="background:var(--bg2);border-radius:4px;height:5px;overflow:hidden;"><div style="height:100%;border-radius:4px;background:${CHART_COLORS[i%CHART_COLORS.length]};width:${Math.round(r.count/maxR*100)}%;"></div></div></div>
-    <div style="font-size:11px;font-family:'IBM Plex Mono',monospace;font-weight:600;text-align:right;">${r.count}</div>
-  </div>`).join('');
-
-  const rSites=rma.by_site||[];
-  const maxRS=Math.max(...rSites.map(s=>s.count),1);
-  document.getElementById('q-rma-sites').innerHTML=rSites.map((s,i)=>`<div style="display:grid;grid-template-columns:160px 1fr 50px;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid var(--border2);">
-    <div style="font-size:11px;font-weight:500;">${s.site}</div>
-    <div><div style="background:var(--bg2);border-radius:4px;height:6px;overflow:hidden;"><div style="height:100%;border-radius:4px;background:${CHART_COLORS[i%CHART_COLORS.length]};width:${Math.round(s.count/maxRS*100)}%;"></div></div></div>
-    <div style="font-size:11px;font-family:'IBM Plex Mono',monospace;font-weight:700;text-align:right;">${s.count}</div>
-  </div>`).join('');
+  // Change Order family filter
+  const coFamSel = document.getElementById('coFamFilter');
+  RMA_DATA.families.forEach(f=>{const o=document.createElement('option');o.value=f;o.text=f;coFamSel.appendChild(o);});
 }
 
-function applyQFilters(){
-  const sec=(document.getElementById('q-filter-section')||{}).value||'all';
-  const siteF=(document.getElementById('q-filter-site')||{}).value||'all';
-  const prodF=(document.getElementById('q-filter-product')||{}).value||'all';
-  const statF=(document.getElementById('q-filter-status')||{}).value||'all';
-
-  // Section show/hide
-  const showSec={};
-  ['calibration','production','rma'].forEach(s=>{
-    const el=document.getElementById('q-sec-'+s);
-    const show=(sec==='all'||sec===s);
-    if(el) el.style.display=show?'block':'none';
-    showSec[s]=show;
-  });
-
-  if(!_qData) return;
-  const calib=_qData['Quality_Calibration']||{};
-  const prod=_qData['Quality_Production']||{};
-  const rma=_qData['Quality_RMA']||{};
-
-  try{
-    // ── Calibration ─────────────────────────────────────
-    if(showSec.calibration){
-      let cItems=(calib.items||[]);
-      if(siteF!=='all') cItems=cItems.filter(i=>(i.Location||'')=== siteF);
-      if(statF!=='all') cItems=cItems.filter(i=>(i.Result||'')=== statF);
-
-      const sSt={};
-      cItems.forEach(i=>{const l=i.Location||'Unknown';if(!sSt[l])sSt[l]={total:0,pass:0,fail:0,overdue:0};sSt[l].total++;if(i.Result==='Pass')sSt[l].pass++;if(i.Result==='Fail')sSt[l].fail++;if(i.Overdue)sSt[l].overdue++;});
-      const bySiteF=Object.entries(sSt).map(function(e){return Object.assign({site:e[0]},e[1]);});
-      const siteEl=document.getElementById('q-calib-site');
-      if(siteEl) siteEl.innerHTML=bySiteF.map(s=>{
-        const pct=s.total?Math.round(s.pass/s.total*100):0;
-        const bc=pct>=95?'var(--green3)':pct>=80?'var(--yellow3)':'var(--red3)';
-        const tc=pct>=95?'var(--green2)':pct>=80?'var(--yellow2)':'var(--red2)';
-        return '<div style="display:grid;grid-template-columns:60px 1fr 40px 60px 60px 60px;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border2);">'+
-          '<div style="font-size:11px;font-weight:600;">'+s.site+'</div>'+
-          '<div><div style="background:var(--bg2);border-radius:4px;height:6px;overflow:hidden;"><div style="height:100%;border-radius:4px;background:'+bc+';width:'+pct+'%"></div></div></div>'+
-          '<div style="font-size:11px;font-family:\'IBM Plex Mono\',monospace;font-weight:700;color:'+tc+';">'+pct+'%</div>'+
-          '<div style="font-size:10px;color:var(--text4);">Total: '+s.total+'</div>'+
-          '<div style="font-size:10px;color:var(--green2);">Pass: '+s.pass+'</div>'+
-          '<div style="font-size:10px;color:var(--red2);">Fail: '+s.fail+'</div></div>';
-      }).join('');
-
-      const tSt={};cItems.forEach(i=>{const t=i.Description||'Unknown';tSt[t]=(tSt[t]||0)+1;});
-      const byTypeF=Object.entries(tSt).sort((a,b)=>b[1]-a[1]).slice(0,10);
-      mkChart('q-calib-type-chart',{type:'bar',data:{labels:byTypeF.map(t=>t[0].substring(0,18)),datasets:[{label:'Count',data:byTypeF.map(t=>t[1]),backgroundColor:CHART_COLORS}]},options:{responsive:true,maintainAspectRatio:true,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{ticks:{font:{size:9}}},y:{ticks:{font:{size:9}}}}}});
-
-      const excepts=cItems.filter(i=>i.Status&&i.Status!=='NA').slice(0,20);
-      const ovrd=cItems.filter(i=>i.Overdue).slice(0,20);
-      const showItems=[...excepts,...ovrd.filter(o=>!excepts.find(e=>e.Serial===o.Serial))].slice(0,25);
-      const excSub=document.getElementById('q-calib-exception-sub');
-      if(excSub) excSub.textContent=showItems.length+' items shown';
-      const excEl=document.getElementById('q-calib-exceptions');
-      if(excEl) excEl.innerHTML=showItems.map(i=>{
-        const sc=i.Overdue?'var(--red2)':'var(--yellow2)';
-        const sb=i.Overdue?'var(--rbg)':'var(--ybg)';
-        const tag=i.Overdue?'Overdue':i['Status']!=='NA'?i['Status']:'Due Soon';
-        return '<div style="display:grid;grid-template-columns:120px 100px 80px 80px 70px 80px;gap:8px;padding:7px 0;border-bottom:1px solid var(--border2);">'+
-          '<div style="font-size:10px;font-family:\'IBM Plex Mono\',monospace;">'+(i.Model||'—')+'</div>'+
-          '<div style="font-size:10px;color:var(--text3);">'+(i.Description||'').substring(0,16)+'</div>'+
-          '<div style="font-size:10px;">'+(i.Location||'—')+'</div>'+
-          '<div style="font-size:10px;font-family:\'IBM Plex Mono\',monospace;">'+(i['Next Cal Date']||'—')+'</div>'+
-          '<div><span style="font-size:9px;font-weight:600;padding:2px 6px;border-radius:4px;background:'+(i.Result==='Pass'?'var(--gbg)':i.Result==='Fail'?'var(--rbg)':'var(--bg2)')+';color:'+(i.Result==='Pass'?'var(--green2)':i.Result==='Fail'?'var(--red2)':'var(--steel)')+';">'+(i.Result||'—')+'</span></div>'+
-          '<div><span style="font-size:9px;font-weight:600;padding:2px 6px;border-radius:4px;background:'+sb+';color:'+sc+';">'+tag+'</span></div></div>';
-      }).join('');
-    }
-
-    // ── Production Quality ───────────────────────────────
-    if(showSec.production){
-      const yieldTrend=(prod.yield_trend||[]).filter(r=>prodF==='all'||r.Product===prodF);
-      const yProducts=[...new Set(yieldTrend.map(r=>r.Product))];
-      const yPeriods=[...new Set(yieldTrend.map(r=>r.Period))];
-      const yDatasets=yProducts.map((p,i)=>({label:p,data:yPeriods.map(per=>{const row=yieldTrend.find(r=>r.Product===p&&r.Period===per);return row&&row['QA1 Yield']!=null?+(row['QA1 Yield']*100).toFixed(1):null;}),borderColor:CHART_COLORS[i%CHART_COLORS.length],backgroundColor:CHART_COLORS[i%CHART_COLORS.length].replace('.7','.15'),fill:true,tension:.35,spanGaps:true,pointRadius:3}));
-      mkChart('q-yield-chart',{type:'line',data:{labels:yPeriods,datasets:yDatasets},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{position:'top',labels:{font:{size:9}}}},scales:{y:{beginAtZero:false,min:50,max:100,ticks:{font:{size:9},callback:v=>v+'%'}},x:{ticks:{font:{size:9}}}}}});
-
-      const dByProdF=(prod.defect_by_product||[]).filter(r=>prodF==='all'||r.product===prodF);
-      const maxDP=Math.max(...dByProdF.map(r=>r.count),1);
-      const dpEl=document.getElementById('q-defect-by-product');
-      if(dpEl) dpEl.innerHTML=dByProdF.map((r,i)=>
-        '<div style="display:grid;grid-template-columns:1fr 120px 40px;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--border2);">'+
-        '<div style="font-size:11px;font-weight:500;">'+r.product+'</div>'+
-        '<div><div style="background:var(--bg2);border-radius:4px;height:5px;overflow:hidden;"><div style="height:100%;border-radius:4px;background:'+CHART_COLORS[i%CHART_COLORS.length]+';width:'+(r.count/maxDP*100)+'%"></div></div></div>'+
-        '<div style="font-size:11px;font-family:\'IBM Plex Mono\',monospace;font-weight:600;text-align:right;">'+r.count+'</div></div>'
-      ).join('');
-    }
-
-    // ── RMA ──────────────────────────────────────────────
-    if(showSec.rma){
-      const rPareto=(rma.pareto||[]).filter(r=>prodF==='all'||r.family===prodF);
-      mkChart('q-rma-pareto-chart',{type:'bar',data:{labels:rPareto.map(r=>r.family),datasets:[{label:'Total RMA',data:rPareto.map(r=>r.count),backgroundColor:CHART_COLORS}]},options:{responsive:true,maintainAspectRatio:true,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{ticks:{font:{size:9}}},y:{ticks:{font:{size:9}}}}}});
-
-      const rSitesF=(rma.by_site||[]).filter(s=>siteF==='all'||s.site===siteF);
-      const maxRS=Math.max(...rSitesF.map(s=>s.count),1);
-      const rsEl=document.getElementById('q-rma-sites');
-      if(rsEl) rsEl.innerHTML=rSitesF.map(s=>
-        '<div style="display:grid;grid-template-columns:160px 1fr 50px;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--border2);">'+
-        '<div style="font-size:11px;font-weight:500;">'+s.site+'</div>'+
-        '<div><div style="background:var(--bg2);border-radius:4px;height:6px;overflow:hidden;"><div style="height:100%;border-radius:4px;background:var(--blue3);width:'+(s.count/maxRS*100)+'%"></div></div></div>'+
-        '<div style="font-size:11px;font-family:\'IBM Plex Mono\',monospace;font-weight:700;text-align:right;">'+s.count+'</div></div>'
-      ).join('');
-    }
-  }catch(e){ console.error('applyQFilters error:',e); }
-}
-function resetQFilters(){
-  ['q-filter-section','q-filter-site','q-filter-product','q-filter-status'].forEach(id=>{
-    const el=document.getElementById(id); if(el) el.value='all';
-  });
-  applyQFilters();
-}
-
-
-function destroyEcnChart(id){if(ecnCharts[id]){ecnCharts[id].destroy();delete ecnCharts[id];}}
-function mkEcnChart(id,cfg){destroyEcnChart(id);const el=document.getElementById(id);if(!el)return;ecnCharts[id]=new Chart(el,cfg);}
-const ECN_COL='rgba(37,99,235,.8)',DA_COL='rgba(245,158,11,.8)',MCO_COL='rgba(139,92,246,.8)';
-
-function renderEcnObjects(){
-  const type=document.getElementById('ecn-obj-type')?.value||'ALL';
-  const objs=(window._ecnTopObjs||{})[type]||[];
-  const sub=document.getElementById('ecn-obj-sub');
-  if(sub) sub.textContent=type==='ALL'?'All Doc Types':type+' only';
-  const max=Math.max(...objs.map(o=>o.count),1);
-  document.getElementById('ecn-top-objects').innerHTML=objs.length?objs.map(o=>
-    '<div style="display:grid;grid-template-columns:1fr 110px 40px;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--border2);">'+
-    '<div style="font-size:10px;font-family:\'IBM Plex Mono\',monospace;">'+o.obj+'</div>'+
-    '<div><div style="background:var(--bg2);border-radius:4px;height:5px;overflow:hidden;"><div style="height:100%;border-radius:4px;background:var(--blue3);width:'+(o.count/max*100)+'%"></div></div></div>'+
-    '<div style="font-size:11px;font-family:\'IBM Plex Mono\',monospace;font-weight:700;text-align:right;color:var(--blue2);">'+o.count+'</div></div>'
-  ).join(''):'<div style="color:var(--muted);font-size:11px;padding:12px 0;">No data</div>';
-}
-
-function renderEcnHeatmap(heatmap){
-  const products=[...new Set(heatmap.map(r=>r.product))].sort();
-  const cats=[...new Set(heatmap.map(r=>r.category))].sort();
-  const hmMap={};heatmap.forEach(r=>{hmMap[r.product+'||'+r.category]=r.count;});
-  const maxHm=Math.max(...heatmap.map(r=>r.count),1);
-  let h='<table style="border-collapse:collapse;font-size:10px;min-width:100%;">';
-  h+='<thead><tr><th style="padding:6px 12px;text-align:left;font-size:9px;font-weight:600;color:var(--muted);border-bottom:2px solid var(--border);white-space:nowrap;">Product</th>';
-  cats.forEach(c=>{h+='<th style="padding:6px 16px;font-size:9px;font-weight:600;color:var(--muted);border-bottom:2px solid var(--border);text-align:center;white-space:nowrap;">'+c+'</th>';});
-  h+='<th style="padding:6px 10px;font-size:9px;font-weight:600;color:var(--muted);border-bottom:2px solid var(--border);text-align:center;">Total</th></tr></thead><tbody>';
-  products.forEach(p=>{
-    const rowT=cats.reduce((s,c)=>s+(hmMap[p+'||'+c]||0),0);
-    h+='<tr><td style="padding:8px 12px;font-size:10px;font-weight:500;border-bottom:1px solid var(--border2);white-space:nowrap;">'+p+'</td>';
-    cats.forEach(c=>{
-      const v=hmMap[p+'||'+c]||0;
-      const intensity=v?Math.max(0.12,v/maxHm):0;
-      const bg=v?'rgba(37,99,235,'+intensity.toFixed(2)+')':'transparent';
-      const tc=intensity>0.5?'#fff':'var(--text)';
-      h+='<td style="padding:8px 16px;text-align:center;border-bottom:1px solid var(--border2);background:'+bg+';color:'+tc+';font-family:\'IBM Plex Mono\',monospace;font-size:11px;font-weight:'+(v?700:400)+';\'>"'+(v||'')+'</td>';
-    });
-    h+='<td style="padding:8px 10px;text-align:center;border-bottom:1px solid var(--border2);font-family:\'IBM Plex Mono\',monospace;font-size:10px;font-weight:700;color:var(--blue2);">'+rowT+'</td></tr>';
-  });
-  h+='<tr style="background:var(--bg2);"><td style="padding:7px 12px;font-size:10px;font-weight:700;">Total</td>';
-  let gt=0;cats.forEach(c=>{const t=products.reduce((s,p)=>s+(hmMap[p+'||'+c]||0),0);gt+=t;h+='<td style="padding:7px 16px;text-align:center;font-family:\'IBM Plex Mono\',monospace;font-size:10px;font-weight:700;color:var(--blue2);">'+t+'</td>';});
-  h+='<td style="padding:7px 10px;text-align:center;font-family:\'IBM Plex Mono\',monospace;font-size:10px;font-weight:700;color:var(--blue2);">'+gt+'</td></tr></tbody></table>';
-  document.getElementById('ecn-heatmap').innerHTML=h;
-}
-
-function _topObjFromRecs(recs,n){
-  n=n||10;const cnt={};
-  recs.forEach(r=>(r.objects||[]).forEach(o=>{cnt[o]=(cnt[o]||0)+1;}));
-  return Object.entries(cnt).sort((a,b)=>b[1]-a[1]).slice(0,n).map(function(e){return{obj:e[0],count:e[1]};});
-}
-
-function _renderEcnCharts(data){
-  const kpis=data.kpis||{};
-  const byProd=data.byProd||[];
-  const byCat=data.byCat||[];
-  const topObjs=data.topObjs||{};
-  const heatmap=data.heatmap||[];
-  const cycleData=data.cycleData||{};
-
-  const badgeC={blue:'#dbeafe;color:var(--blue2)',yellow:'var(--ybg);color:var(--yellow2)',steel:'var(--bg2);color:var(--steel)',green:'var(--gbg);color:var(--green2)'};
-  const kpiItems=[
-    {v:kpis.total||0,lbl:'Total Changes',c:'blue'},
-    {v:kpis.ecn||0,lbl:'ECNs',c:'blue'},
-    {v:kpis.da||0,lbl:'DAs',c:'yellow'},
-    {v:kpis.mco||0,lbl:'MCOs',c:'steel'},
-    {v:(kpis.avg_cycle||0)+'d',lbl:'Avg Cycle Time',c:'green'},
-  ];
-  document.getElementById('ecn-kpi-strip').innerHTML=kpiItems.map(item=>
-    '<div class="card"><div style="font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">'+item.lbl+'</div>'+
-    '<div style="font-size:30px;font-weight:700;font-family:\'IBM Plex Mono\',monospace;background:'+badgeC[item.c]+';padding:10px 16px;border-radius:8px;display:inline-block;">'+item.v+'</div></div>'
-  ).join('');
-
-  mkEcnChart('ecn-by-product-chart',{type:'bar',data:{
-    labels:byProd.map(r=>r.product.length>24?r.product.substring(0,22)+'\u2026':r.product),
-    datasets:[
-      {label:'ECN',data:byProd.map(r=>r.ECN),backgroundColor:ECN_COL},
-      {label:'DA', data:byProd.map(r=>r.DA), backgroundColor:DA_COL},
-      {label:'MCO',data:byProd.map(r=>r.MCO),backgroundColor:MCO_COL},
-    ]
-  },options:{responsive:true,maintainAspectRatio:true,indexAxis:'y',
-    plugins:{legend:{position:'top',labels:{font:{size:10}}},tooltip:{mode:'index',intersect:false}},
-    scales:{x:{stacked:true,ticks:{font:{size:9}}},y:{stacked:true,ticks:{font:{size:9}}}}}});
-
-  mkEcnChart('ecn-cat-donut-chart',{type:'doughnut',data:{
-    labels:byCat.map(r=>r.category),
-    datasets:[{data:byCat.map(r=>r.total),backgroundColor:CHART_COLORS,borderWidth:2}]
-  },options:{responsive:true,maintainAspectRatio:true,
-    plugins:{legend:{position:'right',labels:{font:{size:11},padding:16}}}}});
-
-  mkEcnChart('ecn-cat-grouped-chart',{type:'bar',data:{
-    labels:byCat.map(r=>r.category),
-    datasets:[
-      {label:'ECN',data:byCat.map(r=>r.ECN),backgroundColor:ECN_COL},
-      {label:'DA', data:byCat.map(r=>r.DA), backgroundColor:DA_COL},
-      {label:'MCO',data:byCat.map(r=>r.MCO),backgroundColor:MCO_COL},
-    ]
-  },options:{responsive:true,maintainAspectRatio:true,
-    plugins:{legend:{position:'top',labels:{font:{size:10}}}},
-    scales:{x:{ticks:{font:{size:10}}},y:{beginAtZero:true,ticks:{font:{size:9}}}}}});
-
-  window._ecnTopObjs=topObjs;
-  renderEcnObjects();
-  renderEcnHeatmap(heatmap);
-
-  const allCycles=[
-    ...(cycleData.ECN||[]).map(r=>Object.assign({},r,{dtype:'ECN'})),
-    ...(cycleData.DA||[]).map(r=>Object.assign({},r,{dtype:'DA'})),
-    ...(cycleData.MCO||[]).map(r=>Object.assign({},r,{dtype:'MCO'})),
-  ].filter(r=>r.days!=null).sort((a,b)=>b.days-a.days);
-  const typeColors={ECN:ECN_COL,DA:DA_COL,MCO:MCO_COL};
-  const legendItems=[{text:'ECN',fillStyle:ECN_COL},{text:'DA',fillStyle:DA_COL},{text:'MCO',fillStyle:MCO_COL}];
-  mkEcnChart('ecn-cycle-chart',{type:'bar',data:{
-    labels:allCycles.map(r=>r.doc),
-    datasets:[{label:'Days',data:allCycles.map(r=>r.days),backgroundColor:allCycles.map(r=>typeColors[r.dtype])}]
-  },options:{responsive:true,maintainAspectRatio:true,
-    plugins:{
-      legend:{display:true,labels:{generateLabels:()=>legendItems.map(l=>({text:l.text,fillStyle:l.fillStyle,strokeStyle:'transparent',hidden:false}))}},
-      tooltip:{callbacks:{label:c=>allCycles[c.dataIndex].dtype+' \xb7 '+c.raw+'d \xb7 '+allCycles[c.dataIndex].product}}
-    },
-    scales:{x:{ticks:{font:{size:7},maxRotation:90}},y:{beginAtZero:true,ticks:{font:{size:9}},title:{display:true,text:'Days',font:{size:9}}}}}});
-}
-
-function renderECN(d){
-  const raw=d['ECN_MCO_DA']||{};
-  window._ecnRawData=raw;
-
-  // Populate product filter (full list, always from raw)
-  const allProds=[...new Set([...(raw.records?.ECN||[]),...(raw.records?.DA||[]),...(raw.records?.MCO||[])].map(r=>r.product))].sort();
-  const prodEl=document.getElementById('ecn-filter-product');
-  if(prodEl) prodEl.innerHTML='<option value="all">All Products</option>'+allProds.map(p=>'<option value="'+p+'">'+p+'</option>').join('');
-
-  // Render with full data
-  _renderEcnCharts({
-    kpis:raw.kpis||{},
-    byProd:raw.by_product||[],
-    byCat:raw.by_category||[],
-    topObjs:raw.top_objects||{},
-    heatmap:raw.heatmap||[],
-    cycleData:raw.cycle_data||{}
-  });
-}
-
-function applyEcnFilters(){
-  const raw=window._ecnRawData;
-  if(!raw||!raw.records) return;
-  const typeF=document.getElementById('ecn-filter-type').value;
-  const prodF=document.getElementById('ecn-filter-product').value;
-
-  let ecn=(raw.records.ECN||[]).slice();
-  let da =(raw.records.DA ||[]).slice();
-  let mco=(raw.records.MCO||[]).slice();
-
-  if(typeF!=='all'){ecn=typeF==='ECN'?ecn:[];da=typeF==='DA'?da:[];mco=typeF==='MCO'?mco:[];}
-  if(prodF!=='all'){ecn=ecn.filter(r=>r.product===prodF);da=da.filter(r=>r.product===prodF);mco=mco.filter(r=>r.product===prodF);}
-
-  const all=[...ecn,...da,...mco];
-  const prods=[...new Set(all.map(r=>r.product))].sort();
-  const cats=[...new Set(all.map(r=>r.category))].sort();
-
-  const byProd=prods.map(pf=>({
-    product:pf,
-    ECN:ecn.filter(r=>r.product===pf).length,
-    DA: da.filter(r=>r.product===pf).length,
-    MCO:mco.filter(r=>r.product===pf).length,
-    total:all.filter(r=>r.product===pf).length
-  })).sort((a,b)=>b.total-a.total);
-
-  const byCat=cats.map(cat=>({
-    category:cat,
-    ECN:ecn.filter(r=>r.category===cat).length,
-    DA: da.filter(r=>r.category===cat).length,
-    MCO:mco.filter(r=>r.category===cat).length,
-    total:all.filter(r=>r.category===cat).length
-  })).sort((a,b)=>b.total-a.total);
-
-  const hmMap={};
-  all.forEach(r=>{const k=r.product+'||'+r.category;hmMap[k]=(hmMap[k]||0)+1;});
-  const heatmap=Object.entries(hmMap).map(function(e){const p=e[0].split('||');return{product:p[0],category:p[1],count:e[1]};});
-
-  const topObjs={ECN:_topObjFromRecs(ecn),DA:_topObjFromRecs(da),MCO:_topObjFromRecs(mco),ALL:_topObjFromRecs(all)};
-
-  const cycleData={
-    ECN:ecn.filter(r=>r.cycle_days!=null).map(r=>({doc:r.doc,days:r.cycle_days,product:r.product,category:r.category})),
-    DA: da.filter(r=>r.cycle_days!=null).map(r=>({doc:r.doc,days:r.cycle_days,product:r.product,category:r.category})),
-    MCO:mco.filter(r=>r.cycle_days!=null).map(r=>({doc:r.doc,days:r.cycle_days,product:r.product,category:r.category}))
-  };
-
-  const allCyc=all.filter(r=>r.cycle_days!=null).map(r=>r.cycle_days);
-  const avgCyc=allCyc.length?Math.round(allCyc.reduce((s,v)=>s+v,0)/allCyc.length):0;
-
-  _renderEcnCharts({
-    kpis:{ecn:ecn.length,da:da.length,mco:mco.length,total:all.length,avg_cycle:avgCyc},
-    byProd,byCat,topObjs,heatmap,cycleData
-  });
-}
-
-function resetEcnFilters(){
-  ['ecn-filter-type','ecn-filter-product'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='all';});
-  applyEcnFilters();
-}
-
+// ── MAIN DATA LOAD ────────────────────────────────────────
 function renderAll(d){
-  renderMRB(d);renderCompEng(d);renderCost(d);renderNPI(d);
-  _qData=d; // store for lazy render when quality tab is opened
-  _ecnData=d;
+  renderMRB(d); renderCompEng(d); renderCost(d); renderNPI(d);
+  renderRMA(); renderQuality(); renderChangeOrder();
   setStatus('ok','Data loaded · '+(d['_updated']||''));
   document.getElementById('refreshBtn').classList.remove('loading');
   document.getElementById('refreshBtn').disabled=false;
@@ -916,6 +885,8 @@ async function refreshData(){
     btn.classList.remove('loading');btn.disabled=false;
   }
 }
+
+initFilters();
 refreshData();
 setInterval(()=>refreshData(),15*60*1000);
 </script>
