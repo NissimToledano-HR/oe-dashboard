@@ -822,14 +822,28 @@ function renderMRB(d){
       plugins:{legend:{position:'bottom',labels:{color:'#334155',font:FONT,boxWidth:10,padding:8}},
                tooltip:{callbacks:{label:ctx=>`${ctx.label}: ${ctx.parsed.toLocaleString()} units`}}}}});
   // Quarterly Trend chart
-  makeChart('mrbTrendChart',{type:'line',
-    data:{labels:quarterly.map(r=>r.q.replace(/ - 2026/,'')),datasets:[
-      {label:'Plan',data:quarterly.map(r=>r.plan),borderColor:'#94a3b8',backgroundColor:'rgba(148,163,184,.08)',borderWidth:2,borderDash:[5,3],pointRadius:3,tension:.3,fill:false},
-      {label:'Actual',data:quarterly.map(r=>r.actual>0?r.actual:null),borderColor:'#2563eb',backgroundColor:'rgba(37,99,235,.08)',borderWidth:2.5,pointRadius:4,pointBackgroundColor:'#2563eb',tension:.3,fill:true}
-    ]},
+  makeChart('mrbTrendChart',{type:'bar',
+    data:{
+      labels:['Q1/25','Q2/25','Q3/25','Q4/25\nNov-14','Q1/26\nMar-9'],
+      datasets:[
+        {label:'Historical (prior KPI)',data:[600,1198,1155,null,null],backgroundColor:'rgba(203,213,225,.65)',borderColor:'rgba(148,163,184,.8)',borderWidth:1,borderRadius:4},
+        {label:'Devices from Q4/25 backlog',data:[null,null,null,1130,580],backgroundColor:'rgba(10,22,40,.82)',borderColor:'rgba(10,22,40,.95)',borderWidth:1,borderRadius:4},
+        {label:'Additional – new production Q1/26',data:[null,null,null,null,268],backgroundColor:'rgba(125,211,252,.8)',borderColor:'rgba(56,189,248,.9)',borderWidth:1,borderRadius:4},
+      ]
+    },
     options:{responsive:true,maintainAspectRatio:true,
-      plugins:{legend:{labels:{color:'#64748b',font:FONT,boxWidth:10}}},
-      scales:{x:{grid:{display:false},ticks:TICK_STYLE},y:{grid:GRID_STYLE,ticks:{...TICK_STYLE,callback:v=>v.toLocaleString()},beginAtZero:true}}}});
+      plugins:{
+        legend:{labels:{color:'#64748b',font:FONT,boxWidth:10}},
+        tooltip:{callbacks:{
+          label:ctx=>ctx.parsed.y!=null?`${ctx.dataset.label}: ${ctx.parsed.y.toLocaleString()}`:null,
+          footer:items=>{const t=items.reduce((s,i)=>s+(i.parsed.y||0),0);return t?'Total: '+t.toLocaleString():'';}
+        }}
+      },
+      scales:{
+        x:{stacked:true,grid:{display:false},ticks:TICK_STYLE},
+        y:{stacked:true,grid:GRID_STYLE,ticks:{...TICK_STYLE,callback:v=>v.toLocaleString()},beginAtZero:true}
+      }
+    }});
 }
 
 function renderCompEng(d){
@@ -947,7 +961,16 @@ function renderNPI(d){
 
     // Sub-entries (one per row)
     const subBodies=entries.map((p,idx)=>{
-      const cfgFields=['High Level Justification','Marketing PN','Main Board','BCM Series','SFP Board','DAUGHTER Board','LED Board','240 Level'].filter(k=>p[k]!=null&&p[k]!=='').map(k=>{
+      // Per-entry DI correlation using this entry's own board PNs
+      const entryPNs=new Set();
+      ['Main Board','SFP Board','DAUGHTER Board','LED Board'].forEach(k=>{const v=p[k];if(v&&v!=='TBD')entryPNs.add(v);});
+      const entryIssues=diRows.filter(r=>entryPNs.has(r['PCBA PN']));
+      const eDiId=`${diId}_${idx}`;
+      const eDiBtn=entryIssues.length?`<div class="di-btn" onclick="toggleDI('${eDiId}')">⚠ Design Issues (${entryIssues.length})</div>`:'';
+      const eDiDetail=entryIssues.length?`<div id="di-${eDiId}" class="di-detail"><div style="font-size:9px;font-weight:600;color:var(--red2);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px">Design Issues</div>${entryIssues.map(di=>`<div class="di-row"><div style="font-size:11px">${di['Description']||''}</div><div class="mono">${di['PCBA PN']||''}</div><div style="color:var(--text3);font-size:10px">${di['Type issue']||''}</div><div><span class="pill progress">${di['Status']||''}</span></div></div>`).join('')}</div>`:'';
+      // High Level Justification shown as subtitle after Configuration title
+      const hlj=p['High Level Justification'];
+      const cfgFields=['Marketing PN','Main Board','BCM Series','SFP Board','DAUGHTER Board','LED Board','240 Level'].filter(k=>p[k]!=null&&p[k]!=='').map(k=>{
         const val=p[k];
         const valHtml=val==='TBD'?`<span class="npi-v tbd">TBD</span>`:`<span class="npi-v">${val}</span>`;
         return `<div class="npi-field"><span class="npi-key">${k}</span>${valHtml}</div>`;
@@ -957,15 +980,16 @@ function renderNPI(d){
       const subPill=subStatus==='On Track'?'on-track':subStatus==='At Risk'?'at-risk':'blocked';
       const border=idx<entries.length-1?'border-bottom:1px solid var(--border2);':'';
       return `<div class="npi-body" style="${border}">
-        <div class="npi-sec"><div class="npi-sec-title">Configuration${entries.length>1?` <span class="badge steel">#${idx+1}</span>`:''}</div>${cfgFields}${idx===entries.length-1?diBtn:''}</div>
+        <div class="npi-sec"><div class="npi-sec-title">Configuration${entries.length>1?` <span class="badge steel">#${idx+1}</span> <span class="pill ${subPill}" style="margin-left:4px">${subStatus}</span>`:''}</div>${hlj?`<div style="font-size:10px;color:var(--text3);font-style:italic;margin-bottom:8px">${hlj}</div>`:''}${cfgFields}${eDiBtn}</div>
         <div class="npi-divider"></div>
         <div class="npi-sec"><div class="npi-sec-title">Important Notes</div>${notes||'<span style="color:var(--muted);font-size:11px">—</span>'}</div>
         <div class="npi-divider"></div>
-        <div class="npi-sec"><div class="npi-sec-title">Working Time</div><div style="font-size:11px;color:var(--muted);font-style:italic">—</div>${entries.length>1?`<div style="margin-top:8px"><span class="pill ${subPill}">${subStatus}</span></div>`:''}</div>
+        <div class="npi-sec"><div class="npi-sec-title">Working Time</div><div style="font-size:11px;color:var(--muted);font-style:italic">—</div></div>
+        ${eDiDetail}
       </div>`;
     }).join('');
 
-    return `<div class="npi-card"><div class="npi-top"><div class="tl ${tlC[status]||'tl-yellow'}"></div><div><div class="npi-name">${prod}</div><div style="margin-top:4px"><span class="pill ${stPill}">${status}</span></div></div><div class="phase-bar">${phaseBar}</div></div>${subBodies}${diDetail}</div>`;
+    return `<div class="npi-card"><div class="npi-top"><div class="tl ${tlC[status]||'tl-yellow'}"></div><div><div class="npi-name">${prod}</div><div style="margin-top:4px"><span class="pill ${stPill}">${status}</span></div></div><div class="phase-bar">${phaseBar}</div></div>${subBodies}</div>`;
   }).join('');
 }
 
