@@ -185,6 +185,10 @@ select:focus{border-color:var(--blue3);}
 
 .fade{opacity:0;animation:fi .4s ease forwards;}
 @keyframes fi{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.pva-current{background:rgba(37,99,235,.05);border-left:3px solid var(--blue2);padding-left:9px;border-radius:0 4px 4px 0;}
+.npi-search-input{font-family:'IBM Plex Sans',sans-serif;font-size:11px;padding:6px 12px;border:1px solid var(--border2);border-radius:6px;background:var(--white);color:var(--text2);outline:none;width:240px;}
+.npi-search-input:focus{border-color:var(--blue3);}
+.cal-kpi-row{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:18px;}
 </style>
 </head>
 <body>
@@ -210,6 +214,7 @@ select:focus{border-color:var(--blue3);}
   <div class="tab" onclick="switchTab('rma',this)">RMA</div>
   <div class="tab" onclick="switchTab('quality',this)">Quality</div>
   <div class="tab" onclick="switchTab('changeorder',this)">Change Order</div>
+  <div class="tab" onclick="switchTab('calibration',this)">Calibration</div>
 </nav>
 
 <!-- ═══════ TAB 1: OE EXCELLENCE ═══════ -->
@@ -246,9 +251,13 @@ select:focus{border-color:var(--blue3);}
 <!-- ═══════ TAB MRB ═══════ -->
 <main id="tab-mrb" style="display:none">
   <div class="sec-label">MRB — Material Review Board</div>
+  <div class="card" style="margin-bottom:18px">
+    <div class="card-hdr"><div><div class="card-title">Quarterly Trend — Faulty Units over Time</div><div class="card-sub">Historical backlog · 2025–2026</div></div></div>
+    <canvas id="mrbTrendChart" style="max-height:220px"></canvas>
+  </div>
   <div class="g2">
     <div class="card">
-      <div class="card-hdr"><div><div class="card-title">① Quarterly Repair Target — Plan vs. Actual</div><div class="card-sub">Units repaired · 2026</div></div></div>
+      <div class="card-hdr"><div><div class="card-title">① Quarterly Repair Target — Plan vs. Actual</div><div class="card-sub">Units repaired · 2026</div></div><span class="badge blue" id="mrbCurQBadge">—</span></div>
       <div id="mrbPvaRows"></div>
     </div>
     <div class="card">
@@ -257,21 +266,22 @@ select:focus{border-color:var(--blue3);}
       <div id="mrbMethodRows"></div>
     </div>
   </div>
-  <div class="g2" style="margin-top:18px">
-    <div class="card">
-      <div class="card-hdr"><div><div class="card-title">Quarterly Trend — Repairs over Time</div><div class="card-sub">Plan vs. Actual · 2026</div></div></div>
-      <canvas id="mrbTrendChart" style="max-height:220px"></canvas>
-    </div>
-    <div class="card">
-      <div class="card-hdr"><div><div class="card-title">Breakdown by Product Type</div><div class="card-sub">Total units repaired · by product</div></div></div>
-      <canvas id="mrbProductChart" style="max-height:220px"></canvas>
-    </div>
-  </div>
 </main>
 
 <!-- ═══════ TAB 2: NPI ═══════ -->
 <main id="tab-npi" style="display:none">
   <div class="sec-label">NPI Project Master — OE Status Tracker</div>
+  <div class="filter-bar" style="margin-bottom:14px">
+    <span class="filter-lbl">Search:</span>
+    <input id="npiSearch" class="npi-search-input" type="text" placeholder="Filter by product name..." oninput="filterNPICards()">
+    <span class="filter-lbl">Status:</span>
+    <select id="npiStatusFilter" onchange="filterNPICards()">
+      <option value="ALL">All</option>
+      <option value="On Track">On Track</option>
+      <option value="At Risk">At Risk</option>
+      <option value="Blocked">Blocked</option>
+    </select>
+  </div>
   <div class="npi-grid" id="npiCards"></div>
 </main>
 
@@ -331,11 +341,11 @@ select:focus{border-color:var(--blue3);}
     </select>
   </div>
 
-  <div class="g4" style="margin-bottom:18px" id="qualKpis">
+  <div class="g4" style="margin-bottom:18px">
     <div class="kpi green fade"><div class="kpi-lbl">Avg QA1 Yield</div><div class="kpi-val" id="qk-qa1">—</div><div class="kpi-note">First pass yield</div></div>
     <div class="kpi blue fade"><div class="kpi-lbl">Avg QAS Yield</div><div class="kpi-val" id="qk-qas">—</div><div class="kpi-note">Ship yield</div></div>
-    <div class="kpi yellow fade"><div class="kpi-lbl">Total Defects</div><div class="kpi-val" id="qk-defects">—</div><div class="kpi-note">Mar–Sep 2025</div></div>
-    <div class="kpi teal fade"><div class="kpi-lbl">Calibration</div><div class="kpi-val" id="qk-cal">—</div><div class="kpi-note">Equipment items</div></div>
+    <div class="kpi yellow fade"><div class="kpi-lbl">Total Defects</div><div class="kpi-val" id="qk-defects">—</div><div class="kpi-note" id="qk-defects-note">All products</div></div>
+    <div class="kpi teal fade"><div class="kpi-lbl">Top Defect Type</div><div class="kpi-val" style="font-size:13px" id="qk-top-defect">—</div><div class="kpi-note" id="qk-top-defect-note"> </div></div>
   </div>
 
   <div class="g2">
@@ -349,16 +359,9 @@ select:focus{border-color:var(--blue3);}
     </div>
   </div>
 
-  <div class="g2" style="margin-top:18px">
-    <div class="card">
-      <div class="card-hdr"><div><div class="card-title">Top Defect Descriptions</div></div></div>
-      <canvas id="qualDefectChart" style="max-height:220px"></canvas>
-    </div>
-    <div class="card">
-      <div class="card-hdr"><div><div class="card-title">Calibration Equipment — 2025</div></div></div>
-      <div id="calSummary" style="margin-bottom:12px"></div>
-      <canvas id="calChart" style="max-height:180px"></canvas>
-    </div>
+  <div class="card" style="margin-top:18px">
+    <div class="card-hdr"><div><div class="card-title">Top Defect Descriptions</div><div class="card-sub" id="qualDefectSub">All products</div></div></div>
+    <canvas id="qualDefectChart" style="max-height:220px"></canvas>
   </div>
 </main>
 
@@ -397,6 +400,32 @@ select:focus{border-color:var(--blue3);}
   <div class="card" style="margin-top:18px">
     <div class="card-hdr"><div><div class="card-title">By Product Family</div><div class="card-sub">ECN / DA / MCO distribution per product</div></div></div>
     <canvas id="coProdChart" style="max-height:240px"></canvas>
+  </div>
+</main>
+
+<!-- ═══════ TAB CALIBRATION ═══════ -->
+<main id="tab-calibration" style="display:none">
+  <div class="cal-kpi-row">
+    <div class="kpi teal fade"><div class="kpi-lbl">Total Equipment</div><div class="kpi-val" id="cal-total">—</div><div class="kpi-note">Calibrated items</div></div>
+    <div class="kpi green fade"><div class="kpi-lbl">Pass</div><div class="kpi-val" id="cal-pass">—</div><div class="kpi-note" id="cal-pass-pct"> </div></div>
+    <div class="kpi red fade"><div class="kpi-lbl">Fail</div><div class="kpi-val" id="cal-fail">—</div><div class="kpi-note">Requires attention</div></div>
+    <div class="kpi yellow fade"><div class="kpi-lbl">Overdue</div><div class="kpi-val" id="cal-overdue">—</div><div class="kpi-note">Past due date</div></div>
+    <div class="kpi blue fade"><div class="kpi-lbl">Due Soon</div><div class="kpi-val" id="cal-due-soon">—</div><div class="kpi-note">Within 30 days</div></div>
+  </div>
+  <div class="g2">
+    <div class="card">
+      <div class="card-hdr"><div><div class="card-title">By Site</div><div class="card-sub">Pass / Fail / Overdue per location</div></div></div>
+      <canvas id="calSiteChart" style="max-height:220px"></canvas>
+    </div>
+    <div class="card">
+      <div class="card-hdr"><div><div class="card-title">Pass / Fail Breakdown</div></div></div>
+      <div id="calSummary" style="margin-bottom:12px"></div>
+      <canvas id="calChart" style="max-height:180px"></canvas>
+    </div>
+  </div>
+  <div class="card" style="margin-top:18px">
+    <div class="card-hdr"><div><div class="card-title">Top Equipment Types</div><div class="card-sub">By count</div></div></div>
+    <canvas id="calTypeChart" style="max-height:200px"></canvas>
   </div>
 </main>
 
@@ -487,7 +516,7 @@ tick();setInterval(tick,1000);
 
 // ── TABS ──────────────────────────────────────────────────
 function switchTab(id,el){
-  ['oe','mrb','npi','rma','quality','changeorder'].forEach(t=>document.getElementById('tab-'+t).style.display='none');
+  ['oe','mrb','npi','rma','quality','changeorder','calibration'].forEach(t=>document.getElementById('tab-'+t).style.display='none');
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
   document.getElementById('tab-'+id).style.display='block';
   el.classList.add('active');
@@ -501,6 +530,13 @@ const TICK_STYLE = {color:'#64748b',font:FONT};
 const GRID_STYLE = {color:'rgba(0,0,0,0.04)'};
 
 // ── RMA RENDERING ─────────────────────────────────────────
+function famLabel(k){
+  return k.replace('GEN1 DOCSIS RPD FDX','RPD Gen.1 FDX').replace('GEN2 DOCSIS RPD FDX','RPD Gen.2 FDX')
+          .replace('GEN1 DOCSIS RFT FDX','RFT Gen.1 FDX').replace('GEN2 DOCSIS RFT FDX','RFT Gen.2 FDX')
+          .replace('GEN1 DOCSIS RPD','RPD Gen.1').replace('GEN2 DOCSIS RPD','RPD Gen.2')
+          .replace('GEN1 DOCSIS RFT','RFT Gen.1').replace('GEN2 DOCSIS RFT','RFT Gen.2')
+          .replace('GEN1 OYS NODE','OYS Node Gen.1');
+}
 function getFilteredRMA(){
   const q = document.getElementById('rmaQFilter')?.value || 'ALL';
   const fam = document.getElementById('rmaFamFilter')?.value || 'ALL';
@@ -585,7 +621,7 @@ function renderRMA(){
   makeChart('rmaFamChart',{
     type:'bar',
     data:{
-      labels:famEntries.map(([k])=>k.replace('GEN1 DOCSIS ','').replace('GEN2 DOCSIS ','')),
+      labels:famEntries.map(([k])=>famLabel(k)),
       datasets:[
         {label:'NFF',data:famEntries.map(([,v])=>v.nff),backgroundColor:'rgba(34,197,94,.25)',borderColor:'#22c55e',borderWidth:1.5,borderRadius:4},
         {label:'Repair',data:famEntries.map(([,v])=>v.repair),backgroundColor:'rgba(239,68,68,.25)',borderColor:'#ef4444',borderWidth:1.5,borderRadius:4}
@@ -596,8 +632,8 @@ function renderRMA(){
       scales:{x:{grid:GRID_STYLE,ticks:{...TICK_STYLE,callback:v=>v.toLocaleString()}},y:{grid:{display:false},ticks:TICK_STYLE}}}
   });
 
-  // Top parts
-  const topP = parts.slice(0,10);
+  // Top parts — use filter-aware data; fall back to overall if family has no specific data
+  const topP = (parts&&parts.length?parts:RMA_DATA.top_parts_overall).slice(0,10);
   makeChart('rmaPartsChart',{
     type:'bar',
     data:{
@@ -642,8 +678,18 @@ function renderQuality(){
   });
   document.getElementById('qk-qa1').textContent = qa1Count?(qa1Total/qa1Count).toFixed(2)+'%':'—';
   document.getElementById('qk-qas').textContent = qasCount?(qasTotal/qasCount).toFixed(2)+'%':'—';
-  document.getElementById('qk-defects').textContent = '498';
-  document.getElementById('qk-cal').textContent = CAL_DATA.total;
+  // Total Defects — from actual JSON data, filtered by product
+  const allDefects = QUAL_DATA?.defect_by_product||[];
+  const filtDefectCount = sel==='ALL'
+    ? (QUAL_DATA?.kpis?.total_defects||0)
+    : (allDefects.find(r=>r.product===sel)?.count||0);
+  document.getElementById('qk-defects').textContent = filtDefectCount.toLocaleString();
+  document.getElementById('qk-defects-note').textContent = sel==='ALL'?'All products':sel;
+  const topDefect = sel==='ALL'
+    ? (QUAL_DATA?.defect_pareto?.[0])
+    : ((QUAL_DATA?.defect_pareto_by_product?.[sel]||[])[0]);
+  document.getElementById('qk-top-defect').textContent = topDefect?.desc?.substring(0,20)||'—';
+  document.getElementById('qk-top-defect-note').textContent = topDefect?topDefect.count+' occurrences':' ';
 
   // Colors per product
   const colors=['#2563eb','#16a34a','#d97706','#dc2626','#7c3aed','#0e7490','#c2410c'];
@@ -685,17 +731,16 @@ function renderQuality(){
       scales:{x:{grid:{display:false},ticks:TICK_STYLE},y:{grid:GRID_STYLE,ticks:{...TICK_STYLE,callback:v=>v+'%'},min:98,max:100.2}}}
   });
 
-  // Top defects (static from data)
-  const defectTypes = [
-    ['BLB - Damaged Label',42],['HRDM - Missing Part',38],['NRLM - Missing Markings',31],
-    ['ESD - ESD Damage',28],['SLD - Solder Defect',22],['PCB - PCB Damage',18],
-    ['COMP - Wrong Component',15],['TST - Test Fail',12]
-  ];
+  // Top defects — from actual JSON, filtered by product
+  const defectPareto = sel==='ALL'
+    ? (QUAL_DATA?.defect_pareto||[])
+    : (QUAL_DATA?.defect_pareto_by_product?.[sel]||QUAL_DATA?.defect_pareto||[]);
+  document.getElementById('qualDefectSub').textContent = sel==='ALL'?'All products':sel;
   makeChart('qualDefectChart',{
     type:'bar',
     data:{
-      labels:defectTypes.map(([k])=>k),
-      datasets:[{label:'Count',data:defectTypes.map(([,v])=>v),
+      labels:defectPareto.map(r=>r.desc),
+      datasets:[{label:'Count',data:defectPareto.map(r=>r.count),
         backgroundColor:'rgba(220,38,38,.2)',borderColor:'#dc2626',borderWidth:1.5,borderRadius:4}]
     },
     options:{responsive:true,maintainAspectRatio:true,indexAxis:'y',
@@ -703,18 +748,12 @@ function renderQuality(){
       scales:{x:{grid:GRID_STYLE,ticks:TICK_STYLE},y:{grid:{display:false},ticks:{...TICK_STYLE,font:{...FONT,size:9}}}}}
   });
 
-  // Calibration
-  document.getElementById('calSummary').innerHTML=`
-    <div style="display:flex;gap:16px;flex-wrap:wrap">
-      <span class="badge green">Pass: ${CAL_DATA.pass}</span>
-      <span class="badge red">Fail: ${CAL_DATA.fail}</span>
-      ${Object.entries(CAL_DATA.byLocation).map(([l,c])=>`<span class="badge blue">${l}: ${c}</span>`).join('')}
-    </div>`;
-  makeChart('calChart',{
+  // (Calibration moved to dedicated tab)
+  if(false){ makeChart('calChart',{
     type:'doughnut',
     data:{
       labels:['Pass','Fail'],
-      datasets:[{data:[CAL_DATA.pass,CAL_DATA.fail],backgroundColor:['rgba(34,197,94,.7)','rgba(239,68,68,.7)'],borderColor:'#fff',borderWidth:2,hoverOffset:4}]
+      datasets:[{data:[0,0],backgroundColor:['rgba(34,197,94,.7)','rgba(239,68,68,.7)'],borderColor:'#fff',borderWidth:2,hoverOffset:4}]
     },
     options:{responsive:true,maintainAspectRatio:true,cutout:'60%',
       plugins:{legend:{position:'bottom',labels:{color:'#334155',font:FONT,boxWidth:10,padding:8}}}}
@@ -723,6 +762,8 @@ function renderQuality(){
 
 // ── CHANGE ORDER RENDERING ────────────────────────────────
 let ECN_DATA = null;
+let QUAL_DATA = null;
+let CALIB_DATA = null;
 function renderChangeOrder(){
   if(!ECN_DATA) return;
   const typeFilter = document.getElementById('coQFilter')?.value || 'ALL';
@@ -807,19 +848,24 @@ function renderChangeOrder(){
 }
 
 // ── MRB RENDERING ─────────────────────────────────────────
+function currentQtr(){const m=new Date().getMonth()+1;return 'Q'+Math.ceil(m/3)+' - 2026';}
+
 function renderMRB(d){
   const mrb=d['MRB']||{};
   const quarterly=(mrb.quarterly||[]).map(r=>({q:r['Quarter']||'',plan:parseFloat(r['Target'])||0,actual:parseFloat(r['Actual'])||0}));
   const symptoms=(mrb.symptoms||[]).map(r=>({product:r['Product Name']||'',symptom:r['Symptom']||'',method:r['Repair Method']||'',qty:parseFloat(r['Qty. Repaired'])||0,status:r['Repair status']||'',rate:parseFloat(r['Success rate'])||0}));
   const avgRate=symptoms.length?symptoms.reduce((s,r)=>s+r.rate,0)/symptoms.length:0;
   document.getElementById('mrbRateBadge').textContent='Avg Rate: '+(avgRate?(avgRate*100).toFixed(1)+'%':'—');
+  const curQ=currentQtr();
+  document.getElementById('mrbCurQBadge').textContent=curQ.replace(' - 2026','')+'  ◀ Current';
   const mx=Math.max(...quarterly.map(r=>Math.max(r.plan,r.actual)),1);
   const pvaHtml=quarterly.map(r=>{
+    const isCur=r.q===curQ;
     const pp=r.plan/mx*100,ap=r.actual>0?r.actual/mx*100:0;
     const ratio=r.actual>0?r.actual/r.plan:null;
     const ac=ratio===null?'var(--muted)':ratio>=1?'var(--green3)':ratio>=0.7?'var(--yellow3)':'var(--red3)';
     const pc=ratio===null?'var(--muted)':ratio>=1?'var(--green2)':ratio>=0.7?'var(--yellow2)':'var(--red2)';
-    return `<div class="pva"><div class="pva-lbl">${r.q.replace(/ - 2026/,'')}</div><div class="bar-wrap"><div class="bar-track"><div class="bar-fill" style="width:${pp}%;background:var(--border)"></div></div><div class="bar-track"><div class="bar-fill" style="width:${ap}%;background:${ac}"></div></div></div><div style="font-size:10px;font-family:'IBM Plex Mono',monospace;color:var(--text4);text-align:right;line-height:1.4">${r.plan.toLocaleString()}<br><span style="color:${ac}">${r.actual>0?r.actual.toLocaleString():'—'}</span></div><div style="font-size:11px;font-family:'IBM Plex Mono',monospace;font-weight:600;text-align:right;color:${pc}">${ratio!==null?(ratio*100).toFixed(0)+'%':'—'}</div></div>`;
+    return `<div class="pva${isCur?' pva-current':''}"><div class="pva-lbl">${r.q.replace(/ - 2026/,'')}</div><div class="bar-wrap"><div class="bar-track"><div class="bar-fill" style="width:${pp}%;background:var(--border)"></div></div><div class="bar-track"><div class="bar-fill" style="width:${ap}%;background:${ac}"></div></div></div><div style="font-size:10px;font-family:'IBM Plex Mono',monospace;color:var(--text4);text-align:right;line-height:1.4">${r.plan.toLocaleString()}<br><span style="color:${ac}">${r.actual>0?r.actual.toLocaleString():'—'}</span></div><div style="font-size:11px;font-family:'IBM Plex Mono',monospace;font-weight:600;text-align:right;color:${pc}">${ratio!==null?(ratio*100).toFixed(0)+'%':'—'}</div></div>`;
   }).join('');
   document.getElementById('mrbPvaRows').innerHTML=pvaHtml;
   const methodHtml=symptoms.map(r=>{
@@ -827,16 +873,6 @@ function renderMRB(d){
     return `<div class="method-row"><div style="font-size:11px">${r.product}<br><span style="color:var(--text4);font-size:10px">${r.symptom}</span></div><div><span class="badge ${r.method==='SW'?'blue':'steel'}">${r.method}</span></div><div class="mono">${r.qty.toLocaleString()}</div><div style="display:flex;align-items:center;gap:7px"><div class="rate-track" style="flex:1"><div class="rate-fill" style="width:${pct}%;background:${bc}"></div></div><span class="mono" style="color:${tc};font-weight:600;font-size:10px">${pct}%</span></div><div><span class="pill ${r.status.toLowerCase()==='success'?'success':'fail'}">${r.status}</span></div></div>`;
   }).join('');
   document.getElementById('mrbMethodRows').innerHTML=methodHtml;
-  // Product Type breakdown chart
-  const prodMap={};
-  symptoms.forEach(r=>{if(r.product)prodMap[r.product]=(prodMap[r.product]||0)+r.qty;});
-  const prodLabels=Object.keys(prodMap),prodData=prodLabels.map(k=>prodMap[k]);
-  const PROD_COLORS=['rgba(37,99,235,.75)','rgba(22,163,74,.75)','rgba(217,119,6,.75)','rgba(220,38,38,.75)','rgba(124,58,237,.75)','rgba(14,116,144,.75)','rgba(249,115,22,.75)'];
-  makeChart('mrbProductChart',{type:'doughnut',
-    data:{labels:prodLabels,datasets:[{data:prodData,backgroundColor:PROD_COLORS.slice(0,prodLabels.length),borderColor:'#fff',borderWidth:2,hoverOffset:4}]},
-    options:{responsive:true,maintainAspectRatio:true,cutout:'55%',
-      plugins:{legend:{position:'bottom',labels:{color:'#334155',font:FONT,boxWidth:10,padding:8}},
-               tooltip:{callbacks:{label:ctx=>`${ctx.label}: ${ctx.parsed.toLocaleString()} units`}}}}});
   // Quarterly Trend chart
   makeChart('mrbTrendChart',{type:'bar',
     data:{
@@ -878,9 +914,26 @@ function renderCompEng(d){
   document.getElementById('otdBadge').textContent=`OTD ${otdPct}%`;
   document.getElementById('otdBadge').className='badge '+(otdPct>=80?'green':otdPct>=60?'yellow':'red');
   const rcMap={};rows.forEach(r=>{const delay=parseInt(r['Delay (Days) ']||0)||0;if(delay>0){const rc=r['Root Cause']||'Unknown';rcMap[rc]=(rcMap[rc]||0)+1;}});
-  const onTime=rows.filter(r=>!(parseInt(r['Delay (Days) ']||0)||0)).length;
-  makeChart('rootChart',{type:'doughnut',data:{labels:['On Time',...Object.keys(rcMap)],datasets:[{data:[onTime,...Object.values(rcMap)],backgroundColor:['rgba(34,197,94,.7)','rgba(239,68,68,.7)','rgba(245,158,11,.7)','rgba(59,130,246,.7)'],borderColor:'#fff',borderWidth:2,hoverOffset:4}]},options:{responsive:true,maintainAspectRatio:true,cutout:'60%',plugins:{legend:{position:'bottom',labels:{color:'#334155',font:FONT,boxWidth:10,padding:8}}}}});
-  document.getElementById('rootSummary').innerHTML=[['On Time',onTime],...Object.entries(rcMap)].map(([k,v])=>`<div style="display:flex;justify-content:space-between;font-size:10px;padding:5px 0;border-bottom:1px solid var(--border2)"><span style="color:var(--text4)">${k}</span><span class="mono" style="color:${k==='On Time'?'var(--green2)':'var(--red2)'};font-weight:600">${v} task${v!==1?'s':''}</span></div>`).join('');
+  // Per-product OTD bar chart (horizontal stacked — clearer than doughnut)
+  const prodOtd={};
+  grouped.forEach(g=>{
+    if(!prodOtd[g.product]) prodOtd[g.product]={onTime:0,delayed:0};
+    if(g.totalDelay===0) prodOtd[g.product].onTime++; else prodOtd[g.product].delayed++;
+  });
+  const prodNames=Object.keys(prodOtd);
+  makeChart('rootChart',{type:'bar',
+    data:{labels:prodNames,datasets:[
+      {label:'On Time',data:prodNames.map(p=>prodOtd[p].onTime),backgroundColor:'rgba(34,197,94,.6)',borderColor:'#22c55e',borderWidth:1.5,borderRadius:3},
+      {label:'Delayed',data:prodNames.map(p=>prodOtd[p].delayed),backgroundColor:'rgba(239,68,68,.55)',borderColor:'#ef4444',borderWidth:1.5,borderRadius:3}
+    ]},
+    options:{indexAxis:'y',responsive:true,maintainAspectRatio:true,
+      plugins:{legend:{labels:{color:'#64748b',font:FONT,boxWidth:10}}},
+      scales:{x:{stacked:true,grid:GRID_STYLE,ticks:TICK_STYLE},y:{stacked:true,grid:{display:false},ticks:TICK_STYLE}}}});
+  document.getElementById('rootSummary').innerHTML=
+    `<div style="font-size:10px;font-weight:600;color:var(--text3);margin-bottom:8px">Root Cause of Delays</div>`+
+    (Object.keys(rcMap).length
+      ? Object.entries(rcMap).map(([k,v])=>`<div style="display:flex;justify-content:space-between;font-size:10px;padding:5px 0;border-bottom:1px solid var(--border2)"><span style="color:var(--text4)">${k}</span><span class="mono" style="color:var(--red2);font-weight:600">${v} task${v!==1?'s':''}</span></div>`).join('')
+      : `<div style="font-size:11px;color:var(--green2);font-weight:600">All components on time ✓</div>`);
 
   // Component Status Matrix
   const matrixGroups={};
@@ -999,7 +1052,7 @@ function renderNPI(d){
       const subPill=subStatus==='On Track'?'on-track':subStatus==='At Risk'?'at-risk':'blocked';
       const border=idx<entries.length-1?'border-bottom:1px solid var(--border2);':'';
       return `<div class="npi-body" style="${border}">
-        <div class="npi-sec"><div class="npi-sec-title">Configuration${entries.length>1?` <span class="badge steel">#${idx+1}</span> <span class="pill ${subPill}" style="margin-left:4px">${subStatus}</span>`:''}</div>${hlj?`<div style="font-size:10px;color:var(--text3);font-style:italic;margin-bottom:8px">${hlj}</div>`:''}${pnBcmHtml}${cfgFields}${eDiBtn}</div>
+        <div class="npi-sec"><div class="npi-sec-title">Configuration${entries.length>1?` <span class="badge steel">#${idx+1}</span> <span class="pill ${subPill}" style="margin-left:4px">${subStatus}</span>`:''}${hlj?` <span style="font-size:9px;color:var(--text3);font-style:italic;font-weight:400;letter-spacing:0;text-transform:none;margin-left:6px">· ${hlj}</span>`:''}</div>${pnBcmHtml}${cfgFields}${eDiBtn}</div>
         <div class="npi-divider"></div>
         <div class="npi-sec"><div class="npi-sec-title">Important Notes</div>${notes||'<span style="color:var(--muted);font-size:11px">—</span>'}</div>
         <div class="npi-divider"></div>
@@ -1013,6 +1066,48 @@ function renderNPI(d){
 }
 
 function toggleDI(id){const el=document.getElementById('di-'+id);if(el)el.style.display=el.style.display==='block'?'none':'block';}
+
+function filterNPICards(){
+  const search=(document.getElementById('npiSearch')?.value||'').toLowerCase();
+  const status=document.getElementById('npiStatusFilter')?.value||'ALL';
+  document.querySelectorAll('#npiCards .npi-card').forEach(card=>{
+    const name=(card.querySelector('.npi-name')?.textContent||'').toLowerCase();
+    const pill=card.querySelector('.npi-top .pill')?.textContent||'';
+    card.style.display=((!search||name.includes(search))&&(status==='ALL'||pill===status))?'':'none';
+  });
+}
+
+function renderCalibration(){
+  const c=CALIB_DATA;
+  if(!c||!c.kpis) return;
+  const k=c.kpis;
+  document.getElementById('cal-total').textContent=(k.total||0).toLocaleString();
+  document.getElementById('cal-pass').textContent=(k.pass||0).toLocaleString();
+  document.getElementById('cal-pass-pct').textContent=k.total?(((k.pass/k.total)*100).toFixed(1)+'% pass rate'):'';
+  document.getElementById('cal-fail').textContent=(k.fail||0).toLocaleString();
+  document.getElementById('cal-overdue').textContent=(k.overdue||0).toLocaleString();
+  document.getElementById('cal-due-soon').textContent=(k.due_soon||0).toLocaleString();
+  // Pass/Fail summary + doughnut
+  const bySite=c.by_site||[];
+  document.getElementById('calSummary').innerHTML=`<div style="display:flex;gap:10px;flex-wrap:wrap">
+    <span class="badge green">Pass: ${k.pass}</span><span class="badge red">Fail: ${k.fail}</span>
+    ${bySite.map(s=>`<span class="badge blue">${s.site}: ${s.total}</span>`).join('')}</div>`;
+  makeChart('calChart',{type:'doughnut',data:{labels:['Pass','Fail'],datasets:[{data:[k.pass,k.fail],backgroundColor:['rgba(34,197,94,.7)','rgba(239,68,68,.7)'],borderColor:'#fff',borderWidth:2,hoverOffset:4}]},
+    options:{responsive:true,maintainAspectRatio:true,cutout:'60%',plugins:{legend:{position:'bottom',labels:{color:'#334155',font:FONT,boxWidth:10,padding:8}}}}});
+  // By site chart
+  const siteLabels=bySite.map(s=>s.site);
+  makeChart('calSiteChart',{type:'bar',data:{labels:siteLabels,datasets:[
+    {label:'Pass',data:bySite.map(s=>s.pass||0),backgroundColor:'rgba(34,197,94,.55)',borderColor:'#22c55e',borderWidth:1.5,borderRadius:3},
+    {label:'Fail',data:bySite.map(s=>s.fail||0),backgroundColor:'rgba(239,68,68,.55)',borderColor:'#ef4444',borderWidth:1.5,borderRadius:3},
+    {label:'Overdue',data:bySite.map(s=>s.overdue||0),backgroundColor:'rgba(245,158,11,.55)',borderColor:'#f59e0b',borderWidth:1.5,borderRadius:3}
+  ]},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{labels:{color:'#64748b',font:FONT,boxWidth:10}}},
+    scales:{x:{grid:{display:false},ticks:TICK_STYLE},y:{grid:GRID_STYLE,ticks:TICK_STYLE}}}});
+  // By type chart
+  const byType=c.by_type||[];
+  makeChart('calTypeChart',{type:'bar',data:{labels:byType.map(t=>t.type),datasets:[{label:'Count',data:byType.map(t=>t.count),backgroundColor:'rgba(14,116,144,.35)',borderColor:'#0e7490',borderWidth:1.5,borderRadius:4}]},
+    options:{responsive:true,maintainAspectRatio:true,indexAxis:'y',plugins:{legend:{display:false}},
+    scales:{x:{grid:GRID_STYLE,ticks:TICK_STYLE},y:{grid:{display:false},ticks:{...TICK_STYLE,font:{...FONT,size:9}}}}}});
+}
 
 // ── INIT FILTERS ──────────────────────────────────────────
 function initFilters(){
@@ -1031,13 +1126,14 @@ function initFilters(){
 
 // ── MAIN DATA LOAD ────────────────────────────────────────
 function renderAll(d){
-  // Populate Change Order product filter from ECN data
+  QUAL_DATA = d['Quality_Production'] || {};
+  CALIB_DATA = d['Quality_Calibration'] || {};
   ECN_DATA = d['ECN_MCO_DA'] || {};
   const coFamSel = document.getElementById('coFamFilter');
   coFamSel.querySelectorAll('option:not([value="ALL"])').forEach(o=>o.remove());
   (ECN_DATA.by_product||[]).forEach(r=>{const o=document.createElement('option');o.value=r.product;o.text=r.product;coFamSel.appendChild(o);});
   renderMRB(d); renderCompEng(d); renderCost(d); renderNPI(d);
-  renderRMA(); renderQuality(); renderChangeOrder();
+  renderRMA(); renderQuality(); renderChangeOrder(); renderCalibration();
   setStatus('ok','Data loaded · '+(d['_updated']||''));
   document.getElementById('refreshBtn').classList.remove('loading');
   document.getElementById('refreshBtn').disabled=false;
