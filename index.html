@@ -178,6 +178,11 @@ select:focus{border-color:var(--blue3);}
 .ms-open{background:#fef3c7;color:#b45309;}
 .ms-na{background:var(--border2);color:var(--muted);}
 .ms-delayed{background:#fee2e2;color:#b91c1c;}
+.ms-timing-cell{border-left:2px solid var(--border) !important;background:rgba(241,245,249,.5);padding-left:12px !important;}
+.ms-otd-wrap{position:relative;display:inline-block;}
+.ms-otd-tip{display:none;position:absolute;right:0;top:calc(100% + 5px);background:var(--navy);color:#fff;font-size:10px;padding:6px 10px;border-radius:6px;white-space:nowrap;z-index:99;box-shadow:0 4px 12px rgba(0,0,0,.25);}
+.ms-otd-tip::before{content:'';position:absolute;top:-5px;right:14px;border:5px solid transparent;border-bottom-color:var(--navy);border-top:none;}
+.ms-otd-wrap:hover .ms-otd-tip{display:block;}
 
 /* COMING SOON */
 .coming{display:flex;align-items:center;justify-content:center;min-height:140px;border:2px dashed var(--border2);border-radius:10px;flex-direction:column;gap:8px;}
@@ -902,7 +907,9 @@ function renderCompEng(d){
   rows.forEach(r=>{
     const key=`${r['Product Name']}||${r['Org. HPN']}||${r['New Component']}`;
     const delay=parseInt(r['Delay (Days) ']||0)||0;
-    compDelayMap[key]=(compDelayMap[key]||0)+delay;
+    if(!compDelayMap[key]) compDelayMap[key]={delay:0,reasons:new Set()};
+    compDelayMap[key].delay+=delay;
+    if(delay>0&&r['Root Cause']) compDelayMap[key].reasons.add(r['Root Cause']);
   });
 
   // Component Status Matrix
@@ -935,23 +942,27 @@ function renderCompEng(d){
       return st?`<td><span class="ms-pill ${msClass(st)}">${st}</span></td>`:`<td style="color:var(--muted);font-size:10px">—</td>`;
     }).join('');
     const compKey=`${g.product}||${g.orgHpn}||${g.newComp}`;
-    const delay=compDelayMap[compKey]||0;
+    const compInfo=compDelayMap[compKey]||{delay:0,reasons:new Set()};
+    const delay=compInfo.delay;
+    const reasons=[...compInfo.reasons].join(', ')||'';
+    const otdTooltip=delay>0?`${delay}d delay${reasons?` · ${reasons}`:''}`:' ';
     const otdCell=delay===0
-      ?`<td><span class="ms-pill ms-closed" style="min-width:58px;text-align:center">On Time</span></td>`
-      :`<td><span class="ms-pill ms-delayed" style="min-width:58px;text-align:center" title="${delay}d delay">Delayed</span></td>`;
+      ?`<td class="ms-timing-cell"><span class="ms-pill ms-closed" style="min-width:58px;text-align:center">On Time</span></td>`
+      :`<td class="ms-timing-cell"><div class="ms-otd-wrap"><span class="ms-pill ms-delayed" style="min-width:58px;text-align:center">${delay}d delay</span><div class="ms-otd-tip">${reasons||'No reason specified'}</div></div></td>`;
     return `<tr>
       <td style="font-weight:600;color:var(--text2)">${g.product}</td>
       <td style="color:var(--text4);font-size:10px">${g.type||''}</td>
       <td class="mono" style="font-size:10px;color:var(--text4)">${g.orgHpn||''}</td>
       <td style="font-size:10px;color:var(--text3)">${g.justification||''}</td>
       <td style="font-size:11px;color:var(--blue2);font-weight:500">${g.newComp||''}</td>
-      ${otdCell}
       ${msCells}
+      ${otdCell}
     </tr>`;
   }).join('');
   document.getElementById('compMatrix').innerHTML=`<table class="comp-matrix"><thead><tr>
-    <th>Product</th><th>Type</th><th>Org. HPN</th><th>Justification</th><th>Alt. Component</th><th>OTD</th>
-    ${thCols}</tr></thead><tbody>${trs}</tbody></table>`;
+    <th>Product</th><th>Type</th><th>Org. HPN</th><th>Justification</th><th>Alt. Component</th>
+    ${thCols}<th class="ms-timing-cell">OTD</th>
+    </tr></thead><tbody>${trs}</tbody></table>`;
 }
 
 function renderCost(d){
