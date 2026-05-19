@@ -187,16 +187,16 @@
       "Root Cause": null
     },
     {
-      "Product Name": "PEARL XL",
+      "Product Name": "RPD Gen.1",
       "Type": "DDR3",
       "Org. HPN": "160-1321-220",
       "Justification": "Availability",
       "New Component": "Winbond",
-      "Task Name": null,
-      "Milestone": "Released",
-      "Status": "Closed",
+      "Task Name": "Phase#1 :  10 devices with full production flow",
+      "Milestone": "PLX Pilot #1",
+      "Status": "In-Progresss",
       "Target Date": "15/12/2025",
-      "Actual Date": "15/22/2025",
+      "Actual Date": null,
       "Delay (Days) ": 0,
       "Root Cause": "RM readiness"
     },
@@ -206,11 +206,25 @@
       "Org. HPN": "160-1331-001",
       "Justification": "Single source",
       "New Component": "Winbond",
-      "Task Name": null,
-      "Milestone": "Released",
+      "Task Name": "Phase#1 :  10 devices with full production flow",
+      "Milestone": "PLX Pilot #1",
       "Status": "Closed",
       "Target Date": "28/12/2025",
       "Actual Date": "28/12/2025",
+      "Delay (Days) ": 0,
+      "Root Cause": null
+    },
+    {
+      "Product Name": "RPD UNF Spin #6",
+      "Type": "eMMC",
+      "Org. HPN": "160-1331-001",
+      "Justification": "Single source",
+      "New Component": "Winbond",
+      "Task Name": "R&D validation (HW and SW)",
+      "Milestone": "R&D Validation",
+      "Status": "Open",
+      "Target Date": "28/12/2025",
+      "Actual Date": null,
       "Delay (Days) ": 0,
       "Root Cause": null
     }
@@ -269,8 +283,8 @@
     "npi_at_risk": 2,
     "npi_blocked": 0,
     "npi_on_track": 2,
-    "comp_total": 6,
-    "comp_otd": 4,
+    "comp_total": 7,
+    "comp_otd": 5,
     "comp_max_delay": 24,
     "cost_total": 86000
   },
@@ -9359,5 +9373,5 @@
       }
     ]
   },
-  "_updated": "2026-05-19 20:01 UTC"
+  "_updated": "2026-05-19 20:24 UTC"
 }
