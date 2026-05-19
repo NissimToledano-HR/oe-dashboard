@@ -7110,6 +7110,274 @@
         "count": 22
       }
     ],
+    "defect_pareto_by_product": {
+      "Pebble Gen 2": [
+        {
+          "desc": "HRDL - Part Loose / Insecure (not due to under-torque)",
+          "count": 81
+        },
+        {
+          "desc": "HRDM - Missing Mechanical Part",
+          "count": 45
+        },
+        {
+          "desc": "NRLM - Missing / Illegible Markings",
+          "count": 35
+        },
+        {
+          "desc": "BLB - Damaged Label (peeled / torn / faded)",
+          "count": 24
+        },
+        {
+          "desc": "DMECH - Defective Mechanical Part or Subassembly",
+          "count": 16
+        },
+        {
+          "desc": "NRLB - Bar Code Label Not Scannable or Readable",
+          "count": 6
+        },
+        {
+          "desc": "SCRTCH - Scratches, Cracks in Paint or Finish",
+          "count": 5
+        },
+        {
+          "desc": "HRDW - Wrong Mechanical Part",
+          "count": 1
+        },
+        {
+          "desc": "MPLB - Wrong Placement of Label or Stamp",
+          "count": 1
+        },
+        {
+          "desc": "WLB-MP - Wrong or Misprinted Information on Label",
+          "count": 1
+        }
+      ],
+      "RAFT": [
+        {
+          "desc": "NRLM - Missing / Illegible Markings",
+          "count": 117
+        },
+        {
+          "desc": "HRDL - Part Loose / Insecure (not due to under-torque)",
+          "count": 72
+        },
+        {
+          "desc": "GASK - Damaged or Missing Gasket / EMI Shield",
+          "count": 63
+        },
+        {
+          "desc": "HRDM - Missing Mechanical Part",
+          "count": 51
+        },
+        {
+          "desc": "BLB - Damaged Label (peeled / torn / faded)",
+          "count": 36
+        },
+        {
+          "desc": "NRLB - Bar Code Label Not Scannable or Readable",
+          "count": 35
+        },
+        {
+          "desc": "MPLB - Wrong Placement of Label or Stamp",
+          "count": 20
+        },
+        {
+          "desc": "SCRTCH - Scratches, Cracks in Paint or Finish",
+          "count": 16
+        },
+        {
+          "desc": "WLB-MP - Wrong or Misprinted Information on Label",
+          "count": 8
+        },
+        {
+          "desc": "DMECH - Defective Mechanical Part or Subassembly",
+          "count": 5
+        }
+      ],
+      "Pebble Gen 1": [
+        {
+          "desc": "DMECH - Defective Mechanical Part or Subassembly",
+          "count": 28
+        },
+        {
+          "desc": "BLB - Damaged Label (peeled / torn / faded)",
+          "count": 24
+        },
+        {
+          "desc": "HRDM - Missing Mechanical Part",
+          "count": 22
+        },
+        {
+          "desc": "HRDL - Part Loose / Insecure (not due to under-torque)",
+          "count": 15
+        },
+        {
+          "desc": "IGAP - Interference Fit or Excessive Gap - Door or Panel",
+          "count": 11
+        },
+        {
+          "desc": "NRLM - Missing / Illegible Markings",
+          "count": 6
+        },
+        {
+          "desc": "SCRTCH - Scratches, Cracks in Paint or Finish",
+          "count": 5
+        },
+        {
+          "desc": "NRLB - Bar Code Label Not Scannable or Readable",
+          "count": 3
+        },
+        {
+          "desc": "DCS - Damaged Components or Connectors",
+          "count": 2
+        },
+        {
+          "desc": "WLB-MP - Wrong or Misprinted Information on Label",
+          "count": 2
+        }
+      ],
+      "ATO RFT Gen 1": [
+        {
+          "desc": "NRLM - Missing / Illegible Markings",
+          "count": 9
+        },
+        {
+          "desc": "HRDL - Part Loose / Insecure (not due to under-torque)",
+          "count": 8
+        },
+        {
+          "desc": "WLB-MP - Wrong or Misprinted Information on Label",
+          "count": 8
+        },
+        {
+          "desc": "BLB - Damaged Label (peeled / torn / faded)",
+          "count": 7
+        },
+        {
+          "desc": "HRDM - Missing Mechanical Part",
+          "count": 5
+        },
+        {
+          "desc": "NRLB - Bar Code Label Not Scannable or Readable",
+          "count": 3
+        },
+        {
+          "desc": "DMECH - Defective Mechanical Part or Subassembly",
+          "count": 2
+        },
+        {
+          "desc": "DMG - Damaged PCB / Edges (nicks / dents / burns / burrs / haloing)",
+          "count": 1
+        }
+      ],
+      "ATO RFT Gen 2": [
+        {
+          "desc": "NRLB - Bar Code Label Not Scannable or Readable",
+          "count": 36
+        },
+        {
+          "desc": "BLB - Damaged Label (peeled / torn / faded)",
+          "count": 34
+        },
+        {
+          "desc": "NRLM - Missing / Illegible Markings",
+          "count": 31
+        },
+        {
+          "desc": "WLB-MP - Wrong or Misprinted Information on Label",
+          "count": 28
+        },
+        {
+          "desc": "HRDL - Part Loose / Insecure (not due to under-torque)",
+          "count": 28
+        },
+        {
+          "desc": "HRDM - Missing Mechanical Part",
+          "count": 17
+        },
+        {
+          "desc": "DMECH - Defective Mechanical Part or Subassembly",
+          "count": 8
+        },
+        {
+          "desc": "INSW - Incorrect Installation / Mounting Position of Mechanical Part",
+          "count": 4
+        },
+        {
+          "desc": "(FOD) - Foreign Object Debris (debris, particulate matter,  or alien article)",
+          "count": 3
+        },
+        {
+          "desc": "DMP - Bent or Damaged Chassis / Cabinet / Panel",
+          "count": 3
+        }
+      ],
+      "RFT COS Gen 2": [
+        {
+          "desc": "HRDL - Part Loose / Insecure (not due to under-torque)",
+          "count": 10
+        },
+        {
+          "desc": "BLB - Damaged Label (peeled / torn / faded)",
+          "count": 9
+        },
+        {
+          "desc": "HRDM - Missing Mechanical Part",
+          "count": 8
+        },
+        {
+          "desc": "DMECH - Defective Mechanical Part or Subassembly",
+          "count": 3
+        },
+        {
+          "desc": "NRLM - Missing / Illegible Markings",
+          "count": 2
+        },
+        {
+          "desc": "CLN-FLX - Flux Residue",
+          "count": 1
+        },
+        {
+          "desc": "DMG - Damaged PCB / Edges (nicks / dents / burns / burrs / haloing)",
+          "count": 1
+        },
+        {
+          "desc": "MSS - Missing Component",
+          "count": 1
+        },
+        {
+          "desc": "XX2 - Damaged Leads",
+          "count": 1
+        },
+        {
+          "desc": "TCS - Tombstoned Component",
+          "count": 1
+        }
+      ],
+      "RFT Cos Gen 1": [
+        {
+          "desc": "HRDL - Part Loose / Insecure (not due to under-torque)",
+          "count": 5
+        },
+        {
+          "desc": "CLN-FLX - Flux Residue",
+          "count": 1
+        },
+        {
+          "desc": "NRLB - Bar Code Label Not Scannable or Readable",
+          "count": 1
+        },
+        {
+          "desc": "NRLM - Missing / Illegible Markings",
+          "count": 1
+        },
+        {
+          "desc": "BLB - Damaged Label (peeled / torn / faded)",
+          "count": 1
+        }
+      ]
+    },
     "defect_by_product": [
       {
         "product": "RAFT",
@@ -9091,5 +9359,5 @@
       }
     ]
   },
-  "_updated": "2026-05-19 18:56 UTC"
+  "_updated": "2026-05-19 19:55 UTC"
 }
