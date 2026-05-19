@@ -3,12 +3,12 @@
     "quarterly": [
       {
         "Quarter": "Q1 - 2026",
-        "Target": 300.0,
+        "Target": 500.0,
         "Actual": 445.0
       },
       {
         "Quarter": "Q2 - 2026",
-        "Target": 300.0,
+        "Target": 100.0,
         "Actual": 120.0
       },
       {
@@ -196,16 +196,16 @@
       "Milestone": "Released",
       "Status": "Closed",
       "Target Date": "15/12/2025",
-      "Actual Date": "22/12/2025",
-      "Delay (Days) ": 7,
+      "Actual Date": "15/22/2025",
+      "Delay (Days) ": 0,
       "Root Cause": "RM readiness"
     },
     {
       "Product Name": "RPD UNF Spin #6",
       "Type": "eMMC",
-      "Org. HPN": "160-0000-001",
+      "Org. HPN": "160-1331-001",
       "Justification": "Single source",
-      "New Component": "WD",
+      "New Component": "Winbond",
       "Task Name": null,
       "Milestone": "Released",
       "Status": "Closed",
@@ -242,6 +242,15 @@
       "Annual Volume": 10000.0,
       "Total Yearly Saving ($)": 14000,
       "Status": "Closed"
+    },
+    {
+      "Product Name": "RPD UNF 2G",
+      "Activity Description": "Removing manual soldering rework from Previous spin",
+      "Category": "Labor",
+      "Unit Saving ($)": 0.5,
+      "Annual Volume": 10000.0,
+      "Total Yearly Saving ($)": 5000,
+      "Status": "In-Progresss"
     }
   ],
   "Design issue for improvment": [
@@ -261,7 +270,7 @@
     "npi_blocked": 0,
     "npi_on_track": 2,
     "comp_total": 6,
-    "comp_otd": 3,
+    "comp_otd": 4,
     "comp_max_delay": 24,
     "cost_total": 86000
   },
@@ -9082,5 +9091,5 @@
       }
     ]
   },
-  "_updated": "2026-05-18 14:03 UTC"
+  "_updated": "2026-05-19 18:56 UTC"
 }
