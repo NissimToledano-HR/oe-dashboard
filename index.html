@@ -98,8 +98,10 @@ select:focus{border-color:var(--blue3);}
 .pill::before{content:'';width:5px;height:5px;border-radius:50%;flex-shrink:0;}
 .pill.success,.pill.closed,.pill.on-track,.pill.nff{background:var(--gbg);color:var(--green2);}
 .pill.success::before,.pill.closed::before,.pill.on-track::before,.pill.nff::before{background:var(--green3);}
-.pill.open,.pill.progress,.pill.at-risk{background:var(--ybg);color:var(--yellow2);}
-.pill.open::before,.pill.progress::before,.pill.at-risk::before{background:var(--yellow3);}
+.pill.open,.pill.at-risk{background:var(--ybg);color:var(--yellow2);}
+.pill.open::before,.pill.at-risk::before{background:var(--yellow3);}
+.pill.progress{background:#dbeafe;color:#1d4ed8;}
+.pill.progress::before{background:#3b82f6;}
 .pill.fail,.pill.blocked,.pill.repair{background:var(--rbg);color:var(--red2);}
 .pill.fail::before,.pill.blocked::before,.pill.repair::before{background:var(--red3);}
 
@@ -134,7 +136,7 @@ select:focus{border-color:var(--blue3);}
 .comp-row.hdr div{font-size:9px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);}
 
 /* COST TABLE */
-.cost-row{display:grid;grid-template-columns:1fr 72px 80px 80px 80px 74px;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border2);}
+.cost-row{display:grid;grid-template-columns:2fr 72px 80px 80px 80px 74px;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border2);}
 .cost-row:last-child{border-bottom:none;}
 .cost-row.hdr div{font-size:9px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);}
 
@@ -178,6 +180,7 @@ select:focus{border-color:var(--blue3);}
 .ms-open{background:#fef3c7;color:#b45309;}
 .ms-na{background:var(--border2);color:var(--muted);}
 .ms-delayed{background:#fee2e2;color:#b91c1c;}
+.rma-no-data{height:160px;align-items:center;justify-content:center;font-size:11px;color:var(--muted);font-style:italic;}
 .ms-timing-cell{border-left:2px solid var(--border) !important;background:rgba(241,245,249,.5);padding-left:12px !important;}
 .ms-otd-wrap{position:relative;display:inline-block;}
 .ms-otd-tip{display:none;position:absolute;right:0;top:calc(100% + 5px);background:var(--navy);color:#fff;font-size:10px;padding:6px 10px;border-radius:6px;white-space:nowrap;z-index:99;box-shadow:0 4px 12px rgba(0,0,0,.25);}
@@ -214,17 +217,17 @@ select:focus{border-color:var(--blue3);}
 </header>
 <div class="status-bar"><div class="sdot idle" id="sdot"></div><span id="stxt">Loading...</span></div>
 <nav>
-  <div class="tab active" onclick="switchTab('oe',this)">OE Excellence &amp; Efficiency</div>
+  <div class="tab active" onclick="switchTab('npi',this)">NPI Project Master</div>
+  <div class="tab" onclick="switchTab('oe',this)">OE Excellence &amp; Efficiency</div>
   <div class="tab" onclick="switchTab('mrb',this)">MRB</div>
-  <div class="tab" onclick="switchTab('npi',this)">NPI Project Master</div>
+  <div class="tab" onclick="switchTab('changeorder',this)">Change Order</div>
   <div class="tab" onclick="switchTab('rma',this)">RMA</div>
   <div class="tab" onclick="switchTab('quality',this)">Quality</div>
-  <div class="tab" onclick="switchTab('changeorder',this)">Change Order</div>
   <div class="tab" onclick="switchTab('calibration',this)">Calibration</div>
 </nav>
 
 <!-- ═══════ TAB 1: OE EXCELLENCE ═══════ -->
-<main id="tab-oe">
+<main id="tab-oe" style="display:none">
   <div class="sec-label">2nd source and Alternative component approval</div>
   <div class="g2" style="margin-bottom:18px">
     <div class="card" style="grid-column:1/-1">
@@ -268,7 +271,7 @@ select:focus{border-color:var(--blue3);}
 </main>
 
 <!-- ═══════ TAB 2: NPI ═══════ -->
-<main id="tab-npi" style="display:none">
+<main id="tab-npi">
   <div class="sec-label">NPI Project Master — OE Status Tracker</div>
   <div class="filter-bar" style="margin-bottom:14px">
     <span class="filter-lbl">Search:</span>
@@ -325,10 +328,7 @@ select:focus{border-color:var(--blue3);}
     </div>
   </div>
 
-  <div class="card" style="margin-top:18px">
-    <div class="card-hdr"><div><div class="card-title">Repair Category Breakdown</div></div></div>
-    <canvas id="rmaFailChart" style="max-height:180px"></canvas>
-  </div>
+
 </main>
 
 <!-- ═══════ TAB 4: QUALITY ═══════ -->
@@ -631,34 +631,31 @@ function renderRMA(){
       scales:{x:{grid:GRID_STYLE,ticks:{...TICK_STYLE,callback:v=>v.toLocaleString()}},y:{grid:{display:false},ticks:TICK_STYLE}}}
   });
 
-  // Top parts — use filter-aware data; fall back to overall if family has no specific data
-  const topP = (parts&&parts.length?parts:RMA_DATA.top_parts_overall).slice(0,10);
-  makeChart('rmaPartsChart',{
-    type:'bar',
-    data:{
-      labels:topP.map(([k])=>k),
-      datasets:[{label:'Count',data:topP.map(([,v])=>v),backgroundColor:'rgba(37,99,235,.2)',borderColor:'#2563eb',borderWidth:1.5,borderRadius:4}]
-    },
-    options:{responsive:true,maintainAspectRatio:true,indexAxis:'y',
-      plugins:{legend:{display:false}},
-      scales:{x:{grid:GRID_STYLE,ticks:TICK_STYLE},y:{grid:{display:false},ticks:{...TICK_STYLE,font:{...FONT,family:'IBM Plex Mono',size:10}}}}}
-  });
+  // Top parts — filter-aware; no fallback so chart truly reflects selected filter
+  const topP = (parts||[]).slice(0,10);
+  const partsCanvas = document.getElementById('rmaPartsChart');
+  if(topP.length){
+    partsCanvas.style.display='block';
+    partsCanvas.nextElementSibling&&(partsCanvas.nextElementSibling.style.display='none');
+    makeChart('rmaPartsChart',{
+      type:'bar',
+      data:{
+        labels:topP.map(([k])=>k),
+        datasets:[{label:'Count',data:topP.map(([,v])=>v),backgroundColor:'rgba(37,99,235,.2)',borderColor:'#2563eb',borderWidth:1.5,borderRadius:4}]
+      },
+      options:{responsive:true,maintainAspectRatio:true,indexAxis:'y',
+        plugins:{legend:{display:false}},
+        scales:{x:{grid:GRID_STYLE,ticks:TICK_STYLE},y:{grid:{display:false},ticks:{...TICK_STYLE,font:{...FONT,family:'IBM Plex Mono',size:10}}}}}
+    });
+  } else {
+    destroyChart('rmaPartsChart');
+    partsCanvas.style.display='none';
+    let noData=partsCanvas.nextElementSibling;
+    if(!noData||!noData.classList.contains('rma-no-data')){noData=document.createElement('div');noData.className='rma-no-data';partsCanvas.parentNode.appendChild(noData);}
+    noData.style.display='flex';
+    noData.textContent='No parts data for selected filter';
+  }
 
-  // Failure category
-  const fc = RMA_DATA.failure_categories;
-  makeChart('rmaFailChart',{
-    type:'doughnut',
-    data:{
-      labels:['NFF',...fc.map(([k])=>k)],
-      datasets:[{
-        data:[nff,...fc.map(([,v])=>v)],
-        backgroundColor:['rgba(34,197,94,.7)','rgba(239,68,68,.7)','rgba(59,130,246,.7)','rgba(245,158,11,.7)'],
-        borderColor:'#fff',borderWidth:2,hoverOffset:4
-      }]
-    },
-    options:{responsive:true,maintainAspectRatio:true,cutout:'55%',
-      plugins:{legend:{position:'right',labels:{color:'#334155',font:FONT,boxWidth:12,padding:10}}}}
-  });
 }
 
 // ── QUALITY RENDERING ─────────────────────────────────────
@@ -970,7 +967,7 @@ function renderCost(d){
   const total=rows.filter(r=>r['Status']==='Closed').reduce((s,r)=>s+(parseFloat(r['Total Yearly Saving ($)'])||0),0);
   document.getElementById('costTotal').textContent='$'+total.toLocaleString();
   const catColor={BOM:'blue',Labor:'steel','Process Time':'green','Testing Time':'yellow',Logistics:'steel'};
-  document.getElementById('costRows').innerHTML=rows.map(r=>{const act=String(r['Activity Description']||'').substring(0,34);const tot=parseFloat(r['Total Yearly Saving ($)'])||0;return `<div class="cost-row"><div style="font-size:11px">${act}${act.length>=34?'…':''}</div><div><span class="badge ${catColor[r['Category']]||'steel'}">${r['Category']||''}</span></div><div class="mono">$${parseFloat(r['Unit Saving ($)']||0).toFixed(2)}</div><div class="mono">${parseFloat(r['Annual Volume']||0).toLocaleString()}</div><div class="mono" style="font-weight:600;color:var(--green2)">$${tot.toLocaleString()}</div><div><span class="pill ${r['Status']==='Closed'?'closed':'progress'}">${r['Status']||''}</span></div></div>`;}).join('');
+  document.getElementById('costRows').innerHTML=rows.map(r=>{const act=String(r['Activity Description']||'');const tot=parseFloat(r['Total Yearly Saving ($)'])||0;const stPill=r['Status']==='Closed'?'closed':r['Status']==='Open'?'open':'progress';return `<div class="cost-row"><div style="font-size:11px">${act}</div><div><span class="badge ${catColor[r['Category']]||'steel'}">${r['Category']||''}</span></div><div class="mono">$${parseFloat(r['Unit Saving ($)']||0).toFixed(2)}</div><div class="mono">${parseFloat(r['Annual Volume']||0).toLocaleString()}</div><div class="mono" style="font-weight:600;color:var(--green2)">$${tot.toLocaleString()}</div><div><span class="pill ${stPill}">${r['Status']||''}</span></div></div>`;}).join('');
 }
 
 function renderNPI(d){
@@ -1039,7 +1036,7 @@ function renderNPI(d){
       const subPill=subStatus==='On Track'?'on-track':subStatus==='At Risk'?'at-risk':'blocked';
       const border=idx<entries.length-1?'border-bottom:1px solid var(--border2);':'';
       return `<div class="npi-body" style="${border}">
-        <div class="npi-sec"><div class="npi-sec-title">Configuration${entries.length>1?` <span class="badge steel">#${idx+1}</span> <span class="pill ${subPill}" style="margin-left:4px">${subStatus}</span>`:''}${hlj?` <span style="font-size:9px;color:var(--text3);font-style:italic;font-weight:400;letter-spacing:0;text-transform:none;margin-left:6px">· ${hlj}</span>`:''}</div>${pnBcmHtml}${cfgFields}${eDiBtn}</div>
+        <div class="npi-sec"><div class="npi-sec-title">Configuration${entries.length>1?` <span class="badge steel">#${idx+1}</span> <span class="pill ${subPill}" style="margin-left:4px">${subStatus}</span>`:''}${hlj?` <span style="font-size:9px;color:var(--text3);font-weight:500;letter-spacing:0;text-transform:none;margin-left:6px">· ${hlj}</span>`:''}</div>${pnBcmHtml}${cfgFields}${eDiBtn}</div>
         <div class="npi-divider"></div>
         <div class="npi-sec"><div class="npi-sec-title">Important Notes</div>${notes||'<span style="color:var(--muted);font-size:11px">—</span>'}</div>
         <div class="npi-divider"></div>
